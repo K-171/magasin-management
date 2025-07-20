@@ -58,58 +58,42 @@ export default function RegisterPage() {
   }, [formData.password])
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError("")
-    setSuccess("")
-    setIsSubmitting(true)
+    e.preventDefault();
+    setError("");
+    setSuccess("");
+    setIsSubmitting(true);
 
-    if (!invitationToken) {
-      setError("Invalid invitation link")
-      setIsSubmitting(false)
-      return
-    }
-
-    // Validate passwords match
     if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match")
-      setIsSubmitting(false)
-      return
-    }
-
-    // Validate password strength
-    const passwordValidation = validatePassword(formData.password)
-    if (!passwordValidation.valid) {
-      setError(passwordValidation.errors[0])
-      setIsSubmitting(false)
-      return
+      setError("Passwords do not match");
+      setIsSubmitting(false);
+      return;
     }
 
     try {
-      const result = await register(
-        {
-          email: formData.email,
-          username: formData.username,
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          password: formData.password,
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
-        invitationToken,
-      )
+        body: JSON.stringify(formData),
+      });
 
-      if (result.success) {
-        setSuccess("Account created successfully! You can now log in.")
+      const data = await response.json();
+
+      if (response.ok) {
+        setSuccess("Account created successfully! You can now log in.");
         setTimeout(() => {
-          router.push("/login")
-        }, 2000)
+          router.push("/login");
+        }, 2000);
       } else {
-        setError(result.error || "Registration failed")
+        setError(data.error || "Registration failed");
       }
     } catch (err) {
-      setError("An unexpected error occurred")
+      setError("An unexpected error occurred");
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({

@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  username      String    @unique
+  firstName     String
+  lastName      String
+  role          String
+  passwordHash  String
+  salt          String
+  isEmailVerified Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  lastLoginAt   DateTime? @updatedAt
+}
+
+model Item {
+  id          String    @id @default(cuid())
+  name        String
+  category    String
+  dateAdded   DateTime  @default(now())
+  quantity    Int
+  status      String
+  movements   Movement[]
+}
+
+model Movement {
+  movementId        String    @id @default(cuid())
+  timestamp         DateTime  @default(now())
+  type              String
+  itemId            String
+  itemName          String
+  handledBy         String
+  quantity          Int
+  expectedReturnDate DateTime?
+  status            String
+  item              Item      @relation(fields: [itemId], references: [id])
+}

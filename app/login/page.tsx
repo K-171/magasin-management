@@ -14,47 +14,35 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Eye, EyeOff, LogIn, AlertCircle } from "lucide-react"
 
 export default function LoginPage() {
-  const { login, isAuthenticated, isLoading } = useAuth()
-  const router = useRouter()
+  const { login, isAuthenticated, isLoading } = useAuth();
+  const router = useRouter();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
-  })
-  const [showPassword, setShowPassword] = useState(false)
-  const [error, setError] = useState("")
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  });
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (isAuthenticated && !isLoading) {
-      router.push("/")
+      router.push("/");
     }
-  }, [isAuthenticated, isLoading, router])
-
-  useEffect(() => {
-    // Seed demo accounts on first load
-    if (typeof window !== "undefined") {
-      import("@/lib/demo-data").then(({ seedDemoAccounts }) => {
-        seedDemoAccounts()
-      })
-    }
-  }, [])
+  }, [isAuthenticated, isLoading, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError("")
-    setIsSubmitting(true)
+    e.preventDefault();
+    setError("");
+    setIsSubmitting(true);
 
     try {
-      const result = await login(formData.email, formData.password)
-      if (!result.success) {
-        setError(result.error || "Login failed")
-      }
-    } catch (err) {
-      setError("An unexpected error occurred")
+      await login(formData.email, formData.password);
+    } catch (err: any) {
+      setError(err.message || "An unexpected error occurred");
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({
