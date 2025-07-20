@@ -1,0 +1,292 @@
+"use client"
+
+import { useState } from "react"
+import dynamic from "next/dynamic"
+import { useInventory } from "@/context/inventory-context"
+import { useLanguage } from "@/context/language-context"
+import { Layout } from "@/components/layout"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Button } from "@/components/ui/button"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Badge } from "@/components/ui/badge"
+import { Download, FileText, PieChart, FileSpreadsheet } from "lucide-react"
+import { REPORTS_COLUMNS } from "@/utils/excel-export"
+
+const ExportDialog = dynamic(() => import("@/components/export-dialog").then((mod) => mod.ExportDialog))
+
+export default function Reports() {
+  const { items, getCategoryStats, getStatusStats } = useInventory()
+  const { t } = useLanguage()
+  const [reportType, setReportType] = useState("inventory")
+  const [timeFrame, setTimeFrame] = useState("all")
+  const [isExportDialogOpen, setIsExportDialogOpen] = useState(false)
+
+  const categoryStats = getCategoryStats()
+  const statusStats = getStatusStats()
+
+  // Filter items based on timeframe
+  const filteredItems = items.filter((item) => {
+    if (timeFrame === "all") return true
+
+    const itemDate = new Date(item.dateAdded)
+    const now = new Date()
+
+    switch (timeFrame) {
+      case "week":
+        const oneWeekAgo = new Date(now.setDate(now.getDate() - 7))
+        return itemDate >= oneWeekAgo
+      case "month":
+        const oneMonthAgo = new Date(now.setMonth(now.getMonth() - 1))
+        return itemDate >= oneMonthAgo
+      case "quarter":
+        const oneQuarterAgo = new Date(now.setMonth(now.getMonth() - 3))
+        return itemDate >= oneQuarterAgo
+      default:
+        return true
+    }
+  })
+
+  // Calculate category distribution
+  const categoryDistribution = Object.entries(categoryStats).map(([category, count]) => ({
+    category,
+    count,
+    percentage: Math.round((count / items.length) * 100),
+  }))
+
+  // Calculate status distribution
+  const statusDistribution = Object.entries(statusStats).map(([status, count]) => ({
+    status,
+    count,
+    percentage: Math.round((count / items.length) * 100),
+  }))
+
+  // Get status badge variant
+  const getStatusVariant = (status: string) => {
+    switch (status) {
+      case "In Stock":
+        return "default"
+      case "Low Stock":
+        return "secondary"
+      case "Out of Stock":
+        return "destructive"
+      default:
+        return "default"
+    }
+  }
+
+  // Get category color
+  const getCategoryColor = (category: string, index: number) => {
+    const colors = ["#2b4198", "#4CAF50", "#FFC107", "#9C27B0", "#FF5722"]
+    const categoryIndex = Object.keys(categoryStats).indexOf(category)
+    return colors[categoryIndex % colors.length]
+  }
+
+  // Get status color
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "In Stock":
+        return "#2b4198"
+      case "Low Stock":
+        return "#FFC107"
+      case "Out of Stock":
+        return "#F44336"
+      default:
+        return "#2b4198"
+    }
+  }
+
+  // Generate CSV data
+  const generateCSV = () => {
+    const headers = ["ID", "Name", "Category", "Date Added", "Quantity", "Status"]
+    const rows = filteredItems.map((item) => [
+      item.id,
+      item.name,
+      item.category,
+      item.dateAdded,
+      item.quantity,
+      item.status,
+    ])
+
+    const csvContent = [headers.join(","), ...rows.map((row) => row.join(","))].join("\n")
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement("a")
+    link.setAttribute("href", url)
+    link.setAttribute("download", `inventory-report-${new Date().toISOString().split("T")[0]}.csv`)
+    link.click()
+  }
+
+  // Get unique categories and statuses for export dialog
+  const availableCategories = Array.from(new Set(items.map((item) => item.category)))
+  const availableStatuses = Array.from(new Set(items.map((item) => item.status)))
+
+  return (
+    <Layout title={t("inventoryReports")} showSearch={false}>
+      <div className="grid gap-6">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle>{t("inventoryReports")}</CardTitle>
+            <div className="flex items-center gap-4">
+              <Select value={timeFrame} onValueChange={setTimeFrame}>
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Time Frame" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Time</SelectItem>
+                  <SelectItem value="week">Last Week</SelectItem>
+                  <SelectItem value="month">Last Month</SelectItem>
+                  <SelectItem value="quarter">Last Quarter</SelectItem>
+                </SelectContent>
+              </Select>
+              <Button
+                onClick={() => setIsExportDialogOpen(true)}
+                className="flex items-center gap-2 bg-[#2b4198] hover:bg-opacity-90"
+              >
+                <FileSpreadsheet className="h-4 w-4" />
+                {t("exportExcel")}
+              </Button>
+              <Button onClick={generateCSV} variant="outline" className="flex items-center gap-2 bg-transparent">
+                <Download className="h-4 w-4" />
+                {t("exportCSV")}
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <Tabs defaultValue="inventory" onValueChange={setReportType}>
+              <TabsList className="mb-6">
+                <TabsTrigger value="inventory" className="flex items-center gap-2">
+                  <FileText className="h-4 w-4" />
+                  Inventory Report
+                </TabsTrigger>
+                <TabsTrigger value="distribution" className="flex items-center gap-2">
+                  <PieChart className="h-4 w-4" />
+                  Distribution Analysis
+                </TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="inventory">
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow className="bg-gray-50">
+                        <TableHead className="font-semibold text-gray-600">{t("itemId")}</TableHead>
+                        <TableHead className="font-semibold text-gray-600">{t("itemName")}</TableHead>
+                        <TableHead className="font-semibold text-gray-600">{t("category")}</TableHead>
+                        <TableHead className="font-semibold text-gray-600">{t("dateAdded")}</TableHead>
+                        <TableHead className="font-semibold text-gray-600">{t("quantity")}</TableHead>
+                        <TableHead className="font-semibold text-gray-600">{t("status")}</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {filteredItems.map((item) => (
+                        <TableRow key={item.id} className="hover:bg-gray-50">
+                          <TableCell className="font-medium">{item.id}</TableCell>
+                          <TableCell>{item.name}</TableCell>
+                          <TableCell>{item.category}</TableCell>
+                          <TableCell>{item.dateAdded}</TableCell>
+                          <TableCell>{item.quantity}</TableCell>
+                          <TableCell>
+                            <Badge variant={getStatusVariant(item.status) as any} className="whitespace-nowrap">
+                              {item.status}
+                            </Badge>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="distribution">
+                <div className="grid md:grid-cols-2 gap-6">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Category Distribution</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-4">
+                        {categoryDistribution.map(({ category, count, percentage }, index) => (
+                          <div key={category} className="space-y-2">
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-2">
+                                <div
+                                  className="h-3 w-3 rounded-full"
+                                  style={{ backgroundColor: getCategoryColor(category, index) }}
+                                ></div>
+                                <span>{t(category)}</span>
+                              </div>
+                              <span className="font-medium">
+                                {count} items ({percentage}%)
+                              </span>
+                            </div>
+                            <div className="h-2 w-full rounded-full bg-gray-100">
+                              <div
+                                className="h-2 rounded-full"
+                                style={{
+                                  width: `${percentage}%`,
+                                  backgroundColor: getCategoryColor(category, index),
+                                }}
+                              ></div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Status Distribution</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-4">
+                        {statusDistribution.map(({ status, count, percentage }) => (
+                          <div key={status} className="space-y-2">
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-2">
+                                <div
+                                  className="h-3 w-3 rounded-full"
+                                  style={{ backgroundColor: getStatusColor(status) }}
+                                ></div>
+                                <span>{status}</span>
+                              </div>
+                              <span className="font-medium">
+                                {count} items ({percentage}%)
+                              </span>
+                            </div>
+                            <div className="h-2 w-full rounded-full bg-gray-100">
+                              <div
+                                className="h-2 rounded-full"
+                                style={{
+                                  width: `${percentage}%`,
+                                  backgroundColor: getStatusColor(status),
+                                }}
+                              ></div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              </TabsContent>
+            </Tabs>
+          </CardContent>
+        </Card>
+      </div>
+
+      <ExportDialog
+        open={isExportDialogOpen}
+        onOpenChange={setIsExportDialogOpen}
+        data={filteredItems}
+        defaultColumns={REPORTS_COLUMNS}
+        title="Inventory Report"
+        availableCategories={availableCategories}
+        availableStatuses={availableStatuses}
+      />
+    </Layout>
+  )
+}
