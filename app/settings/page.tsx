@@ -69,7 +69,7 @@ export default function Settings() {
       <Layout title="Settings" showSearch={false}>
         <div className="grid gap-6">
           <Tabs defaultValue="profile">
-            <TabsList className="mb-6">
+            <TabsList className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-6">
               <TabsTrigger value="profile" className="flex items-center gap-2">
                 <User className="h-4 w-4" />
                 Profile
@@ -96,7 +96,7 @@ export default function Settings() {
                 </CardHeader>
                 <CardContent>
                   <form onSubmit={handleProfileUpdate} className="space-y-6">
-                    <div className="flex items-center gap-6">
+                    <div className="flex flex-col sm:flex-row items-center gap-6">
                       <Avatar className="h-20 w-20">
                         <AvatarImage
                           src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
@@ -104,7 +104,7 @@ export default function Settings() {
                         />
                         <AvatarFallback>JD</AvatarFallback>
                       </Avatar>
-                      <div>
+                      <div className="text-center sm:text-left">
                         <Button variant="outline" size="sm">
                           Change Avatar
                         </Button>
@@ -166,8 +166,8 @@ export default function Settings() {
                       </div>
                     </div>
 
-                    <div className="flex justify-end">
-                      <Button type="submit" className="bg-[#2b4198] hover:bg-opacity-90">
+                    <div className="flex justify-center sm:justify-end">
+                      <Button type="submit" className="w-full sm:w-auto bg-[#2b4198] hover:bg-opacity-90">
                         Save Changes
                       </Button>
                     </div>
@@ -184,7 +184,7 @@ export default function Settings() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-6">
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                       <div className="space-y-0.5">
                         <Label className="text-base">Email Notifications</Label>
                         <p className="text-sm text-muted-foreground">
@@ -197,7 +197,7 @@ export default function Settings() {
                       />
                     </div>
                     <Separator />
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                       <div className="space-y-0.5">
                         <Label className="text-base">Low Stock Alerts</Label>
                         <p className="text-sm text-muted-foreground">Get notified when items are running low</p>
@@ -208,7 +208,7 @@ export default function Settings() {
                       />
                     </div>
                     <Separator />
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                       <div className="space-y-0.5">
                         <Label className="text-base">System Updates</Label>
                         <p className="text-sm text-muted-foreground">
@@ -221,7 +221,7 @@ export default function Settings() {
                       />
                     </div>
                     <Separator />
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                       <div className="space-y-0.5">
                         <Label className="text-base">Weekly Activity Summary</Label>
                         <p className="text-sm text-muted-foreground">
@@ -264,7 +264,7 @@ export default function Settings() {
 
                     <Separator />
 
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                       <div className="space-y-0.5">
                         <Label className="text-base">Two-Factor Authentication</Label>
                         <p className="text-sm text-muted-foreground">Add an extra layer of security to your account</p>
@@ -285,7 +285,7 @@ export default function Settings() {
                         value={securitySettings.sessionTimeout}
                         onValueChange={(value) => setSecuritySettings({ ...securitySettings, sessionTimeout: value })}
                       >
-                        <SelectTrigger id="session-timeout">
+                        <SelectTrigger id="session-timeout" className="w-full sm:w-[180px]">
                           <SelectValue placeholder="Select timeout" />
                         </SelectTrigger>
                         <SelectContent>
@@ -297,8 +297,8 @@ export default function Settings() {
                       </Select>
                     </div>
 
-                    <div className="flex justify-end">
-                      <Button className="bg-[#2b4198] hover:bg-opacity-90">Save Security Settings</Button>
+                    <div className="flex justify-center sm:justify-end">
+                      <Button className="w-full sm:w-auto bg-[#2b4198] hover:bg-opacity-90">Save Security Settings</Button>
                     </div>
                   </div>
                 </CardContent>

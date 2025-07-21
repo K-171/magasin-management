@@ -167,22 +167,22 @@ export default function AllStock() {
 
   return (
     <Layout title={t("allStockTitle")}>
-      <div className="bg-white p-8 rounded-lg shadow-md">
-        <div className="flex justify-between items-center mb-6">
+      <div className="bg-white p-4 md:p-8 rounded-lg shadow-md">
+        <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-6 gap-4">
           <h3 className="text-xl font-semibold text-[#3d414a]">{t("inventoryItems")}</h3>
-          <div className="flex gap-2">
+          <div className="flex flex-col sm:flex-row gap-2">
             <Button
               onClick={() => setIsExportDialogOpen(true)}
-              className="flex items-center gap-2 bg-[#2b4198] hover:bg-opacity-90"
+              className="flex items-center justify-center gap-2 bg-[#2b4198] hover:bg-opacity-90"
             >
               <FileSpreadsheet className="h-4 w-4" />
               {t("exportExcel")}
             </Button>
-            <Button variant="outline" onClick={() => setIsImportDialogOpen(true)} className="flex items-center gap-2">
+            <Button variant="outline" onClick={() => setIsImportDialogOpen(true)} className="flex items-center justify-center gap-2">
               <Upload className="h-4 w-4" />
               {t("importData")}
             </Button>
-            <Button variant="outline" onClick={() => setShowFilters(!showFilters)} className="flex items-center gap-2">
+            <Button variant="outline" onClick={() => setShowFilters(!showFilters)} className="flex items-center justify-center gap-2">
               <Filter className="h-4 w-4" />
               {t("filters")}
               {(selectedCategories.length > 0 || selectedStatuses.length > 0) && (
@@ -260,7 +260,7 @@ export default function AllStock() {
         </div>
 
         {/* Table */}
-        <div className="overflow-x-auto">
+        <div className="hidden md:block overflow-x-auto">
           <Table>
             <TableHeader>
               <TableRow className="bg-gray-50">
@@ -385,8 +385,69 @@ export default function AllStock() {
           </Table>
         </div>
 
+        {/* Mobile Card View */}
+        <div className="md:hidden space-y-4">
+          {paginatedItems.map((item) => (
+            <Card key={item.id} className={`bg-white shadow-sm rounded-lg ${highlightedId === item.id ? 'border-2 border-blue-400' : ''}`}>
+              <CardContent className="p-4">
+                <div className="flex justify-between items-start">
+                  <div className="flex-grow">
+                    <p className="font-bold text-lg text-gray-800">{item.name}</p>
+                    <p className="text-sm text-gray-500">{item.id}</p>
+                  </div>
+                  <Badge variant={getStatusVariant(item.status) as any} className="whitespace-nowrap">
+                    {item.status}
+                  </Badge>
+                </div>
+                <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <p className="text-gray-500">{t("category")}</p>
+                    <p className="font-medium">{item.category}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-500">{t("quantity")}</p>
+                    <p className="font-medium">{item.quantity}</p>
+                  </div>
+                  <div className="col-span-2">
+                    <p className="text-gray-500">{t("dateAdded")}</p>
+                    <p className="font-medium">{item.dateAdded}</p>
+                  </div>
+                </div>
+                <div className="mt-4 pt-4 border-t border-gray-200 flex justify-end gap-2">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleCheckoutItem(item)}
+                    className="text-[#2b4198] hover:text-[#2b4198] hover:bg-blue-50"
+                    disabled={item.quantity === 0}
+                  >
+                    <LogOut className="h-4 w-4 mr-1" />
+                    {t("checkout")}
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleEditItem(item)}
+                    className="text-[#2b4198] hover:text-[#2b4198] hover:bg-blue-50"
+                  >
+                    <Edit className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleDeleteItem(item.id)}
+                    className="text-red-500 hover:text-red-500 hover:bg-red-50"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
         {/* Pagination */}
-        <div className="flex justify-between items-center mt-6">
+        <div className="flex flex-col md:flex-row justify-between items-center mt-6 gap-4">
           <span className="text-sm text-gray-600">
             Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, sortedItems.length)}{" "}
             of {sortedItems.length} entries

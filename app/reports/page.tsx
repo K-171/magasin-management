@@ -127,11 +127,11 @@ export default function Reports() {
     <Layout title={t("inventoryReports")} showSearch={false}>
       <div className="grid gap-6">
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
+          <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between pb-2 gap-4">
             <CardTitle>{t("inventoryReports")}</CardTitle>
-            <div className="flex items-center gap-4">
+            <div className="flex flex-col sm:flex-row items-center gap-2">
               <Select value={timeFrame} onValueChange={setTimeFrame}>
-                <SelectTrigger className="w-[180px]">
+                <SelectTrigger className="w-full sm:w-[180px]">
                   <SelectValue placeholder="Time Frame" />
                 </SelectTrigger>
                 <SelectContent>
@@ -143,12 +143,12 @@ export default function Reports() {
               </Select>
               <Button
                 onClick={() => setIsExportDialogOpen(true)}
-                className="flex items-center gap-2 bg-[#2b4198] hover:bg-opacity-90"
+                className="w-full sm:w-auto flex items-center justify-center gap-2 bg-[#2b4198] hover:bg-opacity-90"
               >
                 <FileSpreadsheet className="h-4 w-4" />
                 {t("exportExcel")}
               </Button>
-              <Button onClick={generateCSV} variant="outline" className="flex items-center gap-2 bg-transparent">
+              <Button onClick={generateCSV} variant="outline" className="w-full sm:w-auto flex items-center justify-center gap-2 bg-transparent">
                 <Download className="h-4 w-4" />
                 {t("exportCSV")}
               </Button>
@@ -168,7 +168,7 @@ export default function Reports() {
               </TabsList>
 
               <TabsContent value="inventory">
-                <div className="overflow-x-auto">
+                <div className="hidden md:block overflow-x-auto">
                   <Table>
                     <TableHeader>
                       <TableRow className="bg-gray-50">
@@ -197,6 +197,37 @@ export default function Reports() {
                       ))}
                     </TableBody>
                   </Table>
+                </div>
+                <div className="md:hidden space-y-4">
+                  {filteredItems.map((item) => (
+                    <Card key={item.id} className="bg-white shadow-sm rounded-lg">
+                      <CardContent className="p-4">
+                        <div className="flex justify-between items-start">
+                          <div className="flex-grow">
+                            <p className="font-bold text-lg text-gray-800">{item.name}</p>
+                            <p className="text-sm text-gray-500">{item.id}</p>
+                          </div>
+                          <Badge variant={getStatusVariant(item.status) as any} className="whitespace-nowrap">
+                            {item.status}
+                          </Badge>
+                        </div>
+                        <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
+                          <div>
+                            <p className="text-gray-500">{t("category")}</p>
+                            <p className="font-medium">{item.category}</p>
+                          </div>
+                          <div>
+                            <p className="text-gray-500">{t("quantity")}</p>
+                            <p className="font-medium">{item.quantity}</p>
+                          </div>
+                          <div className="col-span-2">
+                            <p className="text-gray-500">{t("dateAdded")}</p>
+                            <p className="font-medium">{item.dateAdded}</p>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
                 </div>
               </TabsContent>
 

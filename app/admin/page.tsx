@@ -111,7 +111,7 @@ export default function AdminPanel() {
             </Alert>
           )}
 
-          <div className="grid gap-6 md:grid-cols-3">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
                 <CardTitle className="text-sm font-medium">Total Invitations</CardTitle>
@@ -198,7 +198,8 @@ export default function AdminPanel() {
               </Dialog>
             </CardHeader>
             <CardContent>
-              <div className="overflow-x-auto">
+              {/* Desktop Table */}
+              <div className="hidden md:block overflow-x-auto">
                 <Table>
                   <TableHeader>
                     <TableRow>
@@ -253,6 +254,55 @@ export default function AdminPanel() {
                     )}
                   </TableBody>
                 </Table>
+              </div>
+              {/* Mobile Card View */}
+              <div className="md:hidden space-y-4">
+                {invitations.length === 0 ? (
+                  <div className="text-center py-8 text-muted-foreground">
+                    No invitations created yet
+                  </div>
+                ) : (
+                  invitations
+                    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+                    .map((invitation) => (
+                      <Card key={invitation.id} className={`bg-white shadow-sm rounded-lg ${highlightedId === invitation.id ? 'border-2 border-blue-400' : ''}`}>
+                        <CardContent className="p-4">
+                          <div className="flex justify-between items-start">
+                            <div className="flex-grow">
+                              <p className="font-bold text-gray-800 truncate">{invitation.email}</p>
+                              <Badge variant="outline" className="capitalize mt-1">{invitation.role}</Badge>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              {getStatusIcon(invitation)}
+                              {getStatusBadge(invitation)}
+                            </div>
+                          </div>
+                          <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
+                            <div>
+                              <p className="text-gray-500">Created</p>
+                              <p className="font-medium">{formatDate(invitation.createdAt)}</p>
+                            </div>
+                            <div>
+                              <p className="text-gray-500">Expires</p>
+                              <p className="font-medium">{formatDate(invitation.expiresAt)}</p>
+                            </div>
+                          </div>
+                          <div className="mt-4 pt-4 border-t border-gray-200 flex justify-end">
+                            {!invitation.used && new Date(invitation.expiresAt) > new Date() && (
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleRevokeInvitation(invitation.id)}
+                                className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                              >
+                                Revoke
+                              </Button>
+                            )}
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))
+                )}
               </div>
             </CardContent>
           </Card>
