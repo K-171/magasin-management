@@ -7,6 +7,7 @@ import { AuthProvider } from "@/context/auth-context"
 import { ThemeProvider } from "@/components/theme-provider"
 import { LanguageProvider } from "@/context/language-context"
 import { NotificationProvider } from "@/context/notification-context"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -36,6 +37,7 @@ export default function RootLayout({
             </AuthProvider>
           </NotificationProvider>
         </ThemeProvider>
+        <SpeedInsights />
       </body>
     </html>
   )
