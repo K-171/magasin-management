@@ -193,7 +193,7 @@ const translations = {
     categoryAutoCreated: "If a category does not exist, it will be automatically created.",
     systemSetsDateStatus: "The system automatically sets the date added and initial status based on the quantity.",
     exportingData: "Exporting Data",
-    exportDataInfo: "You can export your inventory data from the \"All Stock\" or \"Reports\" pages. The export tool allows you to download the current view as an Excel (.xlsx) file. You can select which columns to include in the final report.",
+    exportDataInfo: "You can export your inventory data from the "All Stock" or "Reports" pages. The export tool allows you to download the current view as an Excel (.xlsx) file. You can select which columns to include in the final report.",
     avatarUpdatedSuccess: "Avatar updated successfully!",
     failedToUpdateAvatar: "Failed to update avatar",
     avatarUploadError: "An unexpected error occurred during avatar upload.",
@@ -387,7 +387,7 @@ const translations = {
     failedToUpdateAvatar: "Error al actualizar el avatar",
     avatarUploadError: "Ocurrió un error inesperado durante la carga del avatar.",
     profileUpdatedSuccess: "¡Perfil actualizado con éxito!",
-    failedToUpdateProfile: "Error al actualizar el perfil"
+    failedToUpdateProfile: "Error al actualizar el perfil"}
   },
   fr: {
     // Navigation
@@ -576,7 +576,7 @@ const translations = {
     failedToUpdateAvatar: "Échec de la mise à jour de l'avatar",
     avatarUploadError: "Une erreur inattendue est survenue lors du téléchargement de l'avatar.",
     profileUpdatedSuccess: "Profil mis à jour avec succès !",
-    failedToUpdateProfile: "Échec de la mise à jour du profil"
+    failedToUpdateProfile: "Échec de la mise à jour du profil"}
   },
   de: {
     // Navigation
@@ -766,5 +766,25 @@ const translations = {
     avatarUploadError: "Ein unerwarteter Fehler ist beim Hochladen des Avatars aufgetreten.",
     profileUpdatedSuccess: "Profil erfolgreich aktualisiert!",
     failedToUpdateProfile: "Profil-Aktualisierung fehlgeschlagen"
+  },
+}
+
+const LanguageContext = createContext<LanguageContextType | undefined>(undefined)
+
+export function LanguageProvider({ children }: { children: ReactNode }) {
+  const [language, setLanguage] = useState<Language>("en")
+
+  const t = (key: string): string => {
+    return translations[language][key as keyof (typeof translations)[typeof language]] || key
   }
+
+  return <LanguageContext.Provider value={{ language, setLanguage, t }}>{children}</LanguageContext.Provider>
+}
+
+export function useLanguage() {
+  const context = useContext(LanguageContext)
+  if (context === undefined) {
+    throw new Error("useLanguage must be used within a LanguageProvider")
+  }
+  return context
 }
