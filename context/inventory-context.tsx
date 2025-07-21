@@ -18,8 +18,21 @@ export interface InventoryItem {
   status: 'In Stock' | 'Low Stock' | 'Out of Stock'
 }
 
+export interface Movement {
+  movementId: string
+  timestamp: string
+  type: string
+  itemId: string
+  itemName: string
+  handledBy: string
+  quantity: number
+  expectedReturnDate?: string
+  status: string
+}
+
 interface InventoryContextType {
   items: InventoryItem[]
+  movements: Movement[]
   isLoading: boolean
   error: string | null
   addItem: (item: {
@@ -30,6 +43,8 @@ interface InventoryContextType {
   updateItem: (id: string, item: Partial<InventoryItem>) => Promise<void>
   deleteItem: (id: string) => Promise<void>
   fetchItems: () => Promise<void>
+  fetchMovements: () => Promise<void>
+  checkinItem: (movementId: string) => Promise<void>
   getTotalItems: () => number
   getLowStockItems: () => InventoryItem[]
   getOutOfStockItems: () => InventoryItem[]
@@ -47,6 +62,7 @@ const InventoryContext = createContext<InventoryContextType | undefined>(
 
 export function InventoryProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<InventoryItem[]>([])
+  const [movements, setMovements] = useState<Movement[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -73,9 +89,33 @@ export function InventoryProvider({ children }: { children: ReactNode }) {
     }
   }, [])
 
+  const fetchMovements = useCallback(async () => {
+    setIsLoading(true)
+    setError(null)
+    try {
+      const response = await fetch('/api/movements')
+      if (!response.ok) {
+        throw new Error(`Failed to fetch movements: ${response.statusText}`)
+      }
+      const data = await response.json()
+      if (Array.isArray(data)) {
+        setMovements(data)
+      } else {
+        console.error('API did not return an array:', data)
+        throw new Error('Invalid data format from API')
+      }
+    } catch (err: any) {
+      setError(err.message)
+      setMovements([]) // Ensure movements is an empty array on error
+    } finally {
+      setIsLoading(false)
+    }
+  }, [])
+
   useEffect(() => {
     fetchItems()
-  }, [fetchItems])
+    fetchMovements()
+  }, [fetchItems, fetchMovements])
 
   const addItem = async (item: {
     name: string
@@ -127,6 +167,20 @@ export function InventoryProvider({ children }: { children: ReactNode }) {
     }
   }
 
+  const checkinItem = async (movementId: string) => {
+    try {
+      const response = await fetch(`/api/movements/${movementId}/checkin`, {
+        method: 'POST',
+      })
+      if (!response.ok) {
+        throw new Error('Failed to check in item')
+      }
+      await fetchMovements()
+    } catch (err: any) {
+      setError(err.message)
+    }
+  }
+
   const getTotalItems = useCallback(() => {
     return (items || []).reduce((total, item) => total + item.quantity, 0)
   }, [items])
@@ -170,12 +224,15 @@ export function InventoryProvider({ children }: { children: ReactNode }) {
     <InventoryContext.Provider
       value={{
         items,
+        movements,
         isLoading,
         error,
         addItem,
         updateItem,
         deleteItem,
         fetchItems,
+        fetchMovements,
+        checkinItem,
         getTotalItems,
         getLowStockItems,
         getOutOfStockItems,
