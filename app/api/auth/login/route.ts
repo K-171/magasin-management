@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { hashPassword } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
-import { createSession } from '@/lib/auth'; // We will create this function later
+import { createSession } from '@/lib/session';
 
 export async function POST(request: Request) {
   try {
@@ -25,10 +25,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Please verify your email before logging in' }, { status: 403 });
     }
 
-    // We will replace this with a proper session mechanism (e.g., JWT)
-    const session = { userId: user.id, role: user.role };
+    await createSession(user.id);
 
-    return NextResponse.json({ success: true, session });
+    return NextResponse.json({ success: true, user });
   } catch (error) {
     console.error('Login error:', error);
     return NextResponse.json({ error: 'An unexpected error occurred' }, { status: 500 });

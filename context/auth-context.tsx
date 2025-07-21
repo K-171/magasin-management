@@ -1,6 +1,6 @@
 "use client"
 
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react"
+import { createContext, useContext, useEffect, useState, type ReactNode, useCallback } from "react"
 import { useRouter } from "next/navigation"
 
 interface User {
@@ -34,11 +34,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   })
   const router = useRouter()
 
-  useEffect(() => {
-    // This effect could be used to verify a session token from a cookie
-    // For now, we'll just set loading to false
-    setAuthState((prev) => ({ ...prev, isLoading: false }));
+  const verifySession = useCallback(async () => {
+    try {
+      const response = await fetch('/api/auth/session');
+      const data = await response.json();
+      if (data.isAuthenticated) {
+        setAuthState({ user: data.user, isAuthenticated: true, isLoading: false });
+      } else {
+        setAuthState({ user: null, isAuthenticated: false, isLoading: false });
+      }
+    } catch (error) {
+      console.error('Session verification failed:', error);
+      setAuthState({ user: null, isAuthenticated: false, isLoading: false });
+    }
   }, []);
+
+  useEffect(() => {
+    verifySession();
+  }, [verifySession]);
 
   const login = async (email: string, password: string) => {
     const response = await fetch('/api/auth/login', {
@@ -55,8 +68,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       throw new Error(data.error || 'Login failed');
     }
 
-    const { user } = data.session;
-    setAuthState({ user, isAuthenticated: true, isLoading: false });
+    setAuthState({ user: data.user, isAuthenticated: true, isLoading: false });
     router.push('/');
   };
 
@@ -76,8 +88,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const logout = () => {
-    // Here you would typically call a /api/auth/logout endpoint
+  const logout = async () => {
+    await fetch('/api/auth/logout', { method: 'POST' });
     setAuthState({
       user: null,
       isAuthenticated: false,
