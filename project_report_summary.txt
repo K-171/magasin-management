@@ -1,0 +1,70 @@
+Project Report: Inventory Management System
+
+=========================================
+
+Part 1: Project Utility and Importance
+
+=========================================
+
+1.  **Overview of the Project**
+
+This project is a comprehensive, web-based Inventory Management System designed to provide a centralized platform for tracking, managing, and analyzing an organization's inventory. It moves beyond simple spreadsheets by offering a dynamic, multi-user environment with real-time data, robust security features, and insightful reporting. The primary goal is to streamline all inventory-related operations, from initial stock entry to final checkout, ensuring accuracy and efficiency throughout the entire lifecycle of an item.
+
+2.  **Core Features and Their Utility**
+
+*   **Centralized Dashboard:** Provides an at-a-glance overview of key inventory metrics, such as total item count, low-stock items, overdue items, and recent activity. This allows managers to quickly assess the state of the inventory.
+
+*   **Stock Management:** Users can add, edit, and delete inventory items. The system tracks essential details like item ID, name, category, quantity, and status.
+
+*   **Movement Logging:** Every action, whether it's a new item entry ('Entrée') or a checkout ('Sortie'), is logged. This creates an auditable trail, showing who handled an item, when, and for what purpose.
+
+*   **Status Tracking:** Items are automatically assigned a status ('In Stock', 'Low Stock', 'Out of Stock') based on their quantity and category rules. This proactive system helps prevent stockouts of critical parts or tools.
+
+*   **User Roles & Permissions:** The system implements a role-based access control (RBAC) model with 'Admin', 'Manager', and 'User' roles. This ensures that employees only have access to the features necessary for their job, enhancing security.
+
+*   **Reporting and Analytics:** The application generates detailed reports on inventory status and distribution. This data can be used to identify trends, optimize stock levels, and make informed purchasing decisions.
+
+*   **Data Portability:** Functionality to import and export inventory data via Excel (.xlsx) or CSV files makes it easy to perform bulk updates or integrate with other systems.
+
+3.  **Importance for Effective Inventory Management**
+
+This system is critically important for any organization, like Stellantis, that relies on a physical inventory of tools, consumable parts, or other assets. Its value lies in:
+
+*   **Minimizing Downtime:** By providing real-time alerts for low-stock items, the system helps ensure that essential parts and tools are always available, preventing work stoppages.
+
+*   **Reducing Costs:** It prevents both overstocking (which ties up capital) and understocking (which can halt operations). Accurate tracking also reduces losses due to misplaced or forgotten items.
+
+*   **Enhancing Accountability:** The movement log creates a clear record of who has checked out an item. This accountability encourages responsible use and timely returns.
+
+*   **Improving Operational Efficiency:** Automating the tracking process eliminates the need for manual, error-prone spreadsheets. It saves time for both floor workers and managers, allowing them to focus on more productive tasks.
+
+*   **Enabling Data-Driven Decisions:** The reporting features transform raw inventory data into actionable insights, helping management to optimize purchasing strategies and understand asset utilization patterns.
+
+
+=========================================
+
+Part 2: Technology Stack Summary
+
+=========================================
+
+This project is built on a modern, robust, and scalable technology stack, primarily centered around JavaScript and TypeScript.
+
+*   **Framework:** **Next.js** is used as the full-stack React framework. It handles both the frontend (user interface) and the backend (API endpoints), allowing for a cohesive development experience.
+
+*   **Language:** **TypeScript** is used throughout the project. It adds static typing to JavaScript, which helps catch errors early in development and makes the codebase more reliable and easier to maintain.
+
+*   **Frontend & UI:**
+    *   **React:** The core library for building the user interface.
+    *   **Tailwind CSS:** A utility-first CSS framework used for all styling. It allows for rapid development of a modern and responsive design.
+    *   **Shadcn/UI:** A collection of pre-built, accessible, and customizable UI components (like buttons, dialogs, tables) that are built on top of Tailwind CSS.
+
+*   **Backend & Database:**
+    *   **Next.js API Routes:** The backend logic is built using API routes within the Next.js framework, located in the `app/api/` directory.
+    *   **Prisma:** A next-generation ORM (Object-Relational Mapper) that provides a type-safe way to interact with the database. It simplifies database queries and ensures data integrity. The database schema is defined in the `prisma/schema.prisma` file.
+    *   **PostgreSQL:** The underlying relational database used to store all application data, including users, items, and movements.
+
+*   **Authentication:** A custom authentication system is implemented. It handles user registration, login, and session management. Passwords are not stored directly; instead, they are securely hashed with a unique salt for each user using Node.js's built-in `crypto` module.
+
+*   **State Management:** **React Context API** is used for managing global state, such as user authentication status (`AuthContext`) and inventory data (`InventoryContext`), making it accessible across different components.
+
+*   **Deployment:** The application is configured for deployment on **Vercel**, a platform optimized for Next.js applications.

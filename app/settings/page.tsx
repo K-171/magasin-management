@@ -308,63 +308,53 @@ export default function Settings() {
               <TabsContent value="data">
                 <Card>
                   <CardHeader>
-                    <CardTitle>Data Import & Export</CardTitle>
-                    <CardDescription>Manage your inventory data import and export settings.</CardDescription>
+                    <CardTitle>Data Management</CardTitle>
+                    <CardDescription>
+                      Guidelines and information for importing and exporting inventory data.
+                    </CardDescription>
                   </CardHeader>
-                  <CardContent>
-                    <div className="space-y-6">
-                      <div>
-                        <h4 className="font-medium mb-3">Import Guidelines</h4>
-                        <div className="space-y-3 text-sm">
-                          <div className="p-3 bg-blue-50 rounded-lg">
-                            <p className="font-medium text-blue-900 mb-1">Supported File Formats</p>
-                            <p className="text-blue-700">CSV (.csv) and Text (.txt) files with comma-separated values</p>
-                          </div>
-                          <div className="p-3 bg-green-50 rounded-lg">
-                            <p className="font-medium text-green-900 mb-1">Required Columns</p>
-                            <ul className="text-green-700 space-y-1">
-                              <li>
-                                • <strong>name</strong> - Item name or title
-                              </li>
-                              <li>
-                                • <strong>category</strong> - Electronics, Furniture, Accessories, or Office Supplies
-                              </li>
-                              <li>
-                                • <strong>quantity</strong> - Number of items in stock (must be a positive number)
-                              </li>
-                            </ul>
-                          </div>
-                          <div className="p-3 bg-amber-50 rounded-lg">
-                            <p className="font-medium text-amber-900 mb-1">Import Tips</p>
-                            <ul className="text-amber-700 space-y-1">
-                              <li>• Use the template download for correct formatting</li>
-                              <li>• Ensure all required fields are filled</li>
-                              <li>• Categories will be created automatically if they don't exist</li>
-                              <li>• Items are automatically assigned IDs and current date</li>
-                            </ul>
-                          </div>
+                  <CardContent className="space-y-6">
+                    <div>
+                      <h4 className="font-medium mb-3 text-lg">Importing Data</h4>
+                      <div className="space-y-4 text-sm">
+                        <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                          <p className="font-semibold text-blue-900 mb-1">Supported File Formats</p>
+                          <p className="text-blue-800">
+                            You can import data using Microsoft Excel (<strong>.xlsx</strong>) or Comma-Separated Values (<strong>.csv</strong>) files.
+                          </p>
                         </div>
-                      </div>
-
-                      <Separator />
-
-                      <div>
-                        <h4 className="font-medium mb-3">Data Validation</h4>
-                        <div className="text-sm space-y-2">
-                          <p>The system will validate your data and show:</p>
-                          <ul className="list-disc list-inside space-y-1 ml-4">
-                            <li>
-                              <strong>Errors</strong> - Issues that prevent import (missing required fields, invalid data)
-                            </li>
-                            <li>
-                              <strong>Warnings</strong> - Non-critical issues (new categories, formatting suggestions)
-                            </li>
-                            <li>
-                              <strong>Preview</strong> - Shows exactly what will be imported
-                            </li>
+                        <div className="p-4 bg-green-50 rounded-lg border border-green-200">
+                          <p className="font-semibold text-green-900 mb-1">Required Columns</p>
+                          <p className="text-green-800 mb-2">
+                            Your file must contain the following columns (the header names must match exactly):
+                          </p>
+                          <ul className="text-green-800 space-y-1 font-mono text-xs">
+                            <li>• id</li>
+                            <li>• name</li>
+                            <li>• category</li>
+                            <li>• quantity</li>
+                          </ul>
+                        </div>
+                        <div className="p-4 bg-amber-50 rounded-lg border border-amber-200">
+                          <p className="font-semibold text-amber-900 mb-1">Importing Tips</p>
+                          <ul className="text-amber-800 space-y-1 list-disc list-inside">
+                            <li>Ensure all required columns are present and correctly named.</li>
+                            <li>The <strong>id</strong> for each item must be unique. If an ID already exists, the import for that row will fail.</li>
+                            <li>The <strong>quantity</strong> must be a whole number.</li>
+                            <li>If a <strong>category</strong> does not exist, it will be automatically created.</li>
+                            <li>The system automatically sets the date added and initial status based on the quantity.</li>
                           </ul>
                         </div>
                       </div>
+                    </div>
+
+                    <Separator />
+
+                    <div>
+                      <h4 className="font-medium mb-3 text-lg">Exporting Data</h4>
+                      <p className="text-sm text-muted-foreground">
+                        You can export your inventory data from the "All Stock" or "Reports" pages. The export tool allows you to download the current view as an Excel (.xlsx) file. You can select which columns to include in the final report.
+                      </p>
                     </div>
                   </CardContent>
                 </Card>
