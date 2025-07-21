@@ -16,6 +16,7 @@ import { Separator } from "@/components/ui/separator"
 import { User, Shield, Bell, FileText } from "lucide-react"
 import { ProtectedRoute } from "@/components/protected-route"
 import { useAuth } from "@/context/auth-context"
+import { useLanguage } from "@/context/language-context"
 
 // Update the component to use actual user data
 export default function Settings() {
