@@ -34,20 +34,16 @@ export async function seedDemoAccounts() {
   ]
 
   for (const account of demoAccounts) {
-    const existingUser = await prisma.user.findUnique({
-      where: { email: account.email },
-    })
-
-    if (existingUser) {
-      console.log(`User ${account.email} already exists. Skipping.`)
-      continue
-    }
-
     const salt = generateSalt()
     const passwordHash = hashPassword(account.password, salt)
 
-    await prisma.user.create({
-      data: {
+    await prisma.user.upsert({
+      where: { email: account.email },
+      update: {
+        passwordHash,
+        salt,
+      },
+      create: {
         email: account.email,
         username: account.username,
         firstName: account.firstName,
@@ -57,8 +53,8 @@ export async function seedDemoAccounts() {
         passwordHash,
         salt,
       },
-    })
-    console.log(`Created user: ${account.email}`)
+    });
+    console.log(`Upserted user: ${account.email}`)
   }
 
   console.log("Demo account seeding finished.")
