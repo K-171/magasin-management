@@ -22,12 +22,22 @@ export default function Settings() {
   const { user, updateProfile } = useAuth()
 
   const [profileForm, setProfileForm] = useState({
-    firstName: user?.firstName || "",
-    lastName: user?.lastName || "",
-    username: user?.username || "",
-    email: user?.email || "",
-    role: user?.role || "user",
-  })
+    firstName: "",
+    lastName: "",
+    username: "",
+    email: "",
+  });
+
+  useEffect(() => {
+    if (user) {
+      setProfileForm({
+        firstName: user.firstName || "",
+        lastName: user.lastName || "",
+        username: user.username || "",
+        email: user.email || "",
+      });
+    }
+  }, [user]);
 
   const [notificationSettings, setNotificationSettings] = useState({
     emailAlerts: false,

@@ -23,7 +23,7 @@ export default function AdminPanel() {
   const { user, createInvitation, getInvitations, revokeInvitation } = useAuth()
   const searchParams = useSearchParams()
   const highlightedId = searchParams.get("highlight")
-  const [invitations, setInvitations] = useState<Invitation[]>(getInvitations())
+  const [invitations, setInvitations] = useState<Invitation[]>([])
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
   const [newInvitation, setNewInvitation] = useState({
     email: "",
@@ -31,6 +31,15 @@ export default function AdminPanel() {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null)
+
+  const fetchInvitations = async () => {
+    const fetchedInvitations = await getInvitations();
+    setInvitations(fetchedInvitations);
+  }
+
+  useEffect(() => {
+    fetchInvitations();
+  }, []);
 
   const handleCreateInvitation = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -42,7 +51,7 @@ export default function AdminPanel() {
       if (result.success) {
         setMessage({ type: "success", text: "Invitation sent successfully!" })
         setNewInvitation({ email: "", role: "user" })
-        setInvitations(getInvitations())
+        fetchInvitations();
         setIsCreateDialogOpen(false)
       } else {
         setMessage({ type: "error", text: result.error || "Failed to create invitation" })
@@ -61,7 +70,7 @@ export default function AdminPanel() {
       const result = await revokeInvitation(invitationId)
       if (result.success) {
         setMessage({ type: "success", text: "Invitation revoked successfully" })
-        setInvitations(getInvitations())
+        fetchInvitations();
       } else {
         setMessage({ type: "error", text: result.error || "Failed to revoke invitation" })
       }
