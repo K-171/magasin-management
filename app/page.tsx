@@ -11,12 +11,14 @@ import { useState } from "react"
 import dynamic from "next/dynamic"
 import { Button } from "@/components/ui/button"
 import { useLanguage } from "@/context/language-context"
+import { Skeleton } from "@/components/ui/skeleton"
 
 const ImportDialog = dynamic(() => import("@/components/import-dialog").then((mod) => mod.ImportDialog))
 
 export default function Dashboard() {
   const {
     items,
+    isLoading,
     getTotalItems,
     getLowStockItems,
     getOutOfStockItems,
@@ -29,6 +31,61 @@ export default function Dashboard() {
   } = useInventory()
   const { t } = useLanguage()
 
+  const [isImportDialogOpen, setIsImportDialogOpen] = useState(false)
+
+  if (isLoading) {
+    return (
+      <Layout title={t("dashboard")}>
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          {[...Array(4)].map((_, i) => (
+            <Card key={i}>
+              <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+                <Skeleton className="h-5 w-2/3" />
+                <Skeleton className="h-4 w-4" />
+              </CardHeader>
+              <CardContent>
+                <Skeleton className="h-7 w-1/2" />
+                <Skeleton className="h-3 w-1/3 mt-2" />
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+        <div className="grid gap-6 mt-6 md:grid-cols-2">
+          <Card>
+            <CardHeader>
+              <Skeleton className="h-6 w-1/2" />
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {[...Array(3)].map((_, i) => (
+                  <div className="flex items-center justify-between" key={i}>
+                    <Skeleton className="h-5 w-1/3" />
+                    <Skeleton className="h-5 w-1/4" />
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <Skeleton className="h-6 w-1/2" />
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {[...Array(3)].map((_, i) => (
+                  <div className="flex items-center justify-between" key={i}>
+                    <Skeleton className="h-5 w-1/3" />
+                    <Skeleton className="h-5 w-1/4" />
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </Layout>
+    )
+  }
+
   const lowStockItems = getLowStockItems()
   const outOfStockItems = getOutOfStockItems()
   const totalItems = getTotalItems()
@@ -38,8 +95,6 @@ export default function Dashboard() {
   const overdueItems = getOverdueItems()
   const mostActiveItems = getMostActiveItems()
   const mostActiveUsers = getMostActiveUsers()
-
-  const [isImportDialogOpen, setIsImportDialogOpen] = useState(false)
 
   // Get recent items (last 5)
   const recentItems = [...items]
@@ -90,7 +145,7 @@ export default function Dashboard() {
             <CardContent>
               <div className="text-2xl font-bold">{lowStockItems.length}</div>
               <p className="text-xs text-muted-foreground">
-                {((lowStockItems.length / items.length) * 100).toFixed(1)}% of inventory
+                {((lowStockItems.length / (items.length || 1)) * 100).toFixed(1)}% of inventory
               </p>
             </CardContent>
           </Card>
@@ -224,7 +279,7 @@ export default function Dashboard() {
                     <div
                       className="h-2 rounded-full bg-[#2b4198]"
                       style={{
-                        width: `${((statusStats["In Stock"] || 0) / items.length) * 100}%`,
+                        width: `${((statusStats["In Stock"] || 0) / (items.length || 1)) * 100}%`,
                       }}
                     ></div>
                   </div>
@@ -242,7 +297,7 @@ export default function Dashboard() {
                     <div
                       className="h-2 rounded-full bg-amber-500"
                       style={{
-                        width: `${((statusStats["Low Stock"] || 0) / items.length) * 100}%`,
+                        width: `${((statusStats["Low Stock"] || 0) / (items.length || 1)) * 100}%`,
                       }}
                     ></div>
                   </div>
@@ -260,7 +315,7 @@ export default function Dashboard() {
                     <div
                       className="h-2 rounded-full bg-red-500"
                       style={{
-                        width: `${((statusStats["Out of Stock"] || 0) / items.length) * 100}%`,
+                        width: `${((statusStats["Out of Stock"] || 0) / (items.length || 1)) * 100}%`,
                       }}
                     ></div>
                   </div>
