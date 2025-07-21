@@ -1,9 +1,10 @@
-import { saveUser, type StoredUser, hashPassword, generateSalt } from "./auth"
+import { PrismaClient } from "@prisma/client"
+import { hashPassword, generateSalt } from "./auth"
 
-export function seedDemoAccounts() {
-  // Check if demo accounts already exist
-  const existingUsers = JSON.parse(localStorage.getItem("inventory_users") || "[]")
-  if (existingUsers.length > 0) return
+const prisma = new PrismaClient()
+
+export async function seedDemoAccounts() {
+  console.log("Starting to seed demo accounts...")
 
   const demoAccounts = [
     {
@@ -32,28 +33,42 @@ export function seedDemoAccounts() {
     },
   ]
 
-  demoAccounts.forEach((account) => {
+  for (const account of demoAccounts) {
+    const existingUser = await prisma.user.findUnique({
+      where: { email: account.email },
+    })
+
+    if (existingUser) {
+      console.log(`User ${account.email} already exists. Skipping.`)
+      continue
+    }
+
     const salt = generateSalt()
     const passwordHash = hashPassword(account.password, salt)
 
-    const user: StoredUser = {
-      id: crypto.randomUUID(),
-      email: account.email,
-      username: account.username,
-      firstName: account.firstName,
-      lastName: account.lastName,
-      role: account.role,
-      isEmailVerified: true, // Pre-verify demo accounts
-      createdAt: new Date().toISOString(),
-      passwordHash,
-      salt,
-    }
+    await prisma.user.create({
+      data: {
+        email: account.email,
+        username: account.username,
+        firstName: account.firstName,
+        lastName: account.lastName,
+        role: account.role,
+        isEmailVerified: true, // Pre-verify demo accounts
+        passwordHash,
+        salt,
+      },
+    })
+    console.log(`Created user: ${account.email}`)
+  }
 
-    saveUser(user)
-  })
-
-  console.log("Demo accounts created - Use admin account to invite new users:")
-  console.log("Admin: admin@inventory.com / Admin123!")
-  console.log("Manager: manager@inventory.com / Manager123!")
-  console.log("User: user@inventory.com / User123!")
+  console.log("Demo account seeding finished.")
 }
+
+seedDemoAccounts()
+  .catch((e) => {
+    console.error(e)
+    process.exit(1)
+  })
+  .finally(async () => {
+    await prisma.$disconnect()
+  })

@@ -1,6 +1,13 @@
-"use client"
+'use client'
 
-import { createContext, useContext, useState, useEffect, type ReactNode, useCallback } from "react"
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  type ReactNode,
+  useCallback,
+} from 'react'
 
 export interface InventoryItem {
   id: string
@@ -8,14 +15,18 @@ export interface InventoryItem {
   category: string
   dateAdded: string
   quantity: number
-  status: "In Stock" | "Low Stock" | "Out of Stock"
+  status: 'In Stock' | 'Low Stock' | 'Out of Stock'
 }
 
 interface InventoryContextType {
   items: InventoryItem[]
   isLoading: boolean
   error: string | null
-  addItem: (item: { name: string; category: string; quantity: number }) => Promise<void>
+  addItem: (item: {
+    name: string
+    category: string
+    quantity: number
+  }) => Promise<void>
   updateItem: (id: string, item: Partial<InventoryItem>) => Promise<void>
   deleteItem: (id: string) => Promise<void>
   fetchItems: () => Promise<void>
@@ -30,7 +41,9 @@ interface InventoryContextType {
   getMostActiveUsers: () => any[]
 }
 
-const InventoryContext = createContext<InventoryContextType | undefined>(undefined)
+const InventoryContext = createContext<InventoryContextType | undefined>(
+  undefined,
+)
 
 export function InventoryProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<InventoryItem[]>([])
@@ -41,14 +54,20 @@ export function InventoryProvider({ children }: { children: ReactNode }) {
     setIsLoading(true)
     setError(null)
     try {
-      const response = await fetch("/api/inventory")
+      const response = await fetch('/api/inventory')
       if (!response.ok) {
-        throw new Error("Failed to fetch inventory")
+        throw new Error(`Failed to fetch inventory: ${response.statusText}`)
       }
       const data = await response.json()
-      setItems(data)
+      if (Array.isArray(data)) {
+        setItems(data)
+      } else {
+        console.error('API did not return an array:', data)
+        throw new Error('Invalid data format from API')
+      }
     } catch (err: any) {
       setError(err.message)
+      setItems([]) // Ensure items is an empty array on error
     } finally {
       setIsLoading(false)
     }
@@ -58,15 +77,19 @@ export function InventoryProvider({ children }: { children: ReactNode }) {
     fetchItems()
   }, [fetchItems])
 
-  const addItem = async (item: { name: string; category: string; quantity: number }) => {
+  const addItem = async (item: {
+    name: string
+    category: string
+    quantity: number
+  }) => {
     try {
-      const response = await fetch("/api/inventory", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const response = await fetch('/api/inventory', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(item),
       })
       if (!response.ok) {
-        throw new Error("Failed to add item")
+        throw new Error('Failed to add item')
       }
       await fetchItems() // Refetch to get the latest list
     } catch (err: any) {
@@ -77,12 +100,12 @@ export function InventoryProvider({ children }: { children: ReactNode }) {
   const updateItem = async (id: string, updatedFields: Partial<InventoryItem>) => {
     try {
       const response = await fetch(`/api/inventory/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updatedFields),
       })
       if (!response.ok) {
-        throw new Error("Failed to update item")
+        throw new Error('Failed to update item')
       }
       await fetchItems() // Refetch to get the latest list
     } catch (err: any) {
@@ -93,10 +116,10 @@ export function InventoryProvider({ children }: { children: ReactNode }) {
   const deleteItem = async (id: string) => {
     try {
       const response = await fetch(`/api/inventory/${id}`, {
-        method: "DELETE",
+        method: 'DELETE',
       })
       if (!response.ok) {
-        throw new Error("Failed to delete item")
+        throw new Error('Failed to delete item')
       }
       await fetchItems() // Refetch to get the latest list
     } catch (err: any) {
@@ -105,34 +128,34 @@ export function InventoryProvider({ children }: { children: ReactNode }) {
   }
 
   const getTotalItems = useCallback(() => {
-    return items.reduce((total, item) => total + item.quantity, 0)
+    return (items || []).reduce((total, item) => total + item.quantity, 0)
   }, [items])
 
   const getLowStockItems = useCallback(() => {
-    return items.filter((item) => item.status === "Low Stock")
+    return (items || []).filter((item) => item.status === 'Low Stock')
   }, [items])
 
   const getOutOfStockItems = useCallback(() => {
-    return items.filter((item) => item.status === "Out of Stock")
+    return (items || []).filter((item) => item.status === 'Out of Stock')
   }, [items])
 
   const getCategoryStats = useCallback(() => {
-    return items.reduce(
+    return (items || []).reduce(
       (stats, item) => {
         stats[item.category] = (stats[item.category] || 0) + 1
         return stats
       },
-      {} as Record<string, number>
+      {} as Record<string, number>,
     )
   }, [items])
 
   const getStatusStats = useCallback(() => {
-    return items.reduce(
+    return (items || []).reduce(
       (stats, item) => {
         stats[item.status] = (stats[item.status] || 0) + 1
         return stats
       },
-      {} as Record<string, number>
+      {} as Record<string, number>,
     )
   }, [items])
 
@@ -172,7 +195,7 @@ export function InventoryProvider({ children }: { children: ReactNode }) {
 export function useInventory() {
   const context = useContext(InventoryContext)
   if (context === undefined) {
-    throw new Error("useInventory must be used within an InventoryProvider")
+    throw new Error('useInventory must be used within an InventoryProvider')
   }
   return context
 }
