@@ -55,6 +55,6 @@ export function validateEmail(email: string): boolean {
   const emailRegex = /^[^
 @]+@[^
 @]+\.[^
-@]+$/
-  return emailRegex.test(email)
+@]+$/;
+  return emailRegex.test(email);
 }
