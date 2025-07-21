@@ -25,7 +25,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Please verify your email before logging in' }, { status: 403 });
     }
 
-    await createSession(user.id);
+    await createSession(user.id, user.role);
 
     return NextResponse.json({ success: true, user });
   } catch (error) {

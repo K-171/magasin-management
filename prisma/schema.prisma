@@ -43,3 +43,16 @@ model Movement {
   status            String
   item              Item      @relation(fields: [itemId], references: [id])
 }
+
+model Invitation {
+  id          String   @id @default(cuid())
+  email       String   @unique
+  role        String
+  token       String   @unique
+  expiresAt   DateTime
+  createdAt   DateTime @default(now())
+  createdBy   String
+  used        Boolean  @default(false)
+  usedAt      DateTime?
+  usedBy      String?
+}
