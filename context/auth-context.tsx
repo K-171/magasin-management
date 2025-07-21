@@ -26,6 +26,7 @@ interface AuthContextType extends AuthState {
   createInvitation: (email: string, role: "admin" | "manager" | "user") => Promise<any>;
   getInvitations: () => Promise<any[]>;
   revokeInvitation: (id: string) => Promise<any>;
+  verifySession: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -147,6 +148,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         createInvitation,
         getInvitations,
         revokeInvitation,
+        verifySession,
       }}
     >
       {children}

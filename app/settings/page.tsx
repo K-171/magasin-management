@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react";
 import { Layout } from "@/components/layout"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -50,6 +50,35 @@ export default function Settings() {
     twoFactorAuth: false,
     sessionTimeout: "15",
   })
+
+  const avatarInputRef = useRef<HTMLInputElement>(null);
+
+  const handleAvatarChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const response = await fetch('/api/auth/avatar', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        verifySession();
+        alert("Avatar updated successfully!");
+      } else {
+        alert(result.error || "Failed to update avatar");
+      }
+    } catch (error) {
+      console.error("Avatar upload error:", error);
+      alert("An unexpected error occurred during avatar upload.");
+    }
+  };
 
   // Update the handleProfileUpdate function
   const handleProfileUpdate = async (e: React.FormEvent) => {
@@ -110,13 +139,14 @@ export default function Settings() {
                       <div className="flex flex-col sm:flex-row items-center gap-6">
                         <Avatar className="h-20 w-20">
                           <AvatarImage
-                            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                            alt="John Doe"
+                            src={user?.avatar || "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"}
+                            alt={user?.username || "User"}
                           />
-                          <AvatarFallback>JD</AvatarFallback>
+                          <AvatarFallback>{user?.username?.charAt(0).toUpperCase()}</AvatarFallback>
                         </Avatar>
                         <div className="text-center sm:text-left">
-                          <Button variant="outline" size="sm">
+                          <input type="file" ref={avatarInputRef} onChange={handleAvatarChange} accept="image/*" style={{ display: 'none' }} />
+                          <Button variant="outline" size="sm" onClick={() => avatarInputRef.current?.click()}>
                             Change Avatar
                           </Button>
                           <p className="text-sm text-muted-foreground mt-1">JPG, GIF or PNG. Max size of 800K</p>
