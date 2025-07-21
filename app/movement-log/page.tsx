@@ -167,6 +167,24 @@ export default function MovementLog() {
     }
   }
 
+  const handleClearLog = async () => {
+    if (confirm(t('confirmClearLog'))) {
+      try {
+        const response = await fetch('/api/movements/clear', {
+          method: 'DELETE',
+        });
+
+        if (response.ok) {
+          fetchMovements();
+        } else {
+          console.error('Failed to clear movement log');
+        }
+      } catch (error) {
+        console.error('Error clearing movement log:', error);
+      }
+    }
+  };
+
   if (isLoading) {
     return (
       <Layout title={t('movementLog')}>
@@ -227,6 +245,14 @@ export default function MovementLog() {
                   {selectedTypes.length + selectedStatuses.length}
                 </Badge>
               )}
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={handleClearLog}
+              className="flex items-center gap-2"
+            >
+              <RotateCcw className="h-4 w-4" />
+              {t('clearLog')}
             </Button>
           </div>
         </div>

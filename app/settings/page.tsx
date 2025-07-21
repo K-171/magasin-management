@@ -70,13 +70,13 @@ export default function Settings() {
 
       if (result.success) {
         verifySession();
-        alert("Avatar updated successfully!");
+        alert(t("avatarUpdatedSuccess"));
       } else {
-        alert(result.error || "Failed to update avatar");
+        alert(result.error || t("failedToUpdateAvatar"));
       }
     } catch (error) {
       console.error("Avatar upload error:", error);
-      alert("An unexpected error occurred during avatar upload.");
+      alert(t("avatarUploadError"));
     }
   };
 
@@ -92,9 +92,9 @@ export default function Settings() {
     })
 
     if (result.success) {
-      alert("Profile updated successfully!")
+      alert(t("profileUpdatedSuccess"))
     } else {
-      alert(result.error || "Failed to update profile")
+      alert(result.error || t("failedToUpdateProfile"))
     }
   }
 
@@ -105,25 +105,25 @@ export default function Settings() {
   // Wrap the return statement with ProtectedRoute
   return (
     <ProtectedRoute>
-      <Layout title="Settings" showSearch={false}>
+      <Layout title={t("settings")} showSearch={false}>
         <div className="grid gap-6">
           <Tabs defaultValue="profile" className="flex flex-col md:flex-row gap-6">
             <TabsList className="flex flex-col items-stretch justify-start h-full gap-2 w-full md:w-1/5">
               <TabsTrigger value="profile" className="flex items-center justify-start gap-2">
                 <User className="h-4 w-4" />
-                Profile
+                {t("profile")}
               </TabsTrigger>
               <TabsTrigger value="notifications" className="flex items-center justify-start gap-2">
                 <Bell className="h-4 w-4" />
-                Notifications
+                {t("notifications")}
               </TabsTrigger>
               <TabsTrigger value="security" className="flex items-center justify-start gap-2">
                 <Shield className="h-4 w-4" />
-                Security
+                {t("security")}
               </TabsTrigger>
               <TabsTrigger value="data" className="flex items-center justify-start gap-2">
                 <FileText className="h-4 w-4" />
-                Data Management
+                {t("dataManagement")}
               </TabsTrigger>
             </TabsList>
 
@@ -131,8 +131,8 @@ export default function Settings() {
               <TabsContent value="profile">
                 <Card>
                   <CardHeader>
-                    <CardTitle>Profile Settings</CardTitle>
-                    <CardDescription>Manage your account information and preferences.</CardDescription>
+                    <CardTitle>{t("profileSettings")}</CardTitle>
+                    <CardDescription>{t("manageAccountInfo")}</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <form onSubmit={handleProfileUpdate} className="space-y-6">
@@ -147,9 +147,9 @@ export default function Settings() {
                         <div className="text-center sm:text-left">
                           <input type="file" ref={avatarInputRef} onChange={handleAvatarChange} accept="image/*" style={{ display: 'none' }} />
                           <Button variant="outline" size="sm" onClick={() => avatarInputRef.current?.click()}>
-                            Change Avatar
+                            {t("changeAvatar")}
                           </Button>
-                          <p className="text-sm text-muted-foreground mt-1">JPG, GIF or PNG. Max size of 800K</p>
+                          <p className="text-sm text-muted-foreground mt-1">{t("avatarUploadInfo")}</p>
                         </div>
                       </div>
 
@@ -157,7 +157,7 @@ export default function Settings() {
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
-                          <Label htmlFor="firstName">First Name</Label>
+                          <Label htmlFor="firstName">{t("firstName")}</Label>
                           <Input
                             id="firstName"
                             value={profileForm.firstName}
@@ -165,7 +165,7 @@ export default function Settings() {
                           />
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="lastName">Last Name</Label>
+                          <Label htmlFor="lastName">{t("lastName")}</Label>
                           <Input
                             id="lastName"
                             value={profileForm.lastName}
@@ -173,7 +173,7 @@ export default function Settings() {
                           />
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="username">Username</Label>
+                          <Label htmlFor="username">{t("username")}</Label>
                           <Input
                             id="username"
                             value={profileForm.username}
@@ -181,7 +181,7 @@ export default function Settings() {
                           />
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="email">Email Address</Label>
+                          <Label htmlFor="email">{t("emailAddress")}</Label>
                           <Input
                             id="email"
                             type="email"
@@ -190,18 +190,18 @@ export default function Settings() {
                           />
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="role">Role</Label>
+                          <Label htmlFor="role">{t("role")}</Label>
                           <Select
                             value={profileForm.role}
                             onValueChange={(value) => setProfileForm({ ...profileForm, role: value })}
                           >
                             <SelectTrigger id="role">
-                              <SelectValue placeholder="Select role" />
+                              <SelectValue placeholder={t("selectRole")} />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="administrator">Administrator</SelectItem>
-                              <SelectItem value="manager">Manager</SelectItem>
-                              <SelectItem value="user">User</SelectItem>
+                              <SelectItem value="administrator">{t("adminRole")}</SelectItem>
+                              <SelectItem value="manager">{t("managerRole")}</SelectItem>
+                              <SelectItem value="user">{t("userRole")}</SelectItem>
                             </SelectContent>
                           </Select>
                         </div>
@@ -209,7 +209,7 @@ export default function Settings() {
 
                       <div className="flex justify-center sm:justify-end">
                         <Button type="submit" className="w-full sm:w-auto bg-[#2b4198] hover:bg-opacity-90">
-                          Save Changes
+                          {t("saveChanges")}
                         </Button>
                       </div>
                     </form>
@@ -220,16 +220,16 @@ export default function Settings() {
               <TabsContent value="notifications">
                 <Card>
                   <CardHeader>
-                    <CardTitle>Notification Settings</CardTitle>
-                    <CardDescription>Configure how you receive notifications and alerts.</CardDescription>
+                    <CardTitle>{t("notificationSettings")}</CardTitle>
+                    <CardDescription>{t("configureNotifications")}</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-6">
                       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                         <div className="space-y-0.5">
-                          <Label className="text-base">Email Notifications</Label>
+                          <Label className="text-base">{t("emailNotifications")}</Label>
                           <p className="text-sm text-muted-foreground">
-                            Receive email notifications for important updates
+                            {t("receiveEmailUpdates")}
                           </p>
                         </div>
                         <Switch
@@ -240,8 +240,8 @@ export default function Settings() {
                       <Separator />
                       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                         <div className="space-y-0.5">
-                          <Label className="text-base">Low Stock Alerts</Label>
-                          <p className="text-sm text-muted-foreground">Get notified when items are running low</p>
+                          <Label className="text-base">{t("lowStockAlerts")}</Label>
+                          <p className="text-sm text-muted-foreground">{t("getNotifiedLowStock")}</p>
                         </div>
                         <Switch
                           checked={notificationSettings.lowStockAlerts}
@@ -251,9 +251,9 @@ export default function Settings() {
                       <Separator />
                       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                         <div className="space-y-0.5">
-                          <Label className="text-base">System Updates</Label>
+                          <Label className="text-base">{t("systemUpdates")}</Label>
                           <p className="text-sm text-muted-foreground">
-                            Receive notifications about system updates and maintenance
+                            {t("receiveSystemUpdates")}
                           </p>
                         </div>
                         <Switch
@@ -264,9 +264,9 @@ export default function Settings() {
                       <Separator />
                       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                         <div className="space-y-0.5">
-                          <Label className="text-base">Weekly Activity Summary</Label>
+                          <Label className="text-base">{t("weeklyActivitySummary")}</Label>
                           <p className="text-sm text-muted-foreground">
-                            Get a weekly summary of inventory changes and activities
+                            {t("getWeeklySummary")}
                           </p>
                         </div>
                         <Switch
@@ -282,23 +282,23 @@ export default function Settings() {
               <TabsContent value="security">
                 <Card>
                   <CardHeader>
-                    <CardTitle>Security Settings</CardTitle>
-                    <CardDescription>Manage your account security and authentication options.</CardDescription>
+                    <CardTitle>{t("securitySettings")}</CardTitle>
+                    <CardDescription>{t("manageSecurityOptions")}</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-6">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
-                          <Label htmlFor="current-password">Current Password</Label>
+                          <Label htmlFor="current-password">{t("currentPassword")}</Label>
                           <Input id="current-password" type="password" />
                         </div>
                         <div></div>
                         <div className="space-y-2">
-                          <Label htmlFor="new-password">New Password</Label>
+                          <Label htmlFor="new-password">{t("newPassword")}</Label>
                           <Input id="new-password" type="password" />
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="confirm-password">Confirm New Password</Label>
+                          <Label htmlFor="confirm-password">{t("confirmNewPassword")}</Label>
                           <Input id="confirm-password" type="password" />
                         </div>
                       </div>
@@ -307,8 +307,8 @@ export default function Settings() {
 
                       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                         <div className="space-y-0.5">
-                          <Label className="text-base">Two-Factor Authentication</Label>
-                          <p className="text-sm text-muted-foreground">Add an extra layer of security to your account</p>
+                          <Label className="text-base">{t("twoFactorAuth")}</Label>
+                          <p className="text-sm text-muted-foreground">{t("addExtraSecurity")}</p>
                         </div>
                         <Switch
                           checked={securitySettings.twoFactorAuth}
@@ -321,25 +321,25 @@ export default function Settings() {
                       <Separator />
 
                       <div className="space-y-2">
-                        <Label htmlFor="session-timeout">Session Timeout (minutes)</Label>
+                        <Label htmlFor="session-timeout">{t("sessionTimeout")} ({t("minutes")})</Label>
                         <Select
                           value={securitySettings.sessionTimeout}
                           onValueChange={(value) => setSecuritySettings({ ...securitySettings, sessionTimeout: value })}
                         >
                           <SelectTrigger id="session-timeout" className="w-full sm:w-[180px]">
-                            <SelectValue placeholder="Select timeout" />
+                            <SelectValue placeholder={t("selectTimeout")} />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="15">15 minutes</SelectItem>
-                            <SelectItem value="30">30 minutes</SelectItem>
-                            <SelectItem value="60">60 minutes</SelectItem>
-                            <SelectItem value="120">2 hours</SelectItem>
+                            <SelectItem value="15">15 {t("minutes")}</SelectItem>
+                            <SelectItem value="30">30 {t("minutes")}</SelectItem>
+                            <SelectItem value="60">60 {t("minutes")}</SelectItem>
+                            <SelectItem value="120">2 {t("hours")}</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
 
                       <div className="flex justify-center sm:justify-end">
-                        <Button className="w-full sm:w-auto bg-[#2b4198] hover:bg-opacity-90">Save Security Settings</Button>
+                        <Button className="w-full sm:w-auto bg-[#2b4198] hover:bg-opacity-90">{t("saveSecuritySettings")}</Button>
                       </div>
                     </div>
                   </CardContent>
@@ -348,25 +348,25 @@ export default function Settings() {
               <TabsContent value="data">
                 <Card>
                   <CardHeader>
-                    <CardTitle>Data Management</CardTitle>
+                    <CardTitle>{t("dataManagementTitle")}</CardTitle>
                     <CardDescription>
-                      Guidelines and information for importing and exporting inventory data.
+                      {t("dataManagementDescription")}
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-6">
                     <div>
-                      <h4 className="font-medium mb-3 text-lg">Importing Data</h4>
+                      <h4 className="font-medium mb-3 text-lg">{t("importingData")}</h4>
                       <div className="space-y-4 text-sm">
                         <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
-                          <p className="font-semibold text-blue-900 mb-1">Supported File Formats</p>
+                          <p className="font-semibold text-blue-900 mb-1">{t("supportedFileFormats")}</p>
                           <p className="text-blue-800">
-                            You can import data using Microsoft Excel (<strong>.xlsx</strong>) or Comma-Separated Values (<strong>.csv</strong>) files.
+                            {t("importFileFormats")}
                           </p>
                         </div>
                         <div className="p-4 bg-green-50 rounded-lg border border-green-200">
-                          <p className="font-semibold text-green-900 mb-1">Required Columns</p>
+                          <p className="font-semibold text-green-900 mb-1">{t("requiredColumns")}</p>
                           <p className="text-green-800 mb-2">
-                            Your file must contain the following columns (the header names must match exactly):
+                            {t("requiredColumnsInfo")}
                           </p>
                           <ul className="text-green-800 space-y-1 font-mono text-xs">
                             <li>• id</li>
@@ -376,13 +376,13 @@ export default function Settings() {
                           </ul>
                         </div>
                         <div className="p-4 bg-amber-50 rounded-lg border border-amber-200">
-                          <p className="font-semibold text-amber-900 mb-1">Importing Tips</p>
+                          <p className="font-semibold text-amber-900 mb-1">{t("importingTips")}</p>
                           <ul className="text-amber-800 space-y-1 list-disc list-inside">
-                            <li>Ensure all required columns are present and correctly named.</li>
-                            <li>The <strong>id</strong> for each item must be unique. If an ID already exists, the import for that row will fail.</li>
-                            <li>The <strong>quantity</strong> must be a whole number.</li>
-                            <li>If a <strong>category</strong> does not exist, it will be automatically created.</li>
-                            <li>The system automatically sets the date added and initial status based on the quantity.</li>
+                            <li>{t("ensureColumnsPresent")}</li>
+                            <li>{t("uniqueId")}</li>
+                            <li>{t("quantityWholeNumber")}</li>
+                            <li>{t("categoryAutoCreated")}</li>
+                            <li>{t("systemSetsDateStatus")}</li>
                           </ul>
                         </div>
                       </div>
@@ -391,9 +391,9 @@ export default function Settings() {
                     <Separator />
 
                     <div>
-                      <h4 className="font-medium mb-3 text-lg">Exporting Data</h4>
+                      <h4 className="font-medium mb-3 text-lg">{t("exportingData")}</h4>
                       <p className="text-sm text-muted-foreground">
-                        You can export your inventory data from the "All Stock" or "Reports" pages. The export tool allows you to download the current view as an Excel (.xlsx) file. You can select which columns to include in the final report.
+                        {t("exportDataInfo")}
                       </p>
                     </div>
                   </CardContent>

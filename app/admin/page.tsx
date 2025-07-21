@@ -49,30 +49,30 @@ export default function AdminPanel() {
     try {
       const result = await createInvitation(newInvitation.email, newInvitation.role)
       if (result.success) {
-        setMessage({ type: "success", text: "Invitation sent successfully!" })
+        setMessage({ type: "success", text: t("invitationSentSuccess") })
         setNewInvitation({ email: "", role: "user" })
         fetchInvitations();
         setIsCreateDialogOpen(false)
       } else {
-        setMessage({ type: "error", text: result.error || "Failed to create invitation" })
+        setMessage({ type: "error", text: result.error || t("failedToCreateInvitation") })
       }
     } catch (error) {
-      setMessage({ type: "error", text: "An unexpected error occurred" })
+      setMessage({ type: "error", text: t("unexpectedError") })
     } finally {
       setIsSubmitting(false)
     }
   }
 
   const handleRevokeInvitation = async (invitationId: string) => {
-    if (!confirm("Are you sure you want to revoke this invitation?")) return
+    if (!confirm(t("confirmRevokeInvitation"))) return
 
     try {
       const result = await revokeInvitation(invitationId)
       if (result.success) {
-        setMessage({ type: "success", text: "Invitation revoked successfully" })
+        setMessage({ type: "success", text: t("invitationRevokedSuccess") })
         fetchInvitations();
       } else {
-        setMessage({ type: "error", text: result.error || "Failed to revoke invitation" })
+        setMessage({ type: "error", text: result.error || t("failedToRevokeInvitation") })
       }
     } catch (error) {
       setMessage({ type: "error", text: "An unexpected error occurred" })
@@ -81,12 +81,12 @@ export default function AdminPanel() {
 
   const getStatusBadge = (invitation: Invitation) => {
     if (invitation.used) {
-      return <Badge className="bg-green-100 text-green-800">Used</Badge>
+      return <Badge className="bg-green-100 text-green-800">{t("used")}</Badge>
     }
     if (new Date(invitation.expiresAt) < new Date()) {
-      return <Badge variant="destructive">Expired</Badge>
+      return <Badge variant="destructive">{t("expired")}</Badge>
     }
-    return <Badge className="bg-blue-100 text-blue-800">Pending</Badge>
+    return <Badge className="bg-blue-100 text-blue-800">{t("pending")}</Badge>
   }
 
   const getStatusIcon = (invitation: Invitation) => {
@@ -111,7 +111,7 @@ export default function AdminPanel() {
 
   return (
     <ProtectedRoute requiredRole="admin">
-      <Layout title="Admin Panel" showSearch={false}>
+      <Layout title={t("adminPanel")} showSearch={false}>
         <div className="space-y-6">
           {message && (
             <Alert variant={message.type === "error" ? "destructive" : "default"}>
@@ -123,7 +123,7 @@ export default function AdminPanel() {
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                <CardTitle className="text-sm font-medium">Total Invitations</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("totalInvitations")}</CardTitle>
                 <Mail className="h-4 w-4 text-[#2b4198]" />
               </CardHeader>
               <CardContent>
@@ -132,7 +132,7 @@ export default function AdminPanel() {
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                <CardTitle className="text-sm font-medium">Pending</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("pending")}</CardTitle>
                 <Clock className="h-4 w-4 text-blue-600" />
               </CardHeader>
               <CardContent>
@@ -143,7 +143,7 @@ export default function AdminPanel() {
             </Card>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                <CardTitle className="text-sm font-medium">Used</CardTitle>
+                <CardTitle className="text-sm font-medium">{t("used")}</CardTitle>
                 <CheckCircle className="h-4 w-4 text-green-600" />
               </CardHeader>
               <CardContent>
@@ -155,8 +155,8 @@ export default function AdminPanel() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <div>
-                <CardTitle>User Invitations</CardTitle>
-                <CardDescription>Manage user access to the inventory system</CardDescription>
+                <CardTitle>{t("userInvitations")}</CardTitle>
+                <CardDescription>{t("manageUserAccess")}</CardDescription>
               </div>
               <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
                 <DialogTrigger asChild>
@@ -167,22 +167,22 @@ export default function AdminPanel() {
                 </DialogTrigger>
                 <DialogContent>
                   <DialogHeader>
-                    <DialogTitle>Create Invitation</DialogTitle>
+                    <DialogTitle>{t("createInvitation")}</DialogTitle>
                   </DialogHeader>
                   <form onSubmit={handleCreateInvitation} className="space-y-4">
                     <div>
-                      <Label htmlFor="email">Email Address</Label>
+                      <Label htmlFor="email">{t("emailAddress")}</Label>
                       <Input
                         id="email"
                         type="email"
                         required
                         value={newInvitation.email}
                         onChange={(e) => setNewInvitation({ ...newInvitation, email: e.target.value })}
-                        placeholder="user@example.com"
+                        placeholder={t("emailPlaceholder")}
                       />
                     </div>
                     <div>
-                      <Label htmlFor="role">Role</Label>
+                      <Label htmlFor="role">{t("role")}</Label>
                       <Select
                         value={newInvitation.role}
                         onValueChange={(value: "admin" | "manager" | "user") =>
@@ -190,17 +190,17 @@ export default function AdminPanel() {
                         }
                       >
                         <SelectTrigger>
-                          <SelectValue placeholder="Select role" />
+                          <SelectValue placeholder={t("selectRole")} />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="user">User</SelectItem>
-                          <SelectItem value="manager">Manager</SelectItem>
-                          <SelectItem value="admin">Administrator</SelectItem>
+                          <SelectItem value="user">{t("userRole")}</SelectItem>
+                          <SelectItem value="manager">{t("managerRole")}</SelectItem>
+                          <SelectItem value="admin">{t("adminRole")}</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
                     <Button type="submit" disabled={isSubmitting} className="w-full bg-[#2b4198] hover:bg-opacity-90">
-                      {isSubmitting ? "Sending..." : "Send Invitation"}
+                      {isSubmitting ? t("sending") : t("sendInvitation")}
                     </Button>
                   </form>
                 </DialogContent>
@@ -212,19 +212,19 @@ export default function AdminPanel() {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Email</TableHead>
-                      <TableHead>Role</TableHead>
-                      <TableHead>Created</TableHead>
-                      <TableHead>Expires</TableHead>
-                      <TableHead>Actions</TableHead>
+                      <TableHead>{t("status")}</TableHead>
+                      <TableHead>{t("email")}</TableHead>
+                      <TableHead>{t("role")}</TableHead>
+                      <TableHead>{t("created")}</TableHead>
+                      <TableHead>{t("expires")}</TableHead>
+                      <TableHead>{t("actions")}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {invitations.length === 0 ? (
                       <TableRow>
                         <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
-                          No invitations created yet
+                          {t("noInvitationsYet")}
                         </TableCell>
                       </TableRow>
                     ) : (
@@ -254,7 +254,7 @@ export default function AdminPanel() {
                                   onClick={() => handleRevokeInvitation(invitation.id)}
                                   className="text-red-600 hover:text-red-700 hover:bg-red-50"
                                 >
-                                  Revoke
+                                  {t("revoke")}
                                 </Button>
                               )}
                             </TableCell>
@@ -268,7 +268,7 @@ export default function AdminPanel() {
               <div className="md:hidden space-y-4">
                 {invitations.length === 0 ? (
                   <div className="text-center py-8 text-muted-foreground">
-                    No invitations created yet
+                    {t("noInvitationsYet")}
                   </div>
                 ) : (
                   invitations
@@ -288,11 +288,11 @@ export default function AdminPanel() {
                           </div>
                           <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
                             <div>
-                              <p className="text-gray-500">Created</p>
+                              <p className="text-gray-500">{t("created")}</p>
                               <p className="font-medium">{formatDate(invitation.createdAt)}</p>
                             </div>
                             <div>
-                              <p className="text-gray-500">Expires</p>
+                              <p className="text-gray-500">{t("expires")}</p>
                               <p className="font-medium">{formatDate(invitation.expiresAt)}</p>
                             </div>
                           </div>

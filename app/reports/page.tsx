@@ -132,13 +132,13 @@ export default function Reports() {
             <div className="flex flex-col sm:flex-row items-center gap-2">
               <Select value={timeFrame} onValueChange={setTimeFrame}>
                 <SelectTrigger className="w-full sm:w-[180px]">
-                  <SelectValue placeholder="Time Frame" />
+                  <SelectValue placeholder={t("timeFrame")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Time</SelectItem>
-                  <SelectItem value="week">Last Week</SelectItem>
-                  <SelectItem value="month">Last Month</SelectItem>
-                  <SelectItem value="quarter">Last Quarter</SelectItem>
+                  <SelectItem value="all">{t("allTime")}</SelectItem>
+                  <SelectItem value="week">{t("lastWeek")}</SelectItem>
+                  <SelectItem value="month">{t("lastMonth")}</SelectItem>
+                  <SelectItem value="quarter">{t("lastQuarter")}</SelectItem>
                 </SelectContent>
               </Select>
               <Button
@@ -159,11 +159,11 @@ export default function Reports() {
               <TabsList className="mb-6">
                 <TabsTrigger value="inventory" className="flex items-center gap-2">
                   <FileText className="h-4 w-4" />
-                  Inventory Report
+                  {t("inventoryReport")}
                 </TabsTrigger>
                 <TabsTrigger value="distribution" className="flex items-center gap-2">
                   <PieChart className="h-4 w-4" />
-                  Distribution Analysis
+                  {t("distributionAnalysis")}
                 </TabsTrigger>
               </TabsList>
 
@@ -235,7 +235,7 @@ export default function Reports() {
                 <div className="grid md:grid-cols-2 gap-6">
                   <Card>
                     <CardHeader>
-                      <CardTitle>Category Distribution</CardTitle>
+                      <CardTitle>{t("categoryDistribution")}</CardTitle>
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-4">
@@ -250,7 +250,7 @@ export default function Reports() {
                                 <span>{t(category)}</span>
                               </div>
                               <span className="font-medium">
-                                {count} items ({percentage}%)
+                                {count} {t("items")} ({percentage}%)
                               </span>
                             </div>
                             <div className="h-2 w-full rounded-full bg-gray-100">
@@ -270,7 +270,7 @@ export default function Reports() {
 
                   <Card>
                     <CardHeader>
-                      <CardTitle>Status Distribution</CardTitle>
+                      <CardTitle>{t("statusDistribution")}</CardTitle>
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-4">
@@ -285,7 +285,7 @@ export default function Reports() {
                                 <span>{status}</span>
                               </div>
                               <span className="font-medium">
-                                {count} items ({percentage}%)
+                                {count} {t("items")} ({percentage}%)
                               </span>
                             </div>
                             <div className="h-2 w-full rounded-full bg-gray-100">
