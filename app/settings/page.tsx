@@ -21,6 +21,7 @@ import { useLanguage } from "@/context/language-context"
 // Update the component to use actual user data
 export default function Settings() {
   const { user, updateProfile } = useAuth()
+  const { t } = useLanguage()
 
   const [profileForm, setProfileForm] = useState({
     firstName: "",

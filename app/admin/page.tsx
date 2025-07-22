@@ -21,6 +21,7 @@ import type { Invitation } from "@/lib/auth"
 
 export default function AdminPanel() {
   const { user, createInvitation, getInvitations, revokeInvitation } = useAuth()
+  const { t } = useLanguage()
   const searchParams = useSearchParams()
   const highlightedId = searchParams.get("highlight")
   const [invitations, setInvitations] = useState<Invitation[]>([])
