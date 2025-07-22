@@ -1,6 +1,7 @@
 "use client"
 
 import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
+import enTranslations from "@/../public/locales/en.json";
 
 type Language = "en" | "es" | "fr" | "de"
 
@@ -15,32 +16,29 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguage] = useState<Language>("en")
-  const [translations, setTranslations] = useState<Record<string, string>>({})
-  const [isLoading, setIsLoading] = useState(true)
+  const [translations, setTranslations] = useState<Record<string, string>>(enTranslations)
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     const fetchTranslations = async () => {
+      if (language === "en") {
+        setTranslations(enTranslations)
+        return
+      }
+
       setIsLoading(true)
       try {
         const response = await fetch(`/locales/${language}.json`)
         if (!response.ok) {
           console.error(`Failed to fetch translations for ${language}`)
-          if (language !== 'en') {
-            const fallbackResponse = await fetch(`/locales/en.json`);
-            const fallbackData = await fallbackResponse.json();
-            setTranslations(fallbackData);
-          }
+          setTranslations(enTranslations) // Fallback to English
           return
         }
         const data = await response.json()
         setTranslations(data)
       } catch (error) {
         console.error("Error loading translations:", error)
-        if (language !== 'en') {
-            const fallbackResponse = await fetch(`/locales/en.json`);
-            const fallbackData = await fallbackResponse.json();
-            setTranslations(fallbackData);
-          }
+        setTranslations(enTranslations) // Fallback to English
       } finally {
         setIsLoading(false)
       }
