@@ -2,7 +2,7 @@
 
 import { useAuth } from "@/context/auth-context"
 import { useRouter } from "next/navigation"
-import { useEffect, type ReactNode } from "react"
+import { useEffect, type ReactNode, useState } from "react"
 
 interface ProtectedRouteProps {
   children: ReactNode
@@ -13,14 +13,19 @@ interface ProtectedRouteProps {
 export function ProtectedRoute({ children, requiredRole, fallback }: ProtectedRouteProps) {
   const { isAuthenticated, isLoading, user } = useAuth()
   const router = useRouter()
+  const [isClient, setIsClient] = useState(false)
 
   useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
+    setIsClient(true)
+  }, [])
+
+  useEffect(() => {
+    if (isClient && !isLoading && !isAuthenticated) {
       router.push("/login")
     }
-  }, [isAuthenticated, isLoading, router])
+  }, [isAuthenticated, isLoading, router, isClient])
 
-  if (isLoading) {
+  if (isLoading || !isClient) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-[#2b4198]"></div>

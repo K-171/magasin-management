@@ -40,6 +40,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const router = useRouter()
 
   const verifySession = useCallback(async () => {
+    if (typeof window === "undefined") {
+      setAuthState({ user: null, isAuthenticated: false, isLoading: false });
+      return;
+    }
     try {
       const response = await fetch('/api/auth/session');
       const data = await response.json();
