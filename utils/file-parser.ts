@@ -1,3 +1,4 @@
+import * as ExcelJS from "exceljs"
 import type { InventoryItem } from "@/context/inventory-context"
 
 export interface ImportResult {
@@ -11,56 +12,36 @@ export interface ParsedRow {
   [key: string]: string | number
 }
 
-// CSV Parser
-export function parseCSV(csvText: string): ParsedRow[] {
-  const lines = csvText.split("\n").filter((line) => line.trim())
-  if (lines.length < 2) return []
+// Excel Parser
+export async function parseExcel(data: ArrayBuffer): Promise<ParsedRow[]> {
+  const workbook = new ExcelJS.Workbook()
+  await workbook.xlsx.load(data)
 
-  const headers = lines[0].split(",").map((h) => h.trim().replace(/"/g, ""))
+  const worksheet = workbook.worksheets[0]
+  if (!worksheet) {
+    return []
+  }
+
   const rows: ParsedRow[] = []
+  const headers: string[] = []
 
-  for (let i = 1; i < lines.length; i++) {
-    const values = parseCSVLine(lines[i])
-    if (values.length === headers.length) {
-      const row: ParsedRow = {}
-      headers.forEach((header, index) => {
-        row[header] = values[index]
-      })
-      rows.push(row)
-    }
+  worksheet.getRow(1).eachCell({ includeEmpty: true }, (cell) => {
+    headers.push(cell.value ? cell.value.toString() : "")
+  })
+
+  for (let i = 2; i <= worksheet.rowCount; i++) {
+    const row = worksheet.getRow(i)
+    const rowData: ParsedRow = {}
+    row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+      const header = headers[colNumber - 1]
+      if (header) {
+        rowData[header] = cell.value
+      }
+    })
+    rows.push(rowData)
   }
 
   return rows
-}
-
-// Parse a single CSV line handling quoted values
-function parseCSVLine(line: string): string[] {
-  const result: string[] = []
-  let current = ""
-  let inQuotes = false
-
-  for (let i = 0; i < line.length; i++) {
-    const char = line[i]
-
-    if (char === '"') {
-      inQuotes = !inQuotes
-    } else if (char === "," && !inQuotes) {
-      result.push(current.trim())
-      current = ""
-    } else {
-      current += char
-    }
-  }
-
-  result.push(current.trim())
-  return result
-}
-
-// Excel Parser (simplified - in a real app you'd use a library like xlsx)
-export function parseExcel(data: ArrayBuffer): ParsedRow[] {
-  // This is a simplified implementation
-  // In a real application, you would use a library like 'xlsx' or 'exceljs'
-  throw new Error("Excel parsing requires additional libraries. Please use CSV format for now.")
 }
 
 // Validate and transform imported data
@@ -124,13 +105,20 @@ export function validateImportData(rows: ParsedRow[]): ImportResult {
   }
 }
 
-// Generate sample CSV template
-export function generateSampleCSV(): string {
-  const headers = ["name", "category", "quantity"]
-  const sampleData = [
-    ["Wireless Mouse", "Outillage", "50"],
-    ["Office Chair", "Pièce consomable", "25"],
+// Generate sample Excel template
+export async function generateSampleExcel(): Promise<Blob> {
+  const workbook = new ExcelJS.Workbook()
+  const worksheet = workbook.addWorksheet("Sample")
+
+  worksheet.columns = [
+    { header: "name", key: "name", width: 25 },
+    { header: "category", key: "category", width: 20 },
+    { header: "quantity", key: "quantity", width: 15 },
   ]
 
-  return [headers.join(","), ...sampleData.map((row) => row.join(","))].join("\n")
+  worksheet.addRow({ name: "Wireless Mouse", category: "Outillage", quantity: 50 })
+  worksheet.addRow({ name: "Office Chair", category: "Pièce consomable", quantity: 25 })
+
+  const buffer = await workbook.xlsx.writeBuffer()
+  return new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" })
 }

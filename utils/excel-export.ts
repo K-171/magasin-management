@@ -1,4 +1,4 @@
-import * as XLSX from "xlsx"
+import * as ExcelJS from "exceljs"
 
 export interface ExportColumn {
   key: string
@@ -67,7 +67,6 @@ export class ExcelExporter {
   private applyFilters(data: any[], options: ExportOptions): any[] {
     let filteredData = [...data]
 
-    // Apply date range filter
     if (options.dateRange) {
       const { start, end, field } = options.dateRange
       filteredData = filteredData.filter((item) => {
@@ -78,12 +77,10 @@ export class ExcelExporter {
       })
     }
 
-    // Apply category filter
     if (options.filters?.categories && options.filters.categories.length > 0) {
       filteredData = filteredData.filter((item) => options.filters!.categories!.includes(item.category))
     }
 
-    // Apply status filter
     if (options.filters?.statuses && options.filters.statuses.length > 0) {
       filteredData = filteredData.filter((item) => options.filters!.statuses!.includes(item.status))
     }
@@ -91,129 +88,102 @@ export class ExcelExporter {
     return filteredData
   }
 
-  private createWorksheet(data: any[], columns: ExportColumn[], options: ExportOptions): XLSX.WorkSheet {
+  private async createWorksheet(
+    workbook: ExcelJS.Workbook,
+    data: any[],
+    columns: ExportColumn[],
+    options: ExportOptions,
+  ): Promise<void> {
     this.updateProgress(0, data.length, "formatting", "Formatting data for export...")
 
-    const headers = columns.map((col) => col.label)
-    const rows: any[][] = []
+    const sheetName = options.sheetName || "Data"
+    const worksheet = workbook.addWorksheet(sheetName)
 
-    // Add headers if requested
+    // Add headers
     if (options.includeHeaders !== false) {
-      rows.push(headers)
-    }
+      worksheet.columns = columns.map((col) => ({
+        header: col.label,
+        key: col.key,
+        width: col.width || 15,
+      }))
 
-    // Process data in chunks for better performance
-    const chunkSize = 1000
-    for (let i = 0; i < data.length; i += chunkSize) {
-      const chunk = data.slice(i, Math.min(i + chunkSize, data.length))
-
-      chunk.forEach((item, index) => {
-        const row = columns.map((col) => this.formatCellValue(item[col.key], col.type))
-        rows.push(row)
-
-        if ((i + index) % 100 === 0) {
-          this.updateProgress(
-            i + index,
-            data.length,
-            "formatting",
-            `Formatting row ${i + index + 1} of ${data.length}...`,
-          )
+      // Style headers
+      worksheet.getRow(1).eachCell((cell) => {
+        cell.font = { bold: true, color: { argb: "FFFFFFFF" } }
+        cell.fill = {
+          type: "pattern",
+          pattern: "solid",
+          fgColor: { argb: "FF2B4198" },
         }
+        cell.alignment = { horizontal: "center" }
       })
     }
 
-    this.updateProgress(data.length, data.length, "generating", "Creating worksheet...")
+    // Add data rows
+    data.forEach((item, index) => {
+      const row = worksheet.addRow(item)
 
-    const worksheet = XLSX.utils.aoa_to_sheet(rows)
-
-    // Set column widths
-    const colWidths = columns.map((col) => ({ wch: col.width || 15 }))
-    worksheet["!cols"] = colWidths
-
-    // Apply formatting
-    const range = XLSX.utils.decode_range(worksheet["!ref"] || "A1")
-
-    // Format headers
-    if (options.includeHeaders !== false) {
-      for (let col = range.s.c; col <= range.e.c; col++) {
-        const cellAddress = XLSX.utils.encode_cell({ r: 0, c: col })
-        if (worksheet[cellAddress]) {
-          worksheet[cellAddress].s = {
-            font: { bold: true, color: { rgb: "FFFFFF" } },
-            fill: { fgColor: { rgb: "2B4198" } },
-            alignment: { horizontal: "center" },
-          }
+      columns.forEach((col, colIndex) => {
+        const cell = row.getCell(colIndex + 1)
+        switch (col.type) {
+          case "currency":
+            cell.numFmt = '"$"#,##0.00'
+            break
+          case "number":
+            cell.numFmt = "#,##0"
+            break
+          case "date":
+            cell.numFmt = "mm/dd/yyyy"
+            break
         }
+      })
+
+      if ((index + 1) % 100 === 0) {
+        this.updateProgress(
+          index + 1,
+          data.length,
+          "formatting",
+          `Formatting row ${index + 1} of ${data.length}...`,
+        )
       }
-    }
+    })
 
-    // Format data cells based on column type
-    for (let row = options.includeHeaders !== false ? 1 : 0; row <= range.e.r; row++) {
-      for (let col = range.s.c; col <= range.e.c; col++) {
-        const cellAddress = XLSX.utils.encode_cell({ r: row, c: col })
-        const column = columns[col]
-
-        if (worksheet[cellAddress] && column) {
-          switch (column.type) {
-            case "currency":
-              worksheet[cellAddress].z = '"$"#,##0.00'
-              break
-            case "number":
-              worksheet[cellAddress].z = "#,##0"
-              break
-            case "date":
-              worksheet[cellAddress].z = "mm/dd/yyyy"
-              break
-          }
-        }
-      }
-    }
-
-    return worksheet
+    this.updateProgress(data.length, data.length, "generating", "Worksheet created.")
   }
 
   async exportToExcel(data: any[], columns: ExportColumn[], options: ExportOptions = {}): Promise<void> {
     try {
       this.updateProgress(0, 100, "preparing", "Preparing export...")
 
-      // Apply filters
       const filteredData = this.applyFilters(data, options)
 
       this.updateProgress(20, 100, "processing", `Processing ${filteredData.length} records...`)
 
-      // Create workbook
-      const workbook = XLSX.utils.book_new()
+      const workbook = new ExcelJS.Workbook()
 
-      // Create main data worksheet
-      const worksheet = this.createWorksheet(filteredData, columns, options)
-      const sheetName = options.sheetName || "Data"
-      XLSX.utils.book_append_sheet(workbook, worksheet, sheetName)
+      await this.createWorksheet(workbook, filteredData, columns, options)
 
-      // Add summary sheet if data is substantial
       if (filteredData.length > 100) {
         this.updateProgress(80, 100, "generating", "Creating summary sheet...")
-        const summarySheet = this.createSummarySheet(filteredData)
-        XLSX.utils.book_append_sheet(workbook, summarySheet, "Summary")
+        this.createSummarySheet(workbook, filteredData)
       }
 
       this.updateProgress(90, 100, "generating", "Generating Excel file...")
 
-      // Generate filename
+      const buffer = await workbook.xlsx.writeBuffer()
+      const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" })
+
       const timestamp = options.includeTimestamp !== false ? new Date().toISOString().split("T")[0] : ""
       const filename = options.filename || `export${timestamp ? "-" + timestamp : ""}.xlsx`
 
-      // Write file
-      const wbout = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-      const blob = new Blob([wbout], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = filename;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement("a")
+      link.href = url
+      link.download = filename
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      URL.revokeObjectURL(url)
 
       this.updateProgress(100, 100, "complete", "Export completed successfully!")
     } catch (error) {
@@ -222,16 +192,20 @@ export class ExcelExporter {
     }
   }
 
-  private createSummarySheet(data: any[]): XLSX.WorkSheet {
-    const summary = [
-      ["Export Summary", ""],
-      ["Generated On", new Date().toLocaleString()],
-      ["Total Records", data.length],
-      ["", ""],
-      ["Category Breakdown", ""],
+  private createSummarySheet(workbook: ExcelJS.Workbook, data: any[]): void {
+    const summarySheet = workbook.addWorksheet("Summary")
+
+    summarySheet.columns = [
+      { header: "Summary", key: "summary", width: 20 },
+      { header: "Value", key: "value", width: 15 },
     ]
 
-    // Calculate category statistics
+    summarySheet.addRow({ summary: "Export Summary", value: "" })
+    summarySheet.addRow({ summary: "Generated On", value: new Date().toLocaleString() })
+    summarySheet.addRow({ summary: "Total Records", value: data.length })
+    summarySheet.addRow({ summary: "", value: "" })
+    summarySheet.addRow({ summary: "Category Breakdown", value: "" })
+
     const categoryStats: Record<string, number> = {}
     const statusStats: Record<string, number> = {}
 
@@ -241,26 +215,18 @@ export class ExcelExporter {
     })
 
     Object.entries(categoryStats).forEach(([category, count]) => {
-      summary.push([category, count])
+      summarySheet.addRow({ summary: category, value: count })
     })
 
-    summary.push(["", ""])
-    summary.push(["Status Breakdown", ""])
+    summarySheet.addRow({ summary: "", value: "" })
+    summarySheet.addRow({ summary: "Status Breakdown", value: "" })
 
     Object.entries(statusStats).forEach(([status, count]) => {
-      summary.push([status, count])
+      summarySheet.addRow({ summary: status, value: count })
     })
-
-    const worksheet = XLSX.utils.aoa_to_sheet(summary)
-
-    // Format summary sheet
-    worksheet["!cols"] = [{ wch: 20 }, { wch: 15 }]
-
-    return worksheet
   }
 }
 
-// Predefined column configurations
 export const INVENTORY_COLUMNS: ExportColumn[] = [
   { key: "id", label: "Item ID", width: 12, type: "text" },
   { key: "name", label: "Item Name", width: 25, type: "text" },
