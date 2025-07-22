@@ -17,6 +17,7 @@ import { Badge } from "@/components/ui/badge"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { UserPlus, Mail, Clock, CheckCircle, XCircle, AlertCircle } from "lucide-react"
+import { useLanguage } from "@/context/language-context"
 import type { Invitation } from "@/lib/auth"
 
 export default function AdminPanel() {
