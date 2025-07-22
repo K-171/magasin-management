@@ -17,11 +17,19 @@ interface LayoutProps {
 }
 
 export function Layout({ children, title, showSearch = true }: LayoutProps) {
-  const { t } = useLanguage()
+  const { t, isLoading } = useLanguage()
   const { logout } = useAuth()
   const { unreadCount, markAllAsRead } = useNotification()
   const isMobile = useIsMobile()
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+
+  if (isLoading) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <div className="text-2xl font-semibold">Loading...</div>
+      </div>
+    )
+  }
 
   return (
     <div className="flex h-screen bg-white">

@@ -8,6 +8,7 @@ interface LanguageContextType {
   language: Language
   setLanguage: (language: Language) => void
   t: (key: string) => string
+  isLoading: boolean
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined)
@@ -15,14 +16,15 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguage] = useState<Language>("en")
   const [translations, setTranslations] = useState<Record<string, string>>({})
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     const fetchTranslations = async () => {
+      setIsLoading(true)
       try {
         const response = await fetch(`/locales/${language}.json`)
         if (!response.ok) {
           console.error(`Failed to fetch translations for ${language}`)
-          // Fallback to English if the selected language fails
           if (language !== 'en') {
             const fallbackResponse = await fetch(`/locales/en.json`);
             const fallbackData = await fallbackResponse.json();
@@ -34,12 +36,13 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
         setTranslations(data)
       } catch (error) {
         console.error("Error loading translations:", error)
-        // Fallback to English on any error
         if (language !== 'en') {
             const fallbackResponse = await fetch(`/locales/en.json`);
             const fallbackData = await fallbackResponse.json();
             setTranslations(fallbackData);
           }
+      } finally {
+        setIsLoading(false)
       }
     }
 
@@ -51,7 +54,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+    <LanguageContext.Provider value={{ language, setLanguage, t, isLoading }}>
       {children}
     </LanguageContext.Provider>
   )
