@@ -160,7 +160,7 @@
   "categoryAutoCreated": "If a category does not exist, it will be automatically created.",
   "systemSetsDateStatus": "The system automatically sets the date added and initial status based on the quantity.",
   "exportingData": "Exporting Data",
-  "exportDataInfo": "You can export your inventory data from the "All Stock" or "Reports" pages. The export tool allows you to download the current view as an Excel (.xlsx) file. You can select which columns to include in the final report.",
+  "exportDataInfo": "You can export your inventory data from the \"All Stock\" or \"Reports\" pages. The export tool allows you to download the current view as an Excel (.xlsx) file. You can select which columns to include in the final report.",
   "avatarUpdatedSuccess": "Avatar updated successfully!",
   "failedToUpdateAvatar": "Failed to update avatar",
   "avatarUploadError": "An unexpected error occurred during avatar upload.",
