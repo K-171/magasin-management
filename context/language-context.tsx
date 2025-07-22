@@ -1,7 +1,7 @@
 "use client"
 
 import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
-import enTranslations from "@/../public/locales/en.json";
+import enTranslations from "../../public/locales/en.json";
 
 type Language = "en" | "es" | "fr" | "de"
 
