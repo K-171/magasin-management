@@ -142,16 +142,6 @@ export default function LoginPage() {
                 Forgot your password?
               </Link>
             </div>
-
-            {/* Demo accounts info */}
-            <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-              <h4 className="text-sm font-medium text-blue-900 mb-2">Demo Accounts</h4>
-              <div className="text-xs text-blue-700 space-y-1">
-                <p>Admin: admin@inventory.com / Admin123!</p>
-                <p>Manager: manager@inventory.com / Manager123!</p>
-                <p>User: user@inventory.com / User123!</p>
-              </div>
-            </div>
           </CardContent>
         </Card>
       </div>
