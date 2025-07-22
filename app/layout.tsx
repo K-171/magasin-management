@@ -2,11 +2,7 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
-import { InventoryProvider } from "@/context/inventory-context"
-import { AuthProvider } from "@/context/auth-context"
-import { ThemeProvider } from "@/components/theme-provider"
-import { LanguageProvider } from "@/context/language-context"
-import { NotificationProvider } from "@/context/notification-context"
+import { AppProviders } from "@/components/app-providers"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const inter = Inter({ subsets: ["latin"] })
@@ -28,15 +24,7 @@ export default function RootLayout({
         <link rel="manifest" href="/manifest.json" />
       </head>
       <body className={inter.className}>
-        <ThemeProvider attribute="class" defaultTheme="light">
-          <NotificationProvider>
-            <AuthProvider>
-              <LanguageProvider>
-                <InventoryProvider>{children}</InventoryProvider>
-              </LanguageProvider>
-            </AuthProvider>
-          </NotificationProvider>
-        </ThemeProvider>
+        <AppProviders>{children}</AppProviders>
         <SpeedInsights />
       </body>
     </html>
