@@ -2,8 +2,10 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
-import { AppProviders } from "@/components/app-providers"
+import dynamic from "next/dynamic"
 import { SpeedInsights } from "@vercel/speed-insights/next"
+
+const AppProviders = dynamic(() => import("@/components/app-providers").then(mod => mod.AppProviders), { ssr: false })
 
 const inter = Inter({ subsets: ["latin"] })
 
