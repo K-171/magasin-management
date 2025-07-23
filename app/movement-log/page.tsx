@@ -253,20 +253,6 @@ export default function MovementLog() {
                 </Badge>
               )}
             </Button>
-            <Button
-              variant="outline"
-              onClick={() => setIsExportDialogOpen(true)}
-              className="flex items-center gap-2"
-            >
-              Export
-            </Button>
-            <Button
-              variant="outline"
-              onClick={() => setIsExportDialogOpen(true)}
-              className="flex items-center gap-2"
-            >
-              Export
-            </Button>
             {user?.role === 'admin' && (
               <Button
                 variant="destructive"
