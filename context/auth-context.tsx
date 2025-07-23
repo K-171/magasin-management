@@ -27,6 +27,8 @@ interface AuthContextType extends AuthState {
   getInvitations: () => Promise<any[]>;
   revokeInvitation: (id: string) => Promise<any>;
   verifySession: () => Promise<void>;
+  requestPasswordReset: (email: string) => Promise<any>;
+  resetPassword: (token: string, password: string) => Promise<any>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -141,6 +143,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return await response.json();
   };
 
+  const requestPasswordReset = async (email: string) => {
+    const response = await fetch('/api/auth/request-reset', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
+    });
+    return await response.json();
+  };
+
+  const resetPassword = async (token: string, password: string) => {
+    const response = await fetch('/api/auth/reset-password',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token, password }),
+      });
+    return await response.json();
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -153,6 +174,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         getInvitations,
         revokeInvitation,
         verifySession,
+        requestPasswordReset, 
+        resetPassword,
       }}
     >
       {children}

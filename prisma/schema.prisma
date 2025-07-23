@@ -20,6 +20,17 @@ model User {
   isEmailVerified Boolean   @default(false)
   createdAt     DateTime  @default(now())
   lastLoginAt   DateTime? @updatedAt
+
+  passwordResetTokens PasswordResetToken[]
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  expires   DateTime
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
 }
 
 model Item {

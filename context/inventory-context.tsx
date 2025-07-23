@@ -44,6 +44,8 @@ interface InventoryContextType {
   deleteItem: (id: string) => Promise<void>
   fetchItems: () => Promise<void>
   fetchMovements: () => Promise<void>
+  addMovement: (movement: Omit<Movement, "movementId" | "timestamp">) => Promise<void>;
+  checkoutItem: (itemId: string, handledBy: string, quantity: number, expectedReturnDate: string) => Promise<void>;
   checkinItem: (movementId: string) => Promise<void>
   getTotalItems: () => number
   getLowStockItems: () => InventoryItem[]
@@ -167,6 +169,40 @@ export function InventoryProvider({ children }: { children: ReactNode }) {
     }
   }
 
+  const addMovement = async (movement: Omit<Movement, "movementId" | "timestamp">) => {
+    try {
+      const response = await fetch("/api/movements", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(movement),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to add movement");
+      }
+      await fetchMovements(); // Refetch to get the latest list
+    } catch (err: any) {
+      setError(err.message);
+    }
+  };
+
+  const checkoutItem = async (itemId: string, handledBy: string, quantity: number, expectedReturnDate: string) => {
+    const item = items.find(i => i.id === itemId);
+    if (!item) {
+      setError("Item not found");
+      return;
+    }
+
+    await addMovement({
+      type: "Sortie",
+      itemId: itemId,
+      itemName: item.name,
+      quantity: quantity,
+      handledBy: handledBy,
+      expectedReturnDate: expectedReturnDate,
+      status: "En Prêt",
+    });
+  };
+
   const checkinItem = async (movementId: string) => {
     try {
       const response = await fetch(`/api/movements/${movementId}/checkin`, {
@@ -232,6 +268,8 @@ export function InventoryProvider({ children }: { children: ReactNode }) {
         deleteItem,
         fetchItems,
         fetchMovements,
+        addMovement, // Add this line
+        checkoutItem,
         checkinItem,
         getTotalItems,
         getLowStockItems,

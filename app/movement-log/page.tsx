@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useInventory } from '@/context/inventory-context'
+import { useAuth } from '@/context/auth-context'
 import { useLanguage } from '@/context/language-context'
 import { useSearchParams } from 'next/navigation'
 import { Layout } from '@/components/layout'
@@ -24,6 +25,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 
 export default function MovementLog() {
   const { movements, isLoading, checkinItem, fetchMovements } = useInventory()
+  const { user } = useAuth()
   const { t } = useLanguage()
   const searchParams = useSearchParams()
   const highlightedId = searchParams.get('highlight')
@@ -246,14 +248,16 @@ export default function MovementLog() {
                 </Badge>
               )}
             </Button>
-            <Button
-              variant="destructive"
-              onClick={handleClearLog}
-              className="flex items-center gap-2"
-            >
-              <RotateCcw className="h-4 w-4" />
-              {t('clearLog')}
-            </Button>
+            {user?.role === 'admin' && (
+              <Button
+                variant="destructive"
+                onClick={handleClearLog}
+                className="flex items-center gap-2"
+              >
+                <RotateCcw className="h-4 w-4" />
+                {t('clearLog')}
+              </Button>
+            )}
           </div>
         </div>
 

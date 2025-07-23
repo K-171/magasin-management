@@ -55,3 +55,13 @@ export function validateEmail(email: string): boolean {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
 }
+
+export async function sendPasswordResetEmail(email: string, token: string) {
+  const resetLink = `${process.env.NEXT_PUBLIC_APP_URL}/reset-password?token=${token}`;
+
+  // In a real app, you'd use a transactional email service
+  console.log(`Password reset link for ${email}: ${resetLink}`);
+
+  // For demonstration, we'll just return a promise that resolves
+  return Promise.resolve();
+}
