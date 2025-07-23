@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { CalendarIcon } from "lucide-react"
+
 import { format } from "date-fns"
 
 interface CheckoutDialogProps {
@@ -23,7 +23,7 @@ interface CheckoutDialogProps {
   onCheckout: (itemId: string, handledBy: string, quantity: number, expectedReturnDate: string) => void
 }
 
-const users = ["John Doe", "Jane Smith", "Mike Johnson", "Sarah Wilson", "David Brown", "Lisa Davis"]
+
 
 export function CheckoutDialog({ open, onOpenChange, item, onCheckout }: CheckoutDialogProps) {
   const { t } = useLanguage()
@@ -72,18 +72,13 @@ export function CheckoutDialog({ open, onOpenChange, item, onCheckout }: Checkou
 
           <div>
             <Label htmlFor="handled-by">{t("handledBy")}</Label>
-            <Select value={handledBy} onValueChange={setHandledBy}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select user" />
-              </SelectTrigger>
-              <SelectContent>
-                {users.map((user) => (
-                  <SelectItem key={user} value={user}>
-                    {user}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <Input
+              id="handled-by"
+              type="text"
+              value={handledBy}
+              onChange={(e) => setHandledBy(e.target.value)}
+              placeholder={t("enterHandlerName")}
+            />
           </div>
 
           <div>
@@ -101,43 +96,22 @@ export function CheckoutDialog({ open, onOpenChange, item, onCheckout }: Checkou
 
           <div>
             <Label>{t("checkoutDate")}</Label>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button variant="outline" className="w-full justify-start text-left font-normal bg-transparent">
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {format(checkoutDate, "PPP")}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0">
-                <Calendar
-                  mode="single"
-                  selected={checkoutDate}
-                  onSelect={(date) => date && setCheckoutDate(date)}
-                  initialFocus
-                />
-              </PopoverContent>
-            </Popover>
+            <Input
+              id="checkout-date"
+              type="date"
+              value={format(checkoutDate, "yyyy-MM-dd")}
+              onChange={(e) => setCheckoutDate(new Date(e.target.value))}
+            />
           </div>
 
           <div>
-            <Label>{t("expectedReturnDate")} *</Label>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button variant="outline" className="w-full justify-start text-left font-normal bg-transparent">
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {expectedReturnDate ? format(expectedReturnDate, "PPP") : "Select date"}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0">
-                <Calendar
-                  mode="single"
-                  selected={expectedReturnDate}
-                  onSelect={setExpectedReturnDate}
-                  disabled={(date) => date < new Date()}
-                  initialFocus
-                />
-              </PopoverContent>
-            </Popover>
+            <Label htmlFor="expected-return-date">{t("expectedReturnDate")} *</Label>
+            <Input
+              id="expected-return-date"
+              type="date"
+              value={expectedReturnDate ? format(expectedReturnDate, "yyyy-MM-dd") : ""}
+              onChange={(e) => setExpectedReturnDate(e.target.value ? new Date(e.target.value) : undefined)}
+            />
           </div>
 
           <div className="flex gap-2 pt-4">
