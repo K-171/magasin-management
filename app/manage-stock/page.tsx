@@ -170,10 +170,7 @@ export default function ManageStock() {
             <Plus className="h-4 w-4" />
             {t("addNewItem")}
           </TabsTrigger>
-          <TabsTrigger value="log-movement" className="flex items-center gap-2">
-            <History className="h-4 w-4" />
-            {t("logMovement")}
-          </TabsTrigger>
+          
         </TabsList>
 
         <TabsContent value="new-items">
@@ -429,86 +426,7 @@ export default function ManageStock() {
           </Card>
         </TabsContent>
 
-        <TabsContent value="log-movement">
-          <Card>
-            <CardHeader>
-              <CardTitle>{t("logMovement")}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleMovementSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <Label htmlFor="movement-type">{t("movementType")}</Label>
-                    <Select
-                      value={movementType}
-                      onValueChange={(value: "Entrée" | "Sortie") =>
-                        setMovementType(value)
-                      }
-                    >
-                      <SelectTrigger id="movement-type">
-                        <SelectValue placeholder={t("selectMovementType")} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Sortie">{t("exit")}</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <Label htmlFor="item-select">{t("itemName")}</Label>
-                    <Select value={selectedItem} onValueChange={setSelectedItem}>
-                      <SelectTrigger id="item-select">
-                        <SelectValue placeholder={t("selectItem")} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {items.map((item) => (
-                          <SelectItem key={item.id} value={item.id}>
-                            {item.name} ({item.id})
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <Label htmlFor="movement-quantity">{t("quantity")}</Label>
-                    <Input
-                      id="movement-quantity"
-                      type="number"
-                      value={movementQuantity}
-                      onChange={(e) => setMovementQuantity(Number(e.target.value))}
-                      min="1"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="handled-by">{t("handledBy")}</Label>
-                    <Input
-                      id="handled-by"
-                      type="text"
-                      value={handledBy}
-                      onChange={(e) => setHandledBy(e.target.value)}
-                      placeholder={t("enterHandlerName")}
-                    />
-                  </div>
-                  {movementType === "Sortie" && (
-                    <div className="md:col-span-2">
-                      <Label htmlFor="return-date">
-                        {t("expectedReturnDate")}
-                      </Label>
-                      <Input
-                        id="return-date"
-                        type="date"
-                        value={expectedReturnDate}
-                        onChange={(e) => setExpectedReturnDate(e.target.value)}
-                      />
-                    </div>
-                  )}
-                </div>
-                <Button type="submit" className="w-full bg-[#2b4198] hover:bg-opacity-90">
-                  {t("logMovement")}
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
-        </TabsContent>
+        
       </Tabs>
 
       {/* Edit Dialog */}
