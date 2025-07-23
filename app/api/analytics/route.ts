@@ -104,10 +104,10 @@ export async function GET(req: NextRequest) {
       mostActiveItems,
       mostActiveUsers,
     });
-  } catch (error) {
-    console.error("Failed to fetch analytics data:", error);
+  } catch (error: any) {
+    console.error("Failed to fetch analytics data:", error.message, error.stack);
     return NextResponse.json(
-      { error: "An unexpected error occurred." },
+      { error: "An unexpected error occurred.", details: error.message },
       { status: 500 }
     );
   }
