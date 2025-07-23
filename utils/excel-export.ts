@@ -245,14 +245,3 @@ export const REPORTS_COLUMNS: ExportColumn[] = [
   { key: "dateAdded", label: "Date Added", width: 15, type: "date" },
   { key: "lastUpdated", label: "Last Updated", width: 15, type: "date" },
 ]
-
-export const MOVEMENT_COLUMNS: ExportColumn[] = [
-  { key: "movementId", label: "Movement ID", width: 12, type: "text" },
-  { key: "timestamp", label: "Date", width: 18, type: "date" },
-  { key: "type", label: "Type", width: 10, type: "text" },
-  { key: "itemName", label: "Item Name", width: 25, type: "text" },
-  { key: "quantity", label: "Quantity", width: 12, type: "number" },
-  { key: "handledBy", label: "Handled By", width: 20, type: "text" },
-  { key: "expectedReturnDate", label: "Expected Return Date", width: 18, type: "date" },
-  { key: "status", label: "Status", width: 15, type: "text" },
-]

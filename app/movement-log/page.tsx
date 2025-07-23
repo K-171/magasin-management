@@ -22,10 +22,6 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Filter, SortAsc, SortDesc, RotateCcw } from 'lucide-react'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Skeleton } from '@/components/ui/skeleton'
-import dynamic from "next/dynamic"
-import { MOVEMENT_COLUMNS } from "@/utils/excel-export"
-
-const ExportDialog = dynamic(() => import("@/components/export-dialog").then((mod) => mod.ExportDialog))
 
 export default function MovementLog() {
   const { movements, isLoading, checkinItem, fetchMovements } = useInventory()
@@ -40,7 +36,6 @@ export default function MovementLog() {
   const [selectedTypes, setSelectedTypes] = useState<string[]>([])
   const [selectedStatuses, setSelectedStatuses] = useState<string[]>([])
   const [showFilters, setShowFilters] = useState(false)
-  const [isExportDialogOpen, setIsExportDialogOpen] = useState(false)
 
   useEffect(() => {
     fetchMovements()
@@ -252,13 +247,6 @@ export default function MovementLog() {
                   {selectedTypes.length + selectedStatuses.length}
                 </Badge>
               )}
-            </Button>
-            <Button
-              variant="outline"
-              onClick={() => setIsExportDialogOpen(true)}
-              className="flex items-center gap-2"
-            >
-              Export
             </Button>
             {user?.role === 'admin' && (
               <Button
@@ -571,15 +559,6 @@ export default function MovementLog() {
           </div>
         </div>
       </div>
-      <ExportDialog
-        open={isExportDialogOpen}
-        onOpenChange={setIsExportDialogOpen}
-        data={movements}
-        defaultColumns={MOVEMENT_COLUMNS}
-        title={t("movementLogData")}
-        availableCategories={Array.from(new Set(movements.map((movement) => movement.type)))}
-        availableStatuses={Array.from(new Set(movements.map((movement) => movement.status)))}
-      />
     </Layout>
   )
 }
