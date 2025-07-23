@@ -17,7 +17,9 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const { itemId, itemName, type, quantity, handledBy, expectedReturnDate, status } = await request.json();
+    const { itemId, itemName, type, quantity, handledBy, expectedReturnDate: rawExpectedReturnDate, status } = await request.json();
+
+    const expectedReturnDate = rawExpectedReturnDate === '' ? null : rawExpectedReturnDate;
 
     const newMovement = await prisma.movement.create({
       data: {
