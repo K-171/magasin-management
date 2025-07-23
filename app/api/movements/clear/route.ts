@@ -6,7 +6,7 @@ export async function DELETE() {
   const session = await getSession();
   console.log('User role:', session.role);
 
-  if (!session || session.role !== 'Administrator') {
+  if (!session || session.role !== 'admin') {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   }
 
