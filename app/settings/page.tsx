@@ -17,11 +17,18 @@ import { User, Shield, Bell, FileText } from "lucide-react"
 import { ProtectedRoute } from "@/components/protected-route"
 import { useAuth } from "@/context/auth-context"
 import { useLanguage } from "@/context/language-context"
+import { useInventory } from "@/context/inventory-context"
+import { INVENTORY_COLUMNS, MOVEMENT_COLUMNS } from "@/utils/excel-export"
+import dynamic from "next/dynamic"
+
+const ImportDialog = dynamic(() => import("@/components/import-dialog").then((mod) => mod.ImportDialog))
+const ExportDialog = dynamic(() => import("@/components/export-dialog").then((mod) => mod.ExportDialog))
 
 // Update the component to use actual user data
 export default function Settings() {
   const { user, updateProfile } = useAuth()
   const { t } = useLanguage()
+  const { movements } = useInventory()
 
   const [profileForm, setProfileForm] = useState({
     firstName: "",
@@ -29,6 +36,10 @@ export default function Settings() {
     username: "",
     email: "",
   });
+
+  const [isImportDialogOpen, setIsImportDialogOpen] = useState(false);
+  const [isExportDialogOpen, setIsExportDialogOpen] = useState(false);
+  const [isMovementExportDialogOpen, setIsMovementExportDialogOpen] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -388,6 +399,9 @@ export default function Settings() {
                           </ul>
                         </div>
                       </div>
+                      <Button onClick={() => setIsImportDialogOpen(true)} className="mt-4 bg-[#2b4198] hover:bg-opacity-90">
+                        {t("importData")}
+                      </Button>
                     </div>
 
                     <Separator />
@@ -397,6 +411,21 @@ export default function Settings() {
                       <p className="text-sm text-muted-foreground">
                         {t("exportDataInfo")}
                       </p>
+                      <Button onClick={() => setIsExportDialogOpen(true)} className="mt-4 bg-[#2b4198] hover:bg-opacity-90">
+                        {t("exportData")}
+                      </Button>
+                    </div>
+
+                    <Separator />
+
+                    <div>
+                      <h4 className="font-medium mb-3 text-lg">{t("exportingMovementLog")}</h4>
+                      <p className="text-sm text-muted-foreground">
+                        {t("exportMovementLogInfo")}
+                      </p>
+                      <Button onClick={() => setIsMovementExportDialogOpen(true)} className="mt-4 bg-[#2b4198] hover:bg-opacity-90">
+                        {t("exportMovementLog")}
+                      </Button>
                     </div>
                   </CardContent>
                 </Card>
@@ -405,6 +434,26 @@ export default function Settings() {
           </Tabs>
         </div>
       </Layout>
+
+      <ImportDialog open={isImportDialogOpen} onOpenChange={setIsImportDialogOpen} />
+      <ExportDialog
+        open={isExportDialogOpen}
+        onOpenChange={setIsExportDialogOpen}
+        data={items}
+        defaultColumns={INVENTORY_COLUMNS}
+        title={t("inventoryData")}
+        availableCategories={Array.from(new Set(items.map((item) => item.category)))}
+        availableStatuses={Array.from(new Set(items.map((item) => item.status)))}
+      />
+      <ExportDialog
+        open={isMovementExportDialogOpen}
+        onOpenChange={setIsMovementExportDialogOpen}
+        data={movements}
+        defaultColumns={MOVEMENT_COLUMNS}
+        title={t("movementLogData")}
+        availableCategories={Array.from(new Set(movements.map((movement) => movement.type)))}
+        availableStatuses={Array.from(new Set(movements.map((movement) => movement.status)))}
+      />
     </ProtectedRoute>
   )
 }
