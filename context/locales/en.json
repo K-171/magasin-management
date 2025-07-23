@@ -165,5 +165,12 @@
   "failedToUpdateAvatar": "Failed to update avatar",
   "avatarUploadError": "An unexpected error occurred during avatar upload.",
   "profileUpdatedSuccess": "Profile updated successfully!",
-  "failedToUpdateProfile": "Failed to update profile"
+  "failedToUpdateProfile": "Failed to update profile",
+  "systemAnalytics": "System Analytics",
+  "totalMovementsLast30Days": "Total Movements (Last 30 Days)",
+  "dailyMovements": "Daily Movements",
+  "itemStatusDistribution": "Item Status Distribution",
+  "movements": "Movements",
+  "checkIn": "Check-in",
+  "checkOut": "Check-out"
 }
