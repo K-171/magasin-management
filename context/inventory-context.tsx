@@ -8,6 +8,7 @@ import {
   type ReactNode,
   useCallback,
 } from 'react'
+import { useAuth } from '@/context/auth-context'
 
 export interface InventoryItem {
   id: string
@@ -63,6 +64,7 @@ const InventoryContext = createContext<InventoryContextType | undefined>(
 )
 
 export function InventoryProvider({ children }: { children: ReactNode }) {
+  const { user } = useAuth();
   const [items, setItems] = useState<InventoryItem[]>([])
   const [movements, setMovements] = useState<Movement[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -133,7 +135,20 @@ export function InventoryProvider({ children }: { children: ReactNode }) {
       if (!response.ok) {
         throw new Error('Failed to add item')
       }
-      await fetchItems() // Refetch to get the latest list
+      const newItem = await response.json(); // Get the newly created item from the response
+      await fetchItems(); // Refetch to get the latest list
+
+      // Log an "Entrée" movement for the new item
+      if (user && newItem) {
+        await addMovement({
+          type: "Entrée",
+          itemId: newItem.id,
+          itemName: newItem.name,
+          quantity: newItem.quantity,
+          handledBy: user.username, // Use the logged-in user's username
+          status: "Retourné", // New items are considered returned/in stock
+        });
+      }
     } catch (err: any) {
       setError(err.message)
     }
@@ -224,6 +239,20 @@ export function InventoryProvider({ children }: { children: ReactNode }) {
       if (!response.ok) {
         throw new Error('Failed to check in item')
       }
+      const checkedInMovement = await response.json();
+
+      // Log an "Entrée" movement for the checked-in item
+      if (user && checkedInMovement) {
+        await addMovement({
+          type: "Entrée",
+          itemId: checkedInMovement.itemId,
+          itemName: checkedInMovement.itemName,
+          quantity: checkedInMovement.quantity,
+          handledBy: user.username, // Use the logged-in user's username
+          status: "Retourné", // Checked-in items are considered returned/in stock
+        });
+      }
+
       await fetchMovements()
     } catch (err: any) {
       setError(err.message)

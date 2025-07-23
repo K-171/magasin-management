@@ -11,10 +11,9 @@ export async function POST(request: Request, { params }: { params: { id: string 
       return NextResponse.json({ error: 'Movement not found' }, { status: 404 });
     }
 
-    // Update the movement status to "Returned"
-    await prisma.movement.update({
+    const updatedMovement = await prisma.movement.update({
       where: { movementId: params.id },
-      data: { status: 'Returned' },
+      data: { status: 'Retourné' },
     });
 
     // Update the item quantity
@@ -27,7 +26,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
       },
     });
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json(updatedMovement);
   } catch (error) {
     console.error(`Error checking in item for movement ${params.id}:`, error);
     return NextResponse.json({ error: 'Failed to check in item' }, { status: 500 });

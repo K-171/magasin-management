@@ -40,7 +40,7 @@ export default function ManageStock() {
   const [isImportDialogOpen, setIsImportDialogOpen] = useState(false)
   const [isExportDialogOpen, setIsExportDialogOpen] = useState(false)
 
-  const [movementType, setMovementType] = useState<"Entrée" | "Sortie">("Entrée")
+  const [movementType, setMovementType] = useState<"Sortie">("Sortie")
   const [selectedItem, setSelectedItem] = useState("")
   const [movementQuantity, setMovementQuantity] = useState(1)
   const [handledBy, setHandledBy] = useState("")
@@ -449,7 +449,6 @@ export default function ManageStock() {
                         <SelectValue placeholder={t("selectMovementType")} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="Entrée">{t("entry")}</SelectItem>
                         <SelectItem value="Sortie">{t("exit")}</SelectItem>
                       </SelectContent>
                     </Select>
