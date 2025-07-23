@@ -293,10 +293,47 @@ export function InventoryProvider({ children }: { children: ReactNode }) {
 
   // NOTE: The following functions require movement data which is not yet fetched.
   // Returning dummy data for now.
-  const getConsumableTurnover = useCallback(() => 0, [])
-  const getOverdueItems = useCallback(() => [], [])
-  const getMostActiveItems = useCallback(() => [], [])
-  const getMostActiveUsers = useCallback(() => [], [])
+  const getConsumableTurnover = useCallback(() => {
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+    const turnoverMovements = movements.filter(movement =>
+      movement.type === "Sortie" && new Date(movement.timestamp) >= thirtyDaysAgo
+    );
+
+    return turnoverMovements.reduce((total, movement) => total + movement.quantity, 0);
+  }, [movements]);
+  const getOverdueItems = useCallback(() => {
+    return movements.filter(movement => movement.type === "Sortie" && movement.status === "En Retard");
+  }, [movements]);
+  const getMostActiveItems = useCallback(() => {
+    const itemActivity: { [key: string]: { name: string; count: number } } = {};
+
+    movements.forEach(movement => {
+      if (movement.type === "Sortie") {
+        if (!itemActivity[movement.itemId]) {
+          itemActivity[movement.itemId] = { name: movement.itemName, count: 0 };
+        }
+        itemActivity[movement.itemId].count += movement.quantity; // Sum quantities for activity
+      }
+    });
+
+    return Object.values(itemActivity).sort((a, b) => b.count - a.count).slice(0, 5);
+  }, [movements]);
+  const getMostActiveUsers = useCallback(() => {
+    const userActivity: { [key: string]: { name: string; count: number } } = {};
+
+    movements.forEach(movement => {
+      if (movement.type === "Sortie") {
+        if (!userActivity[movement.handledBy]) {
+          userActivity[movement.handledBy] = { name: movement.handledBy, count: 0 };
+        }
+        userActivity[movement.handledBy].count += movement.quantity; // Sum quantities for activity
+      }
+    });
+
+    return Object.values(userActivity).sort((a, b) => b.count - a.count).slice(0, 5);
+  }, [movements]);
 
   return (
     <InventoryContext.Provider
