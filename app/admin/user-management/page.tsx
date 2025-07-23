@@ -35,6 +35,7 @@ export default function UserManagementPage() {
       const response = await fetch("/api/users");
       if (response.ok) {
         const data = await response.json();
+        console.log("Fetched users:", data); // Add this line
         setUsers(data);
       }
     } catch (error) {
