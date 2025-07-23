@@ -5,7 +5,7 @@ import { getSession } from '@/lib/session';
 export async function DELETE() {
   const session = await getSession();
 
-  if (!session || session.user.role !== 'Admin') {
+  if (!session || session.role !== 'Admin') {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   }
 

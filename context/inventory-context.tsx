@@ -179,6 +179,19 @@ export function InventoryProvider({ children }: { children: ReactNode }) {
       if (!response.ok) {
         throw new Error("Failed to add movement");
       }
+
+      // Update item quantity based on movement type
+      const currentItem = items.find(item => item.id === movement.itemId);
+      if (currentItem) {
+        let newQuantity = currentItem.quantity;
+        if (movement.type === "Entrée") {
+          newQuantity += movement.quantity;
+        } else if (movement.type === "Sortie") {
+          newQuantity -= movement.quantity;
+        }
+        await updateItem(currentItem.id, { quantity: newQuantity });
+      }
+
       await fetchMovements(); // Refetch to get the latest list
     } catch (err: any) {
       setError(err.message);
