@@ -188,5 +188,6 @@
   "unexpectedErrorFetchingUsers": "An unexpected error occurred while fetching users.",
   "userRoleUpdatedSuccess": "User role updated successfully.",
   "failedToUpdateUserRole": "Failed to update user role.",
-  "unexpectedErrorUpdatingUserRole": "An unexpected error occurred while updating the user role."
+  "unexpectedErrorUpdatingUserRole": "An unexpected error occurred while updating the user role.",
+  "pickADate": "Pick a date"
 }
