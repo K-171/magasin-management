@@ -189,6 +189,5 @@
   "userRoleUpdatedSuccess": "User role updated successfully.",
   "failedToUpdateUserRole": "Failed to update user role.",
   "unexpectedErrorUpdatingUserRole": "An unexpected error occurred while updating the user role.",
-  "pickADate": "Pick a date",
-  "selectADateForExpectedReturn": "Select a date for expected return"
+  "pickADate": "Pick a date"
 }

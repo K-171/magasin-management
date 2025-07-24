@@ -1,5 +1,3 @@
-"use client"
-
 import { useState } from "react"
 import { useLanguage } from "@/context/language-context"
 import { Button } from "@/components/ui/button"
@@ -9,18 +7,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { CalendarIcon } from "lucide-react"
-import { useIsMobile } from "@/hooks/use-mobile"
-import {
-  Drawer,
-  DrawerContent,
-  DrawerDescription,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer"
 
 import { format } from "date-fns"
+import { CalendarIcon } from "lucide-react"
 
 interface CheckoutDialogProps {
   open: boolean
@@ -37,7 +26,6 @@ interface CheckoutDialogProps {
 
 export function CheckoutDialog({ open, onOpenChange, item, onCheckout }: CheckoutDialogProps) {
   const { t } = useLanguage()
-  const isMobile = useIsMobile()
   const [handledBy, setHandledBy] = useState("")
   const [quantity, setQuantity] = useState(1)
   const [checkoutDate, setCheckoutDate] = useState<Date>(new Date())
@@ -66,17 +54,6 @@ export function CheckoutDialog({ open, onOpenChange, item, onCheckout }: Checkou
   }
 
   if (!item) return null
-
-  const DatePicker = () => {
-    return (
-      <Calendar
-        mode="single"
-        selected={expectedReturnDate}
-        onSelect={setExpectedReturnDate}
-        initialFocus
-      />
-    )
-  }
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
@@ -128,59 +105,13 @@ export function CheckoutDialog({ open, onOpenChange, item, onCheckout }: Checkou
 
           <div>
             <Label htmlFor="expected-return-date">{t("expectedReturnDate")} *</Label>
-            {isMobile ? (
-              <Drawer>
-                <DrawerTrigger asChild>
-                  <Button
-                    variant={"outline"}
-                    className={
-                      "w-full justify-start text-left font-normal " +
-                      (!expectedReturnDate ? "text-muted-foreground" : "")
-                    }
-                  >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {expectedReturnDate ? (
-                      format(expectedReturnDate, "PPP")
-                    ) : (
-                      <span>{t("pickADate")}</span>
-                    )}
-                  </Button>
-                </DrawerTrigger>
-                <DrawerContent>
-                  <DrawerHeader className="text-left">
-                    <DrawerTitle>{t("pickADate")}</DrawerTitle>
-                    <DrawerDescription>
-                      {t("selectADateForExpectedReturn")}
-                    </DrawerDescription>
-                  </DrawerHeader>
-                  <div className="flex justify-center">
-                    <DatePicker />
-                  </div>
-                </DrawerContent>
-              </Drawer>
-            ) : (
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant={"outline"}
-                    className={
-                      "w-full justify-start text-left font-normal " +
-                      (!expectedReturnDate ? "text-muted-foreground" : "")
-                    }
-                  >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {expectedReturnDate ? (
-                      format(expectedReturnDate, "PPP")
-                    ) : (
-                      <span>{t("pickADate")}</span>
-                    )}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0">
-                  <DatePicker />
-                </PopoverContent>
-              </Popover>
-            )}
+            <Calendar
+              mode="single"
+              selected={expectedReturnDate}
+              onSelect={setExpectedReturnDate}
+              initialFocus
+              className="rounded-md border"
+            />
           </div>
 
           <div className="flex gap-2 pt-4">
