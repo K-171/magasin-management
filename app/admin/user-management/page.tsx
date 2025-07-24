@@ -39,10 +39,10 @@ export default function UserManagementPage() {
       const response = await fetch("/api/users");
       if (response.ok) {
         const data = await response.json();
-        console.log("Fetched users:", data); // Add this line
         setUsers(data);
       } else {
-        toast.error(t("failedToFetchUsers"));
+        const errorData = await response.json();
+        toast.error(`${t("failedToFetchUsers")} ${errorData.error || ''}`);
       }
     } catch (error) {
       console.error("Failed to fetch users:", error);
