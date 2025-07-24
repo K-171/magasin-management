@@ -19,7 +19,7 @@ import {
 import { Badge } from '@/components/ui/badge'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent } from '@/components/ui/card'
-import { Filter, SortAsc, SortDesc, RotateCcw } from 'lucide-react'
+import { Filter, SortAsc, SortDesc, RotateCcw, Download } from 'lucide-react'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Skeleton } from '@/components/ui/skeleton'
 import dynamic from "next/dynamic"
@@ -258,7 +258,7 @@ export default function MovementLog() {
               onClick={() => setIsExportDialogOpen(true)}
               className="flex items-center gap-2"
             >
-              <Filter className="h-4 w-4" />
+              <Download className="h-4 w-4" />
               {t('exportExcel')}
             </Button>
             {user?.role === 'admin' && (
