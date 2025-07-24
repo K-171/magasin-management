@@ -105,12 +105,11 @@ export function CheckoutDialog({ open, onOpenChange, item, onCheckout }: Checkou
 
           <div>
             <Label htmlFor="expected-return-date">{t("expectedReturnDate")} *</Label>
-            <Calendar
-              mode="single"
-              selected={expectedReturnDate}
-              onSelect={setExpectedReturnDate}
-              initialFocus
-              className="rounded-md border"
+            <Input
+              id="expected-return-date"
+              type="date"
+              value={expectedReturnDate ? format(expectedReturnDate, "yyyy-MM-dd") : ""}
+              onChange={(e) => setExpectedReturnDate(e.target.value ? new Date(e.target.value) : undefined)}
             />
           </div>
 
