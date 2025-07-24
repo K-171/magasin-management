@@ -253,6 +253,14 @@ export default function MovementLog() {
                 </Badge>
               )}
             </Button>
+            <Button
+              variant="outline"
+              onClick={() => setIsExportDialogOpen(true)}
+              className="flex items-center gap-2"
+            >
+              <Filter className="h-4 w-4" />
+              {t('exportExcel')}
+            </Button>
             {user?.role === 'admin' && (
               <Button
                 variant="destructive"
