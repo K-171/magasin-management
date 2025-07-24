@@ -172,5 +172,13 @@
   "itemStatusDistribution": "Item Status Distribution",
   "movements": "Movements",
   "checkIn": "Check-in",
-  "checkOut": "Check-out"
+  "checkOut": "Check-out",
+  "userManagement": "User Management",
+  "viewAndManageUsers": "View and manage all users",
+  "invitations": "Invitations",
+  "inviteNewUsers": "Invite new users to the system",
+  "viewDetailedAnalytics": "View detailed system analytics",
+  "error": "Error",
+  "noDataAvailable": "No data available.",
+  "outOfStockItems": "Out of Stock Items"
 }

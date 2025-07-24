@@ -87,7 +87,7 @@ export default function AnalyticsPage() {
   if (error) {
     return (
       <Layout title={t("systemAnalytics")}>
-        <div className="text-center text-red-500">Error: {error}</div>
+        <div className="text-center text-red-500">{t("error")}: {error}</div>
       </Layout>
     );
   }
@@ -95,7 +95,7 @@ export default function AnalyticsPage() {
   if (!analyticsData) {
     return (
       <Layout title={t("systemAnalytics")}>
-        <div className="text-center">No data available.</div>
+        <div className="text-center">{t("noDataAvailable")}</div>
       </Layout>
     );
   }
