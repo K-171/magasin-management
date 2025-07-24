@@ -18,8 +18,12 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 
+import { useLanguage } from "@/context/language-context";
+import { toast } from "sonner";
+
 export default function UserManagementPage() {
   const { user } = useAuth();
+  const { t } = useLanguage();
   const [users, setUsers] = useState<any[]>([]);
   const [editingUser, setEditingUser] = useState<any>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -37,9 +41,12 @@ export default function UserManagementPage() {
         const data = await response.json();
         console.log("Fetched users:", data); // Add this line
         setUsers(data);
+      } else {
+        toast.error(t("failedToFetchUsers"));
       }
     } catch (error) {
       console.error("Failed to fetch users:", error);
+      toast.error(t("unexpectedErrorFetchingUsers"));
     }
   };
 
@@ -63,27 +70,31 @@ export default function UserManagementPage() {
       if (response.ok) {
         await fetchUsers();
         setIsEditDialogOpen(false);
+        toast.success(t("userRoleUpdatedSuccess"));
+      } else {
+        toast.error(t("failedToUpdateUserRole"));
       }
     } catch (error) {
       console.error("Failed to update user role:", error);
+      toast.error(t("unexpectedErrorUpdatingUserRole"));
     }
   };
 
   if (user?.role !== "admin") {
     return (
-      <Layout title="Forbidden">
+      <Layout title={t("forbidden")}>
         <div className="text-center">
-          <h1 className="text-2xl font-bold">Forbidden</h1>
-          <p>You do not have permission to access this page.</p>
+          <h1 className="text-2xl font-bold">{t("forbidden")}</h1>
+          <p>{t("permissionDenied")}</p>
         </div>
       </Layout>
     );
   }
 
   return (
-    <Layout title="User Management">
+    <Layout title={t("userManagement")}>
       <div className="bg-white p-8 rounded-lg shadow-md">
-        <h3 className="text-xl font-semibold text-[#3d414a] mb-6">All Users</h3>
+        <h3 className="text-xl font-semibold text-[#3d414a] mb-6">{t("allUsers")}</h3>
         <div className="overflow-x-auto">
           <Table>
             <TableHeader>

@@ -180,5 +180,13 @@
   "viewDetailedAnalytics": "View detailed system analytics",
   "error": "Error",
   "noDataAvailable": "No data available.",
-  "outOfStockItems": "Out of Stock Items"
+  "outOfStockItems": "Out of Stock Items",
+  "forbidden": "Forbidden",
+  "permissionDenied": "You do not have permission to access this page.",
+  "allUsers": "All Users",
+  "failedToFetchUsers": "Failed to fetch users.",
+  "unexpectedErrorFetchingUsers": "An unexpected error occurred while fetching users.",
+  "userRoleUpdatedSuccess": "User role updated successfully.",
+  "failedToUpdateUserRole": "Failed to update user role.",
+  "unexpectedErrorUpdatingUserRole": "An unexpected error occurred while updating the user role."
 }
