@@ -15,7 +15,20 @@ interface LanguageContextType {
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined)
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguage] = useState<Language>('en')
+  const [language, setLanguageState] = useState<Language>(() => {
+    if (typeof window !== 'undefined') {
+      const storedLanguage = localStorage.getItem('selectedLanguage')
+      return (storedLanguage as Language) || 'en'
+    }
+    return 'en'
+  })
+
+  const setLanguage = (lang: Language) => {
+    setLanguageState(lang)
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('selectedLanguage', lang)
+    }
+  }
   const [translations, setTranslations] = useState<Record<string, string>>(enTranslations)
   const [isLoading, setIsLoading] = useState(false)
 
