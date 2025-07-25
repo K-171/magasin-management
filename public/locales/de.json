@@ -166,5 +166,11 @@
   "failedToUpdateAvatar": "Avatar-Aktualisierung fehlgeschlagen",
   "avatarUploadError": "Ein unerwarteter Fehler ist beim Hochladen des Avatars aufgetreten.",
   "profileUpdatedSuccess": "Profil erfolgreich aktualisiert!",
-  "failedToUpdateProfile": "Profil-Aktualisierung fehlgeschlagen"
+  "failedToUpdateProfile": "Profil-Aktualisierung fehlgeschlagen",
+  "userManagement": "Benutzerverwaltung",
+  "viewAndManageUsers": "Benutzer anzeigen und verwalten",
+  "invitations": "Einladungen",
+  "inviteNewUsers": "Neue Benutzer einladen",
+  "systemAnalytics": "Systemanalytik",
+  "viewDetailedAnalytics": "Detaillierte Analysen anzeigen"
 }

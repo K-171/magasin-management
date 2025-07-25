@@ -166,5 +166,11 @@
   "failedToUpdateAvatar": "Error al actualizar el avatar",
   "avatarUploadError": "Ocurrió un error inesperado durante la carga del avatar.",
   "profileUpdatedSuccess": "¡Perfil actualizado con éxito!",
-  "failedToUpdateProfile": "Error al actualizar el perfil"
+  "failedToUpdateProfile": "Error al actualizar el perfil",
+  "userManagement": "Gestión de usuarios",
+  "viewAndManageUsers": "Ver y gestionar usuarios",
+  "invitations": "Invitaciones",
+  "inviteNewUsers": "Invitar nuevos usuarios",
+  "systemAnalytics": "Análisis del sistema",
+  "viewDetailedAnalytics": "Ver análisis detallados"
 }

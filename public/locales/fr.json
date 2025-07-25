@@ -166,5 +166,11 @@
   "failedToUpdateAvatar": "Échec de la mise à jour de l'avatar",
   "avatarUploadError": "Une erreur inattendue est survenue lors du téléchargement de l'avatar.",
   "profileUpdatedSuccess": "Profil mis à jour avec succès !",
-  "failedToUpdateProfile": "Échec de la mise à jour du profil"
+  "failedToUpdateProfile": "Échec de la mise à jour du profil",
+  "userManagement": "Gestion des utilisateurs",
+  "viewAndManageUsers": "Afficher et gérer les utilisateurs",
+  "invitations": "Invitations",
+  "inviteNewUsers": "Inviter de nouveaux utilisateurs",
+  "systemAnalytics": "Analyses du système",
+  "viewDetailedAnalytics": "Afficher les analyses détaillées"
 }
