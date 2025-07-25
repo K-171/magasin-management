@@ -167,7 +167,7 @@ export function Sidebar({ isMobile, isOpen, setIsOpen }: SidebarProps) {
       {/* Company Logo */}
       <div className="px-8 py-4 border-t border-gray-700 text-center">
         <Image
-          src="/Stellantis_logo_blue_background.jpg"
+          src="/Stellantis-Emblem.png"
           alt="Company Logo"
           width={100}
           height={100}
