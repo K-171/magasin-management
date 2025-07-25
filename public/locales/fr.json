@@ -172,5 +172,8 @@
   "invitations": "Invitations",
   "inviteNewUsers": "Inviter de nouveaux utilisateurs",
   "systemAnalytics": "Analyses du système",
-  "viewDetailedAnalytics": "Afficher les analyses détaillées"
+  "viewDetailedAnalytics": "Afficher les analyses détaillées",
+  "outOfStockItems": "Articles en rupture de stock",
+  "totalMovementsLast30Days": "Total des mouvements (30 derniers jours)",
+  "allUsers": "Tous les utilisateurs"
 }
