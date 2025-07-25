@@ -1,6 +1,6 @@
-'use client'
-
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react'
+import enTranslations from './locales/en.json'
+
 type Language = 'en' | 'es' | 'fr' | 'de'
 
 interface LanguageContextType {
@@ -27,11 +27,16 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       localStorage.setItem('selectedLanguage', lang)
     }
   }
-  const [translations, setTranslations] = useState<Record<string, string>>({})
+  const [translations, setTranslations] = useState<Record<string, string>>(enTranslations)
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     const fetchTranslations = async (lang: Language) => {
+      if (lang === 'en') {
+        setTranslations(enTranslations)
+        return
+      }
+
       setIsLoading(true)
       try {
         const response = await fetch(`/locales/${lang}.json`)
@@ -42,10 +47,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
         setTranslations(data)
       } catch (error) {
         console.error('Error loading translations:', error)
-        // Fallback to English in case of an error
-        const enResponse = await fetch('/locales/en.json')
-        const enData = await enResponse.json()
-        setTranslations(enData)
+        setTranslations(enTranslations) // Fallback to English
       } finally {
         setIsLoading(false)
       }
