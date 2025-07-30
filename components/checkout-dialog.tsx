@@ -1,15 +1,10 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useLanguage } from "@/context/language-context"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Calendar } from "@/components/ui/calendar"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-
 import { format } from "date-fns"
-import { CalendarIcon } from "lucide-react"
 
 interface CheckoutDialogProps {
   open: boolean
@@ -18,11 +13,10 @@ interface CheckoutDialogProps {
     id: string
     name: string
     quantity: number
+    category: string
   } | null
-  onCheckout: (itemId: string, handledBy: string, quantity: number, expectedReturnDate: string) => void
+  onCheckout: (itemId: string, handledBy: string, quantity: number, expectedReturnDate?: string) => void
 }
-
-
 
 export function CheckoutDialog({ open, onOpenChange, item, onCheckout }: CheckoutDialogProps) {
   const { t } = useLanguage()
@@ -31,29 +25,35 @@ export function CheckoutDialog({ open, onOpenChange, item, onCheckout }: Checkou
   const [checkoutDate, setCheckoutDate] = useState<Date>(new Date())
   const [expectedReturnDate, setExpectedReturnDate] = useState<Date | undefined>(undefined)
 
+  useEffect(() => {
+    if (item) {
+      setHandledBy("")
+      setQuantity(1)
+      setCheckoutDate(new Date())
+      setExpectedReturnDate(undefined)
+    }
+  }, [item])
+
   const handleSubmit = () => {
-    if (!item || !handledBy || !expectedReturnDate || quantity <= 0) return
+    if (!item || !handledBy || quantity <= 0) return
 
-    onCheckout(item.id, handledBy, quantity, expectedReturnDate.toISOString())
+    if (item.category === "Pièce consomable") {
+      onCheckout(item.id, handledBy, quantity)
+    } else {
+      if (!expectedReturnDate) return
+      onCheckout(item.id, handledBy, quantity, expectedReturnDate.toISOString())
+    }
 
-    // Reset form
-    setHandledBy("")
-    setQuantity(1)
-    setCheckoutDate(new Date())
-    setExpectedReturnDate(undefined)
     onOpenChange(false)
   }
 
   const handleClose = () => {
-    // Reset form when closing
-    setHandledBy("")
-    setQuantity(1)
-    setCheckoutDate(new Date())
-    setExpectedReturnDate(undefined)
     onOpenChange(false)
   }
 
   if (!item) return null
+
+  const isConsumable = item.category === "Pièce consomable"
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
@@ -103,15 +103,17 @@ export function CheckoutDialog({ open, onOpenChange, item, onCheckout }: Checkou
             />
           </div>
 
-          <div>
-            <Label htmlFor="expected-return-date">{t("expectedReturnDate")} *</Label>
-            <Input
-              id="expected-return-date"
-              type="date"
-              value={expectedReturnDate ? format(expectedReturnDate, "yyyy-MM-dd") : ""}
-              onChange={(e) => setExpectedReturnDate(e.target.value ? new Date(e.target.value) : undefined)}
-            />
-          </div>
+          {!isConsumable && (
+            <div>
+              <Label htmlFor="expected-return-date">{t("expectedReturnDate")} *</Label>
+              <Input
+                id="expected-return-date"
+                type="date"
+                value={expectedReturnDate ? format(expectedReturnDate, "yyyy-MM-dd") : ""}
+                onChange={(e) => setExpectedReturnDate(e.target.value ? new Date(e.target.value) : undefined)}
+              />
+            </div>
+          )}
 
           <div className="flex gap-2 pt-4">
             <Button variant="outline" onClick={handleClose} className="flex-1 bg-transparent">
@@ -120,7 +122,12 @@ export function CheckoutDialog({ open, onOpenChange, item, onCheckout }: Checkou
             <Button
               onClick={handleSubmit}
               className="flex-1 bg-[#2b4198] hover:bg-opacity-90"
-              disabled={!handledBy || !expectedReturnDate || quantity <= 0 || quantity > item.quantity}
+              disabled={
+                !handledBy ||
+                quantity <= 0 ||
+                quantity > item.quantity ||
+                (!isConsumable && !expectedReturnDate)
+              }
             >
               {t("checkout")}
             </Button>

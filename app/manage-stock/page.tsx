@@ -16,6 +16,7 @@ import { Edit, Plus, Trash2, Upload, FileSpreadsheet, LogOut, History } from "lu
 import { INVENTORY_COLUMNS } from "@/utils/excel-export"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { formatDate } from "@/lib/utils"
 
 const ImportDialog = dynamic(() => import("@/components/import-dialog").then((mod) => mod.ImportDialog))
 const ExportDialog = dynamic(() => import("@/components/export-dialog").then((mod) => mod.ExportDialog))
@@ -283,7 +284,7 @@ export default function ManageStock() {
                         <TableCell className="font-medium">{item.id}</TableCell>
                         <TableCell className="font-medium">{item.name}</TableCell>
                         <TableCell>{item.category}</TableCell>
-                        <TableCell>{item.dateAdded}</TableCell>
+                        <TableCell>{formatDate(item.dateAdded)}</TableCell>
                         <TableCell>{item.quantity}</TableCell>
                         <TableCell>
                           <Badge variant={getStatusVariant(item.status) as any} className="whitespace-nowrap">
@@ -348,7 +349,7 @@ export default function ManageStock() {
                         </div>
                         <div className="col-span-2">
                           <p className="text-gray-500">{t("dateAdded")}</p>
-                          <p className="font-medium">{item.dateAdded}</p>
+                          <p className="font-medium">{formatDate(item.dateAdded)}</p>
                         </div>
                       </div>
                       <div className="mt-4 pt-4 border-t border-gray-200 flex justify-end gap-2">
