@@ -9,53 +9,27 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
+  const { searchParams } = new URL(req.url);
+  const days = parseInt(searchParams.get("days") || "30", 10);
+
+  const startDate = new Date();
+  startDate.setDate(startDate.getDate() - days);
+
   try {
-    // Total Inventory
     const totalItems = await prisma.item.count();
-
-    // Low Stock Items (assuming quantity < 10 for low stock)
-    const lowStockItems = await prisma.item.count({
+    const lowStockItems = await prisma.item.count({ where: { quantity: { lt: 10 } } });
+    const outOfStockItems = await prisma.item.count({ where: { quantity: { equals: 0 } } });
+    const overdueItems = await prisma.movement.count({
       where: {
-        quantity: {
-          lt: 10,
-        },
+        status: "En Retard",
+        timestamp: { gte: startDate },
       },
     });
-
-    // Out of Stock Items
-    const outOfStockItems = await prisma.item.count({
-      where: {
-        quantity: {
-          equals: 0,
-        },
-      },
-    });
-
-    // Overdue Items
-    const overdueItems = await prisma.item.count({
-      where: {
-        status: "Overdue",
-      },
-    });
-
-    // Movements over time (last 30 days)
-    const thirtyDaysAgo = new Date();
-    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
     const movements = await prisma.movement.findMany({
-      where: {
-        timestamp: {
-          gte: thirtyDaysAgo,
-        },
-      },
-      select: {
-        timestamp: true,
-        type: true,
-        quantity: true,
-      },
-      orderBy: {
-        timestamp: "asc",
-      },
+      where: { timestamp: { gte: startDate } },
+      select: { timestamp: true, type: true, quantity: true },
+      orderBy: { timestamp: "asc" },
     });
 
     const dailyMovements: { date: string; checkIn: number; checkOut: number }[] = [];
@@ -75,31 +49,19 @@ export async function GET(req: NextRequest) {
       }
     });
 
-    // Most Active Items (based on movement count)
     const mostActiveItems = await prisma.movement.groupBy({
       by: ["itemName"],
-      _count: {
-        movementId: true,
-      },
-      orderBy: {
-        _count: {
-          movementId: "desc",
-        },
-      },
+      where: { timestamp: { gte: startDate } },
+      _sum: { quantity: true },
+      orderBy: { _sum: { quantity: "desc" } },
       take: 5,
     });
 
-    // Most Active Users (based on movement count)
     const mostActiveUsers = await prisma.movement.groupBy({
       by: ["handledBy"],
-      _count: {
-        movementId: true,
-      },
-      orderBy: {
-        _count: {
-          movementId: "desc",
-        },
-      },
+      where: { timestamp: { gte: startDate } },
+      _count: { movementId: true },
+      orderBy: { _count: { movementId: "desc" } },
       take: 5,
     });
 
