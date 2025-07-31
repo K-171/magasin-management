@@ -19,6 +19,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { UserPlus, Mail, Clock, CheckCircle, XCircle, AlertCircle } from "lucide-react"
 import { useLanguage } from "@/context/language-context"
 import type { Invitation } from "@/lib/auth"
+import { formatDate } from "@/lib/utils"
 
 export default function AdminPanel() {
   const { user, createInvitation, getInvitations, revokeInvitation } = useAuth()
@@ -99,16 +100,6 @@ export default function AdminPanel() {
       return <XCircle className="h-4 w-4 text-red-600" />
     }
     return <Clock className="h-4 w-4 text-blue-600" />
-  }
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    })
   }
 
   return (

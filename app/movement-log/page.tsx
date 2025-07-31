@@ -24,6 +24,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Skeleton } from '@/components/ui/skeleton'
 import dynamic from "next/dynamic"
 import { MOVEMENT_COLUMNS } from "@/utils/excel-export"
+import { formatDate } from "@/lib/utils"
 
 const ExportDialog = dynamic(() => import("@/components/export-dialog").then((mod) => mod.ExportDialog))
 
@@ -155,11 +156,6 @@ export default function MovementLog() {
       default:
         return 'default'
     }
-  }
-
-  // Format date
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString()
   }
 
   // Check if movement is overdue
