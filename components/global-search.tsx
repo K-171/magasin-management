@@ -19,39 +19,45 @@ export function GlobalSearch() {
   const searchRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (query.length > 1) {
-      const lowerCaseQuery = query.toLowerCase()
+    const fetchResults = async () => {
+      if (query.length > 1) {
+        const lowerCaseQuery = query.toLowerCase()
 
-      const filteredItems = items
-        .filter(
-          (item) =>
-            item.name.toLowerCase().includes(lowerCaseQuery) ||
-            item.id.toLowerCase().includes(lowerCaseQuery)
-        )
-        .map((item) => ({ ...item, type: "item" }))
+        const filteredItems = items
+          .filter(
+            (item) =>
+              item.name.toLowerCase().includes(lowerCaseQuery) ||
+              item.id.toLowerCase().includes(lowerCaseQuery)
+          )
+          .map((item) => ({ ...item, type: "item" }))
 
-      const filteredMovements = movements
-        .filter(
-          (movement) =>
-            movement.itemName.toLowerCase().includes(lowerCaseQuery) ||
-            movement.handledBy.toLowerCase().includes(lowerCaseQuery)
-        )
-        .map((movement) => ({ ...movement, type: "movement" }))
-        
-      let filteredUsers: any[] = []
-      if (user?.role === 'admin') {
-        const invitations = getInvitations()
-        filteredUsers = invitations
-          .filter((invitation) => invitation.email.toLowerCase().includes(lowerCaseQuery))
-          .map((invitation) => ({ ...invitation, type: "user" }))
+        const filteredMovements = movements
+          .filter(
+            (movement) =>
+              movement.itemName.toLowerCase().includes(lowerCaseQuery) ||
+              movement.handledBy.toLowerCase().includes(lowerCaseQuery)
+          )
+          .map((movement) => ({ ...movement, type: "movement" }))
+          
+        let filteredUsers: any[] = []
+        if (user?.role === 'admin') {
+          const invitations = await getInvitations()
+          if (Array.isArray(invitations)) {
+            filteredUsers = invitations
+              .filter((invitation) => invitation.email.toLowerCase().includes(lowerCaseQuery))
+              .map((invitation) => ({ ...invitation, type: "user" }))
+          }
+        }
+
+        setResults([...filteredItems, ...filteredMovements, ...filteredUsers])
+        setIsOpen(true)
+      } else {
+        setResults([])
+        setIsOpen(false)
       }
-
-      setResults([...filteredItems, ...filteredMovements, ...filteredUsers])
-      setIsOpen(true)
-    } else {
-      setResults([])
-      setIsOpen(false)
     }
+
+    fetchResults()
   }, [query, items, movements, user, getInvitations])
 
   useEffect(() => {
