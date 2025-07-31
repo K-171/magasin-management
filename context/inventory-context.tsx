@@ -206,6 +206,14 @@ export function InventoryProvider({ children }: { children: ReactNode }) {
         await updateItem(currentItem.id, { quantity: newQuantity });
       }
 
+      if (movement.type === "Sortie" && currentItem?.category === "Pièce consomable") {
+        await fetch(`/api/movements/${(await response.json()).movementId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: 'Consommé' }),
+        });
+      }
+
       await fetchMovements(); // Refetch to get the latest list
     } catch (err: any) {
       setError(err.message);
