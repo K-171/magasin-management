@@ -29,17 +29,30 @@ export async function POST(request: Request) {
 
     const expectedReturnDate = rawExpectedReturnDate ? new Date(rawExpectedReturnDate) : null;
 
-    const newMovement = await prisma.movement.create({
-      data: {
-        itemId,
-        itemName,
-        type,
-        quantity,
-        handledBy,
-        expectedReturnDate,
-        status,
-      },
-    });
+    // Use a transaction to ensure both movement creation and item update are successful
+    const [newMovement] = await prisma.$transaction([
+      prisma.movement.create({
+        data: {
+          itemId,
+          itemName,
+          type,
+          quantity,
+          handledBy,
+          expectedReturnDate,
+          status,
+        },
+      }),
+      prisma.item.update({
+        where: { id: itemId },
+        data: {
+          quantity: {
+            // Decrement for 'Sortie' (Check-out), increment for 'Entrée' (Check-in)
+            [type === 'Sortie' ? 'decrement' : 'increment']: quantity,
+          },
+        },
+      }),
+    ]);
+
     return NextResponse.json(newMovement, { status: 201 });
   } catch (error) {
     console.error('Error creating movement:', error);
