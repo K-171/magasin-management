@@ -26,6 +26,8 @@ import dynamic from "next/dynamic"
 import { MOVEMENT_COLUMNS } from "@/utils/excel-export"
 import { formatDate } from "@/lib/utils"
 
+import { useMediaQuery } from '@/hooks/use-media-query';
+
 const ExportDialog = dynamic(() => import("@/components/export-dialog").then((mod) => mod.ExportDialog))
 
 export default function MovementLog() {
@@ -42,6 +44,7 @@ export default function MovementLog() {
   const [selectedStatuses, setSelectedStatuses] = useState<string[]>([])
   const [showFilters, setShowFilters] = useState(false)
   const [isExportDialogOpen, setIsExportDialogOpen] = useState(false)
+  const isMobile = useMediaQuery("(max-width: 768px)");
 
   useEffect(() => {
     fetchMovements()
@@ -343,174 +346,249 @@ export default function MovementLog() {
           )}
         </div>
 
-        {/* Table */}
+        {/* Table and Mobile Card View */}
         <div className="overflow-x-auto">
-          <Table>
-            <TableHeader>
-              <TableRow className="bg-gray-50">
-                <TableHead className="font-semibold text-gray-600">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="flex items-center gap-1 p-0 h-auto font-semibold"
-                    onClick={() => handleSort('timestamp')}
-                  >
-                    {t('movementDate')}
-                    {sortField === 'timestamp' &&
-                      (sortDirection === 'asc' ? (
-                        <SortAsc className="h-3 w-3" />
-                      ) : (
-                        <SortDesc className="h-3 w-3" />
-                      ))}
-                  </Button>
-                </TableHead>
-                <TableHead className="font-semibold text-gray-600">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="flex items-center gap-1 p-0 h-auto font-semibold"
-                    onClick={() => handleSort('itemName')}
-                  >
-                    {t('itemName')}
-                    {sortField === 'itemName' &&
-                      (sortDirection === 'asc' ? (
-                        <SortAsc className="h-3 w-3" />
-                      ) : (
-                        <SortDesc className="h-3 w-3" />
-                      ))}
-                  </Button>
-                </TableHead>
-                <TableHead className="font-semibold text-gray-600">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="flex items-center gap-1 p-0 h-auto font-semibold"
-                    onClick={() => handleSort('type')}
-                  >
-                    {t('movementType')}
-                    {sortField === 'type' &&
-                      (sortDirection === 'asc' ? (
-                        <SortAsc className="h-3 w-3" />
-                      ) : (
-                        <SortDesc className="h-3 w-3" />
-                      ))}
-                  </Button>
-                </TableHead>
-                <TableHead className="font-semibold text-gray-600">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="flex items-center gap-1 p-0 h-auto font-semibold"
-                    onClick={() => handleSort('quantity')}
-                  >
-                    {t('quantity')}
-                    {sortField === 'quantity' &&
-                      (sortDirection === 'asc' ? (
-                        <SortAsc className="h-3 w-3" />
-                      ) : (
-                        <SortDesc className="h-3 w-3" />
-                      ))}
-                  </Button>
-                </TableHead>
-                <TableHead className="font-semibold text-gray-600">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="flex items-center gap-1 p-0 h-auto font-semibold"
-                    onClick={() => handleSort('handledBy')}
-                  >
-                    {t('handledBy')}
-                    {sortField === 'handledBy' &&
-                      (sortDirection === 'asc' ? (
-                        <SortAsc className="h-3 w-3" />
-                      ) : (
-                        <SortDesc className="h-3 w-3" />
-                      ))}
-                  </Button>
-                </TableHead>
-                <TableHead className="font-semibold text-gray-600">
-                  {t('expectedReturnDate')}
-                </TableHead>
-                <TableHead className="font-semibold text-gray-600">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="flex items-center gap-1 p-0 h-auto font-semibold"
-                    onClick={() => handleSort('status')}
-                  >
-                    {t('status')}
-                    {sortField === 'status' &&
-                      (sortDirection === 'asc' ? (
-                        <SortAsc className="h-3 w-3" />
-                      ) : (
-                        <SortDesc className="h-3 w-3" />
-                      ))}
-                  </Button>
-                </TableHead>
-                <TableHead className="font-semibold text-gray-600 text-center">
-                  {t('actions')}
-                </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
+          {isMobile ? (
+            <div className="space-y-4">
               {paginatedMovements.map((movement) => (
-                <TableRow
-                  key={movement.movementId}
-                  className={`hover:bg-gray-50 ${
-                    isOverdue(movement) ? 'bg-red-50' : ''
-                  } ${
-                    highlightedId === movement.movementId ? 'bg-blue-100' : ''
-                  }`}
-                >
-                  <TableCell className="font-medium">
-                    {formatDate(movement.timestamp)}
-                  </TableCell>
-                  <TableCell className="font-medium">{movement.itemName}</TableCell>
-                  <TableCell>
-                    <Badge
-                      variant={getTypeVariant(movement.type) as any}
-                      className="whitespace-nowrap"
-                    >
-                      {movement.type === 'Entrée' ? t('entry') : t('exit')}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>{movement.quantity}</TableCell>
-                  <TableCell>{movement.handledBy}</TableCell>
-                  <TableCell>
-                    {movement.expectedReturnDate
-                      ? formatDate(movement.expectedReturnDate)
-                      : '-'}
-                  </TableCell>
-                  <TableCell>
-                    <Badge
-                      variant={getStatusVariant(movement.status) as any}
-                      className="whitespace-nowrap"
-                    >
-                      {movement.status === 'En Prêt'
-                        ? t('onLoan')
-                        : movement.status === 'Retourné'
-                          ? t('returned')
-                          : t('overdue')}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="text-center">
-                    {(movement.status === 'En Prêt' ||
-                      movement.status === 'En Retard') &&
-                      movement.type === 'Sortie' && (
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleCheckin(movement.movementId)}
-                          className="text-[#2b4198] hover:text-[#2b4198] hover:bg-blue-50"
+                <Card key={movement.movementId} className={`bg-white shadow-sm rounded-lg ${
+                  isOverdue(movement) ? 'border-red-500' : ''
+                } ${
+                  highlightedId === movement.movementId ? 'border-blue-500' : ''
+                }`}>
+                  <CardContent className="p-4">
+                    <div className="flex justify-between items-start">
+                      <div className="flex-grow">
+                        <p className="font-bold text-lg text-gray-800">{movement.itemName}</p>
+                        <p className="text-sm text-gray-500">{movement.movementId}</p>
+                      </div>
+                      <Badge
+                        variant={getTypeVariant(movement.type) as any}
+                        className="whitespace-nowrap"
+                      >
+                        {movement.type === 'Entrée' ? t('entry') : t('exit')}
+                      </Badge>
+                    </div>
+                    <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
+                      <div>
+                        <p className="text-gray-500">{t('movementDate')}</p>
+                        <p className="font-medium">{formatDate(movement.timestamp)}</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-500">{t('quantity')}</p>
+                        <p className="font-medium">{movement.quantity}</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-500">{t('handledBy')}</p>
+                        <p className="font-medium">{movement.handledBy}</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-500">{t('status')}</p>
+                        <Badge
+                          variant={getStatusVariant(movement.status) as any}
+                          className="whitespace-nowrap"
                         >
-                          <RotateCcw className="h-4 w-4" />
-                        </Button>
+                          {movement.status === 'En Prêt'
+                            ? t('onLoan')
+                            : movement.status === 'Retourné'
+                              ? t('returned')
+                              : t('overdue')}
+                        </Badge>
+                      </div>
+                      {movement.expectedReturnDate && (
+                        <div className="col-span-2">
+                          <p className="text-gray-500">{t('expectedReturnDate')}</p>
+                          <p className="font-medium">{formatDate(movement.expectedReturnDate)}</p>
+                        </div>
                       )}
-                  </TableCell>
-                </TableRow>
+                    </div>
+                    <div className="mt-4 pt-4 border-t border-gray-200 flex justify-end gap-2">
+                      {(movement.status === 'En Prêt' ||
+                        movement.status === 'En Retard') &&
+                        movement.type === 'Sortie' && (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleCheckin(movement.movementId)}
+                            className="text-[#2b4198] hover:text-[#2b4198] hover:bg-blue-50"
+                          >
+                            <RotateCcw className="h-4 w-4 mr-1" />
+                            {t('checkin')}
+                          </Button>
+                        )}
+                    </div>
+                  </CardContent>
+                </Card>
               ))}
-            </TableBody>
-          </Table>
+            </div>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-gray-50">
+                  <TableHead className="font-semibold text-gray-600">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="flex items-center gap-1 p-0 h-auto font-semibold"
+                      onClick={() => handleSort('timestamp')}
+                    >
+                      {t('movementDate')}
+                      {sortField === 'timestamp' &&
+                        (sortDirection === 'asc' ? (
+                          <SortAsc className="h-3 w-3" />
+                        ) : (
+                          <SortDesc className="h-3 w-3" />
+                        ))}
+                    </Button>
+                  </TableHead>
+                  <TableHead className="font-semibold text-gray-600">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="flex items-center gap-1 p-0 h-auto font-semibold"
+                      onClick={() => handleSort('itemName')}
+                    >
+                      {t('itemName')}
+                      {sortField === 'itemName' &&
+                        (sortDirection === 'asc' ? (
+                          <SortAsc className="h-3 w-3" />
+                        ) : (
+                          <SortDesc className="h-3 w-3" />
+                        ))}
+                    </Button>
+                  </TableHead>
+                  <TableHead className="font-semibold text-gray-600">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="flex items-center gap-1 p-0 h-auto font-semibold"
+                      onClick={() => handleSort('type')}
+                    >
+                      {t('movementType')}
+                      {sortField === 'type' &&
+                        (sortDirection === 'asc' ? (
+                          <SortAsc className="h-3 w-3" />
+                        ) : (
+                          <SortDesc className="h-3 w-3" />
+                        ))}
+                    </Button>
+                  </TableHead>
+                  <TableHead className="font-semibold text-gray-600">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="flex items-center gap-1 p-0 h-auto font-semibold"
+                      onClick={() => handleSort('quantity')}
+                    >
+                      {t('quantity')}
+                      {sortField === 'quantity' &&
+                        (sortDirection === 'asc' ? (
+                          <SortAsc className="h-3 w-3" />
+                        ) : (
+                          <SortDesc className="h-3 w-3" />
+                        ))}
+                    </Button>
+                  </TableHead>
+                  <TableHead className="font-semibold text-gray-600">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="flex items-center gap-1 p-0 h-auto font-semibold"
+                      onClick={() => handleSort('handledBy')}
+                    >
+                      {t('handledBy')}
+                      {sortField === 'handledBy' &&
+                        (sortDirection === 'asc' ? (
+                          <SortAsc className="h-3 w-3" />
+                        ) : (
+                          <SortDesc className="h-3 w-3" />
+                        ))}
+                    </Button>
+                  </TableHead>
+                  <TableHead className="font-semibold text-gray-600">
+                    {t('expectedReturnDate')}
+                  </TableHead>
+                  <TableHead className="font-semibold text-gray-600">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="flex items-center gap-1 p-0 h-auto font-semibold"
+                      onClick={() => handleSort('status')}
+                    >
+                      {t('status')}
+                      {sortField === 'status' &&
+                        (sortDirection === 'asc' ? (
+                          <SortAsc className="h-3 w-3" />
+                        ) : (
+                          <SortDesc className="h-3 w-3" />
+                        ))}
+                    </Button>
+                  </TableHead>
+                  <TableHead className="font-semibold text-gray-600 text-center">
+                    {t('actions')}
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {paginatedMovements.map((movement) => (
+                  <TableRow
+                    key={movement.movementId}
+                    className={`hover:bg-gray-50 ${
+                      isOverdue(movement) ? 'bg-red-50' : ''
+                    } ${
+                      highlightedId === movement.movementId ? 'bg-blue-100' : ''
+                    }`}
+                  >
+                    <TableCell className="font-medium">
+                      {formatDate(movement.timestamp)}
+                    </TableCell>
+                    <TableCell className="font-medium">{movement.itemName}</TableCell>
+                    <TableCell>
+                      <Badge
+                        variant={getTypeVariant(movement.type) as any}
+                        className="whitespace-nowrap"
+                      >
+                        {movement.type === 'Entrée' ? t('entry') : t('exit')}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>{movement.quantity}</TableCell>
+                    <TableCell>{movement.handledBy}</TableCell>
+                    <TableCell>
+                      {movement.expectedReturnDate
+                        ? formatDate(movement.expectedReturnDate)
+                        : '-'}
+                    </TableCell>
+                    <TableCell>
+                      <Badge
+                        variant={getStatusVariant(movement.status) as any}
+                        className="whitespace-nowrap"
+                      >
+                        {movement.status === 'En Prêt'
+                          ? t('onLoan')
+                          : movement.status === 'Retourné'
+                            ? t('returned')
+                            : t('overdue')}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {(movement.status === 'En Prêt' ||
+                        movement.status === 'En Retard') &&
+                        movement.type === 'Sortie' && (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleCheckin(movement.movementId)}
+                            className="text-[#2b4198] hover:text-[#2b4198] hover:bg-blue-50"
+                          >
+                            <RotateCcw className="h-4 w-4" />
+                          </Button>
+                        )}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
         </div>
 
         {/* Pagination */}
