@@ -5,7 +5,7 @@ import { getSession } from "@/lib/session";
 export async function GET(req: NextRequest) {
   const session = await getSession();
 
-  if (!session || session.role !== "admin") {
+  if (!session || session.user.role !== "admin") {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
@@ -28,6 +28,13 @@ export async function GET(req: NextRequest) {
         quantity: {
           equals: 0,
         },
+      },
+    });
+
+    // Overdue Items
+    const overdueItems = await prisma.item.count({
+      where: {
+        status: "Overdue",
       },
     });
 
@@ -100,6 +107,7 @@ export async function GET(req: NextRequest) {
       totalItems,
       lowStockItems,
       outOfStockItems,
+      overdueItems,
       dailyMovements,
       mostActiveItems,
       mostActiveUsers,

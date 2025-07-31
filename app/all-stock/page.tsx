@@ -161,6 +161,8 @@ export default function AllStock() {
         return "secondary"
       case "Out of Stock":
         return "destructive"
+      case "Overdue":
+        return "destructive"
       default:
         return "default"
     }

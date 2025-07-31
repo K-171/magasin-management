@@ -8,7 +8,15 @@ export async function GET() {
         timestamp: 'desc',
       },
     });
-    return NextResponse.json(movements);
+
+    const updatedMovements = movements.map(movement => {
+      if (movement.expectedReturnDate && new Date(movement.expectedReturnDate) < new Date() && movement.status !== 'Retourné') {
+        return { ...movement, status: 'En Retard' };
+      }
+      return movement;
+    });
+
+    return NextResponse.json(updatedMovements);
   } catch (error) {
     console.error('Error fetching movements:', error);
     return NextResponse.json({ error: 'Failed to fetch movements' }, { status: 500 });

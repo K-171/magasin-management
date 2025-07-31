@@ -8,7 +8,15 @@ export async function GET() {
         dateAdded: 'desc',
       },
     });
-    return NextResponse.json(items);
+
+    const updatedItems = items.map(item => {
+      if (item.expectedReturnDate && new Date(item.expectedReturnDate) < new Date()) {
+        return { ...item, status: 'Overdue' };
+      }
+      return item;
+    });
+
+    return NextResponse.json(updatedItems);
   } catch (error) {
     console.error('Error fetching items:', error);
     return NextResponse.json({ error: 'Failed to fetch items' }, { status: 500 });

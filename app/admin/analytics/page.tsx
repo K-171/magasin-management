@@ -13,6 +13,7 @@ interface AnalyticsData {
   totalItems: number;
   lowStockItems: number;
   outOfStockItems: number;
+  overdueItems: number;
   dailyMovements: { date: string; checkIn: number; checkOut: number }[];
   mostActiveItems: { itemName: string; _count: { movementId: number } }[];
   mostActiveUsers: { handledBy: string; _count: { movementId: number } }[];
@@ -101,9 +102,10 @@ export default function AnalyticsPage() {
   }
 
   const itemStatusData = [
-    { name: t("inStock"), value: analyticsData.totalItems - analyticsData.lowStockItems - analyticsData.outOfStockItems },
+    { name: t("inStock"), value: analyticsData.totalItems - analyticsData.lowStockItems - analyticsData.outOfStockItems - analyticsData.overdueItems },
     { name: t("lowStock"), value: analyticsData.lowStockItems },
     { name: t("outOfStock"), value: analyticsData.outOfStockItems },
+    { name: t("overdue"), value: analyticsData.overdueItems },
   ];
 
   return (
@@ -135,6 +137,15 @@ export default function AnalyticsPage() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{analyticsData.outOfStockItems}</div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+              <CardTitle className="text-sm font-medium">{t("overdueItems")}</CardTitle>
+              <AlertCircle className="h-4 w-4 text-red-500" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{analyticsData.overdueItems}</div>
             </CardContent>
           </Card>
           <Card>
