@@ -21,8 +21,8 @@ export async function GET(req: NextRequest) {
     const outOfStockItems = await prisma.item.count({ where: { quantity: { equals: 0 } } });
     const overdueItems = await prisma.movement.count({
       where: {
-        status: "En Retard",
-        timestamp: { gte: startDate },
+        expectedReturnDate: { lt: new Date() },
+        status: "En Prêt",
       },
     });
 
@@ -42,9 +42,9 @@ export async function GET(req: NextRequest) {
         dailyMovements.push(existingEntry);
       }
 
-      if (movement.type === "Check-in") {
+      if (movement.type === "Entrée") {
         existingEntry.checkIn += movement.quantity;
-      } else if (movement.type === "Check-out") {
+      } else if (movement.type === "Sortie") {
         existingEntry.checkOut += movement.quantity;
       }
     });
