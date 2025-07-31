@@ -220,13 +220,16 @@ export function InventoryProvider({ children }: { children: ReactNode }) {
       return;
     }
 
+    const returnDate = new Date(expectedReturnDate);
+    returnDate.setHours(19, 0, 0, 0);
+
     await addMovement({
       type: "Sortie",
       itemId: itemId,
       itemName: item.name,
       quantity: quantity,
       handledBy: handledBy,
-      expectedReturnDate: expectedReturnDate,
+      expectedReturnDate: returnDate.toISOString(),
       status: "En Prêt",
     });
   };
