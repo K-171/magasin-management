@@ -46,7 +46,7 @@ interface InventoryContextType {
   fetchItems: () => Promise<void>
   fetchMovements: () => Promise<void>
   addMovement: (movement: Omit<Movement, "movementId" | "timestamp">) => Promise<void>;
-  checkoutItem: (itemId: string, handledBy: string, quantity: number, expectedReturnDate: string) => Promise<void>;
+  checkoutItem: (itemId: string, handledBy: string, quantity: number, expectedReturnDate?: string) => Promise<void>;
   checkinItem: (movementId: string) => Promise<void>
   getTotalItems: () => number
   getLowStockItems: () => InventoryItem[]
@@ -212,15 +212,17 @@ export function InventoryProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const checkoutItem = async (itemId: string, handledBy: string, quantity: number, expectedReturnDate: string) => {
+  const checkoutItem = async (itemId: string, handledBy: string, quantity: number, expectedReturnDate?: string) => {
     const item = items.find(i => i.id === itemId);
     if (!item) {
       setError("Item not found");
       return;
     }
 
-    const returnDate = new Date(expectedReturnDate);
-    returnDate.setHours(19, 0, 0, 0);
+    const returnDate = expectedReturnDate ? new Date(expectedReturnDate) : undefined;
+    if (returnDate) {
+      returnDate.setHours(19, 0, 0, 0);
+    }
 
     await addMovement({
       type: "Sortie",
@@ -228,8 +230,8 @@ export function InventoryProvider({ children }: { children: ReactNode }) {
       itemName: item.name,
       quantity: quantity,
       handledBy: handledBy,
-      expectedReturnDate: returnDate.toISOString(),
-      status: "En Prêt",
+      expectedReturnDate: returnDate?.toISOString(),
+      status: item.category === "Pièce consomable" ? "Consommé" : "En Prêt",
     });
   };
 
