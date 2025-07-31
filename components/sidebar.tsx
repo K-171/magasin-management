@@ -73,8 +73,8 @@ export function Sidebar({ isMobile, isOpen, setIsOpen }: SidebarProps) {
   const sidebarContent = (
     <div className="flex flex-col h-full">
       {/* Header */}
-      <div className="px-8 py-6 border-b border-gray-700 flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-center">MAGASIN</h1>
+      <div className="px-8 py-6 border-b border-gray-700 flex justify-center items-center">
+        <h1 className="text-2xl font-bold">MAGASIN</h1>
         {isMobile && (
           <Button
             variant="ghost"
