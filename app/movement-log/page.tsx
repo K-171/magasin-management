@@ -26,7 +26,7 @@ import dynamic from "next/dynamic"
 import { MOVEMENT_COLUMNS } from "@/utils/excel-export"
 import { formatDate } from "@/lib/utils"
 
-import { useMediaQuery } from '@/hooks/use-media-query';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const ExportDialog = dynamic(() => import("@/components/export-dialog").then((mod) => mod.ExportDialog))
 
@@ -44,7 +44,7 @@ export default function MovementLog() {
   const [selectedStatuses, setSelectedStatuses] = useState<string[]>([])
   const [showFilters, setShowFilters] = useState(false)
   const [isExportDialogOpen, setIsExportDialogOpen] = useState(false)
-  const isMobile = useMediaQuery("(max-width: 768px)");
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     fetchMovements()
