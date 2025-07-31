@@ -10,7 +10,7 @@ export async function GET() {
     });
 
     const updatedMovements = movements.map(movement => {
-      if (movement.expectedReturnDate && new Date(movement.expectedReturnDate) < new Date() && movement.status !== 'Retourné') {
+      if (movement.expectedReturnDate && new Date(movement.expectedReturnDate).setHours(19, 0, 0, 0) < new Date().setHours(19, 0, 0, 0) && movement.status !== 'Retourné') {
         return { ...movement, status: 'En Retard' };
       }
       return movement;

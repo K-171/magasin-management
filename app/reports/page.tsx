@@ -13,6 +13,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge"
 import { Download, FileText, PieChart, FileSpreadsheet } from "lucide-react"
 import { REPORTS_COLUMNS } from "@/utils/excel-export"
+import { formatDate } from "@/lib/utils"
 
 const ExportDialog = dynamic(() => import("@/components/export-dialog").then((mod) => mod.ExportDialog))
 
@@ -186,7 +187,7 @@ export default function Reports() {
                           <TableCell className="font-medium">{item.id}</TableCell>
                           <TableCell>{item.name}</TableCell>
                           <TableCell>{item.category}</TableCell>
-                          <TableCell>{item.dateAdded}</TableCell>
+                          <TableCell>{formatDate(item.dateAdded)}</TableCell>
                           <TableCell>{item.quantity}</TableCell>
                           <TableCell>
                             <Badge variant={getStatusVariant(item.status) as any} className="whitespace-nowrap">
@@ -222,7 +223,7 @@ export default function Reports() {
                           </div>
                           <div className="col-span-2">
                             <p className="text-gray-500">{t("dateAdded")}</p>
-                            <p className="font-medium">{item.dateAdded}</p>
+                            <p className="font-medium">{formatDate(item.dateAdded)}</p>
                           </div>
                         </div>
                       </CardContent>
