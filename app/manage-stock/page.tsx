@@ -33,7 +33,6 @@ export default function ManageStock() {
   const [editingItem, setEditingItem] = useState<any>(null)
   const [checkoutingItem, setCheckoutingItem] = useState<any>(null)
   const [newItem, setNewItem] = useState({
-    id: "",
     name: "",
     category: "",
     quantity: 0,
@@ -72,7 +71,6 @@ export default function ManageStock() {
     if (!newItem.name || !newItem.category) return
 
     addItem({
-      id: newItem.id,
       name: newItem.name,
       category: newItem.category,
       quantity: newItem.quantity,
@@ -202,15 +200,6 @@ export default function ManageStock() {
                       <DialogTitle>{t("addNewItem")}</DialogTitle>
                     </DialogHeader>
                     <div className="space-y-4">
-                      <div>
-                        <Label htmlFor="id">{t("itemId")}</Label>
-                        <Input
-                          id="id"
-                          value={newItem.id}
-                          onChange={(e) => setNewItem({ ...newItem, id: e.target.value })}
-                          placeholder={t("itemId")}
-                        />
-                      </div>
                       <div>
                         <Label htmlFor="name">{t("itemName")}</Label>
                         <Input
