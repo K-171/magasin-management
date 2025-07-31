@@ -195,7 +195,6 @@ export function InventoryProvider({ children }: { children: ReactNode }) {
         throw new Error("Failed to add movement");
       }
 
-      // Update item quantity based on movement type
       const currentItem = items.find(item => item.id === movement.itemId);
       if (currentItem) {
         let newQuantity = currentItem.quantity;
