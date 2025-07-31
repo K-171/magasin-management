@@ -19,14 +19,10 @@ import {
 import { Badge } from '@/components/ui/badge'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent } from '@/components/ui/card'
-import { Filter, SortAsc, SortDesc, RotateCcw, Download } from 'lucide-react'
-import { Checkbox } from '@/components/ui/checkbox'
-import { Skeleton } from '@/components/ui/skeleton'
-import dynamic from "next/dynamic"
-import { MOVEMENT_COLUMNS } from "@/utils/excel-export"
-import { formatDate } from "@/lib/utils"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { MoreVertical } from 'lucide-react';
 
-import { useIsMobile } from '@/hooks/use-mobile';
+const ExportDialog = dynamic(() => import("@/components/export-dialog").then((mod) => mod.ExportDialog))
 
 const ExportDialog = dynamic(() => import("@/components/export-dialog").then((mod) => mod.ExportDialog))
 
@@ -239,36 +235,64 @@ export default function MovementLog() {
             {t('movementHistory')}
           </h3>
           <div className="flex gap-2">
-            <Button
-              variant="outline"
-              onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center gap-2"
-            >
-              <Filter className="h-4 w-4" />
-              {t('filters')}
-              {(selectedTypes.length > 0 || selectedStatuses.length > 0) && (
-                <Badge className="ml-1 bg-[#2b4198]">
-                  {selectedTypes.length + selectedStatuses.length}
-                </Badge>
-              )}
-            </Button>
-            <Button
-              variant="outline"
-              onClick={() => setIsExportDialogOpen(true)}
-              className="flex items-center gap-2"
-            >
-              <Download className="h-4 w-4" />
-              {t('exportExcel')}
-            </Button>
-            {user?.role === 'admin' && (
-              <Button
-                variant="destructive"
-                onClick={handleClearLog}
-                className="flex items-center gap-2"
-              >
-                <RotateCcw className="h-4 w-4" />
-                {t('clearLog')}
-              </Button>
+            {isMobile ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="icon">
+                    <MoreVertical className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={() => setShowFilters(!showFilters)}>
+                    <Filter className="h-4 w-4 mr-2" />
+                    {t('filters')}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setIsExportDialogOpen(true)}>
+                    <Download className="h-4 w-4 mr-2" />
+                    {t('exportExcel')}
+                  </DropdownMenuItem>
+                  {user?.role === 'admin' && (
+                    <DropdownMenuItem onClick={handleClearLog}>
+                      <RotateCcw className="h-4 w-4 mr-2" />
+                      {t('clearLog')}
+                    </DropdownMenuItem>
+                  )}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <>
+                <Button
+                  variant="outline"
+                  onClick={() => setShowFilters(!showFilters)}
+                  className="flex items-center gap-2"
+                >
+                  <Filter className="h-4 w-4" />
+                  {t('filters')}
+                  {(selectedTypes.length > 0 || selectedStatuses.length > 0) && (
+                    <Badge className="ml-1 bg-[#2b4198]">
+                      {selectedTypes.length + selectedStatuses.length}
+                    </Badge>
+                  )}
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => setIsExportDialogOpen(true)}
+                  className="flex items-center gap-2"
+                >
+                  <Download className="h-4 w-4" />
+                  {t('exportExcel')}
+                </Button>
+                {user?.role === 'admin' && (
+                  <Button
+                    variant="destructive"
+                    onClick={handleClearLog}
+                    className="flex items-center gap-2"
+                  >
+                    <RotateCcw className="h-4 w-4" />
+                    {t('clearLog')}
+                  </Button>
+                )}
+              </>
             )}
           </div>
         </div>
