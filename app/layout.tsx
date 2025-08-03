@@ -4,6 +4,8 @@ import { Inter } from "next/font/google"
 import "./globals.css"
 import dynamic from "next/dynamic"
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import { ThemeProvider } from "@/components/theme-provider"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 const AppProviders = dynamic(() => import("@/components/app-providers").then(mod => mod.AppProviders), { ssr: false })
 
@@ -26,7 +28,15 @@ export default function RootLayout({
         <link rel="manifest" href="/manifest.json" />
       </head>
       <body className={inter.className}>
-        <AppProviders>{children}</AppProviders>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <AppProviders>{children}</AppProviders>
+          <ThemeToggle />
+        </ThemeProvider>
         <SpeedInsights />
       </body>
     </html>
