@@ -8,9 +8,12 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import listPlugin from '@fullcalendar/list'
 
+import { useIsMobile } from '@/hooks/use-mobile';
+
 export default function CalendarPage() {
   const { t } = useLanguage()
   const [events, setEvents] = useState([])
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -27,11 +30,11 @@ export default function CalendarPage() {
       <div className="bg-white p-8 rounded-lg shadow-md">
         <FullCalendar
           plugins={[dayGridPlugin, timeGridPlugin, listPlugin]}
-          initialView="dayGridMonth"
+          initialView={isMobile ? 'listWeek' : 'dayGridMonth'}
           headerToolbar={{
-            left: 'prev,next today',
+            left: isMobile ? 'prev,next' : 'prev,next today',
             center: 'title',
-            right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+            right: isMobile ? 'listWeek,dayGridMonth' : 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
           }}
           events={events}
         />
