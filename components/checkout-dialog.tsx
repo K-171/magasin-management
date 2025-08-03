@@ -104,14 +104,41 @@ export function CheckoutDialog({ open, onOpenChange, item, onCheckout }: Checkou
           </div>
 
           {!isConsumable && (
-            <div>
-              <Label htmlFor="expected-return-date">{t("expectedReturnDate")} *</Label>
-              <Input
-                id="expected-return-date"
-                type="date"
-                value={expectedReturnDate ? format(expectedReturnDate, "yyyy-MM-dd") : ""}
-                onChange={(e) => setExpectedReturnDate(e.target.value ? new Date(e.target.value) : undefined)}
-              />
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="expected-return-date">{t("expectedReturnDate")} *</Label>
+                <Input
+                  id="expected-return-date"
+                  type="date"
+                  value={expectedReturnDate ? format(expectedReturnDate, "yyyy-MM-dd") : ""}
+                  onChange={(e) => {
+                    const newDate = e.target.value ? new Date(e.target.value) : undefined;
+                    if (newDate && expectedReturnDate) {
+                      newDate.setHours(expectedReturnDate.getHours());
+                      newDate.setMinutes(expectedReturnDate.getMinutes());
+                    }
+                    setExpectedReturnDate(newDate);
+                  }}
+                />
+              </div>
+              <div>
+                <Label htmlFor="expected-return-time">{t("expectedReturnTime")} *</Label>
+                <Input
+                  id="expected-return-time"
+                  type="time"
+                  value={expectedReturnDate ? format(expectedReturnDate, "HH:mm") : ""}
+                  onChange={(e) => {
+                    const newTime = e.target.value;
+                    if (newTime && expectedReturnDate) {
+                      const [hours, minutes] = newTime.split(":").map(Number);
+                      const newDate = new Date(expectedReturnDate);
+                      newDate.setHours(hours);
+                      newDate.setMinutes(minutes);
+                      setExpectedReturnDate(newDate);
+                    }
+                  }}
+                />
+              </div>
             </div>
           )}
 

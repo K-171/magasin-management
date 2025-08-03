@@ -228,9 +228,6 @@ export function InventoryProvider({ children }: { children: ReactNode }) {
     }
 
     const returnDate = expectedReturnDate ? new Date(expectedReturnDate) : undefined;
-    if (returnDate) {
-      returnDate.setHours(19, 0, 0, 0);
-    }
 
     await addMovement({
       type: "Sortie",
