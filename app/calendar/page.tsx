@@ -58,7 +58,7 @@ export default function CalendarPage() {
           headerToolbar={{
             left: isMobile ? 'prev,next' : 'prev,next today',
             center: 'title',
-            right: isMobile ? 'listWeek,dayGridMonth' : 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+            right: isMobile ? 'listWeek,dayGridMonth' : 'dayGridMonth,listWeek'
           }}
           events={filteredEvents}
           eventContent={(arg) => {
