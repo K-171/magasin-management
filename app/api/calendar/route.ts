@@ -24,8 +24,11 @@ export async function GET() {
     const calendarEvents = movements.map(movement => ({
       title: `${movement.itemName} - ${movement.handledBy}`,
       start: movement.timestamp,
-      end: movement.expectedReturnDate,
+      end: movement.actualReturnDate || movement.expectedReturnDate,
       allDay: false,
+      extendedProps: {
+        status: movement.status,
+      }
     }));
 
     return NextResponse.json(calendarEvents);

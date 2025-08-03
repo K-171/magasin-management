@@ -53,6 +53,7 @@ model Movement {
   handledBy         String
   quantity          Int
   expectedReturnDate DateTime?
+  actualReturnDate   DateTime?
   status            String
   item              Item      @relation(fields: [itemId], references: [id])
 }
