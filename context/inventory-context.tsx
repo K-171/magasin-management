@@ -119,7 +119,7 @@ export function InventoryProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     fetchItems()
     fetchMovements()
-  }, [fetchItems, fetchMovements])
+  }, [])
 
   const addItem = async (item: {
     name: string
