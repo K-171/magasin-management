@@ -10,6 +10,7 @@ import { GlobalSearch } from '@/components/global-search'
 import { useNotification } from '@/context/notification-context'
 import { useIsMobile } from '@/hooks/use-mobile'
 
+
 interface LayoutProps {
   children: ReactNode
   title: string
@@ -53,7 +54,6 @@ export function Layout({ children, title, showSearch = true }: LayoutProps) {
           </div>
           <div className="flex items-center gap-2 md:gap-4">
             {showSearch && !isMobile && <GlobalSearch />}
-            <ThemeToggle />
             <div className="relative">
               <Button
                 variant="ghost"
