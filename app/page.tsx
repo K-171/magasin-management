@@ -341,7 +341,7 @@ export default function Dashboard() {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <div className="h-3 w-3 rounded-full bg-red-500"></div>
-                      <span>Out of Stock</span>
+                      <span>{t('outOfStock')}</span>
                     </div>
                     <span className="font-medium">
                       {statusStats['Out of Stock'] || 0}
@@ -391,7 +391,7 @@ export default function Dashboard() {
                           </p>
                         </div>
                       </div>
-                      <Badge variant="destructive">Out of Stock</Badge>
+                      <Badge variant="destructive">{t('outOfStock')}</Badge>
                     </div>
                   ))}
 
