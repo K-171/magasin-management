@@ -53,6 +53,7 @@ export function Layout({ children, title, showSearch = true }: LayoutProps) {
           </div>
           <div className="flex items-center gap-2 md:gap-4">
             {showSearch && !isMobile && <GlobalSearch />}
+            <ThemeToggle />
             <div className="relative">
               <Button
                 variant="ghost"
