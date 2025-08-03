@@ -12,6 +12,10 @@
     "seed": "ts-node --compiler-options \"{\\\"module\\\":\\\"commonjs\\\"}\" lib/demo-data.ts"
   },
   "dependencies": {
+    "@fullcalendar/daygrid": "^6.1.18",
+    "@fullcalendar/list": "^6.1.18",
+    "@fullcalendar/react": "^6.1.18",
+    "@fullcalendar/timegrid": "^6.1.18",
     "@google/gemini-cli": "^0.1.16",
     "@hookform/resolvers": "^3.9.1",
     "@prisma/client": "^6.12.0",

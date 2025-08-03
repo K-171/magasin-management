@@ -12,6 +12,7 @@ import {
   History,
   Plus,
   X,
+  Calendar,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -41,6 +42,7 @@ export function Sidebar({ isMobile, isOpen, setIsOpen }: SidebarProps) {
     { name: t('dashboard'), icon: LayoutDashboard, href: '/' },
     { name: t('manageStock'), icon: Package, href: '/manage-stock' },
     { name: t('movementLog'), icon: History, href: '/movement-log' },
+    { name: t('calendar'), icon: Calendar, href: '/calendar' },
     { name: t('reports'), icon: BarChart3, href: '/reports' },
     ...(user?.role === 'admin'
       ? [{ name: t('adminPanel'), icon: Settings, href: '/admin' }]
