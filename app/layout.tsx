@@ -8,6 +8,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { ThemeToggle } from "@/components/theme-toggle"
 
 const AppProviders = dynamic(() => import("@/components/app-providers").then(mod => mod.AppProviders), { ssr: false })
+const DynamicThemeToggle = dynamic(() => import("@/components/theme-toggle").then(mod => mod.ThemeToggle), { ssr: false })
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -35,7 +36,7 @@ export default function RootLayout({
       >
         <body className={inter.className}>
           <AppProviders>{children}</AppProviders>
-          <ThemeToggle />
+          <DynamicThemeToggle />
         </body>
       </ThemeProvider>
       <SpeedInsights />
