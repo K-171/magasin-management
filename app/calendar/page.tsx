@@ -46,6 +46,15 @@ export default function CalendarPage() {
               backgroundColor = '#ef4444'; // Red
             }
 
+            if (arg.view.type === 'timeGridWeek' || arg.view.type === 'timeGridDay') {
+              return (
+                <div style={{ backgroundColor, borderColor: backgroundColor, color: 'white'}} className="fc-event-main p-1 rounded-md">
+                  <b>{arg.timeText}</b>
+                  <span className="pl-1">{arg.event.title}</span>
+                </div>
+              )
+            }
+
             return (
               <div style={{ backgroundColor, borderColor: backgroundColor }} className="fc-event-main p-1 rounded-md text-white">
                 <b>{arg.timeText}</b>
