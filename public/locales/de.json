@@ -172,5 +172,9 @@
   "invitations": "Einladungen",
   "inviteNewUsers": "Neue Benutzer einladen",
   "systemAnalytics": "Systemanalytik",
-  "viewDetailedAnalytics": "Detaillierte Analysen anzeigen"
+  "viewDetailedAnalytics": "Detaillierte Analysen anzeigen",
+  "totalMovements": "Gesamtbewegungen",
+  "dailyMovements": "Tägliche Bewegungen",
+  "itemStatusDistribution": "Artikelstatusverteilung",
+  "quantityMoved": "Bewegte Menge"
 }

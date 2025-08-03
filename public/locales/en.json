@@ -189,5 +189,9 @@
   "userRoleUpdatedSuccess": "User role updated successfully.",
   "failedToUpdateUserRole": "Failed to update user role.",
   "unexpectedErrorUpdatingUserRole": "An unexpected error occurred while updating the user role.",
-  "pickADate": "Pick a date"
+  "pickADate": "Pick a date",
+  "totalMovements": "Total Movements",
+  "dailyMovements": "Daily Movements",
+  "itemStatusDistribution": "Item Status Distribution",
+  "quantityMoved": "Quantity Moved"
 }

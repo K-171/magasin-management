@@ -175,5 +175,8 @@
   "viewDetailedAnalytics": "Ver análisis detallados",
   "outOfStockItems": "Artículos agotados",
   "totalMovementsLast30Days": "Movimientos totales (últimos 30 días)",
+  "dailyMovements": "Movimientos Diarios",
+  "itemStatusDistribution": "Distribución por Estado de Artículo",
+  "quantityMoved": "Cantidad Movida",
   "allUsers": "Todos los usuarios"
 }
