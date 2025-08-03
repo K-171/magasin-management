@@ -21,15 +21,26 @@ export async function GET() {
       },
     });
 
-    const calendarEvents = movements.map(movement => ({
-      title: `${movement.itemName} - ${movement.handledBy}`,
-      start: movement.timestamp,
-      end: movement.actualReturnDate || movement.expectedReturnDate,
-      allDay: false,
-      extendedProps: {
-        status: movement.status,
+    const calendarEvents = movements.map(movement => {
+      let backgroundColor = '#3788d8'; // Default blue for 'En Prêt'
+      if (movement.status === 'Retourné') {
+        backgroundColor = '#34d399'; // Green
+      } else if (movement.status === 'En Retard') {
+        backgroundColor = '#ef4444'; // Red
       }
-    }));
+
+      return {
+        title: `${movement.itemName} - ${movement.handledBy}`,
+        start: movement.timestamp,
+        end: movement.actualReturnDate || movement.expectedReturnDate,
+        allDay: false,
+        backgroundColor,
+        borderColor: backgroundColor,
+        extendedProps: {
+          status: movement.status,
+        }
+      }
+    });
 
     return NextResponse.json(calendarEvents);
   } catch (error) {
