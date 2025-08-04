@@ -9,8 +9,7 @@ import { useAuth } from '@/context/auth-context'
 import { GlobalSearch } from '@/components/global-search'
 import { useNotification } from '@/context/notification-context'
 import { useIsMobile } from '@/hooks/use-mobile'
-import dynamic from "next/dynamic"
-const ThemeToggle = dynamic(() => import("@/components/theme-toggle").then(mod => mod.ThemeToggle), { ssr: false })
+import { ThemeToggle } from "@/components/theme-toggle"
 
 
 interface LayoutProps {
@@ -29,7 +28,7 @@ export function Layout({ children, title, showSearch = true }: LayoutProps) {
   
 
   return (
-    <div className="flex h-screen bg-white">
+    <div className="flex h-screen">
       <Sidebar
         isMobile={isMobile}
         isOpen={isSidebarOpen}
@@ -38,7 +37,7 @@ export function Layout({ children, title, showSearch = true }: LayoutProps) {
 
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
-        <header className="flex justify-between items-center py-4 px-6 bg-white border-b-2 border-gray-200">
+        <header className="flex justify-between items-center py-4 px-6 border-b-2 border-gray-200">
           <div className="flex items-center">
             {isMobile && (
               <Button
@@ -82,7 +81,7 @@ export function Layout({ children, title, showSearch = true }: LayoutProps) {
         </header>
 
         {/* Main Content */}
-        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-4 md:p-6">
+        <main className="flex-1 overflow-x-hidden overflow-y-auto p-4 md:p-6">
           {children}
         </main>
       </div>
