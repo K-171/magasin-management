@@ -9,6 +9,8 @@ import { useAuth } from '@/context/auth-context'
 import { GlobalSearch } from '@/components/global-search'
 import { useNotification } from '@/context/notification-context'
 import { useIsMobile } from '@/hooks/use-mobile'
+import dynamic from "next/dynamic"
+const ThemeToggle = dynamic(() => import("@/components/theme-toggle").then(mod => mod.ThemeToggle), { ssr: false })
 
 
 interface LayoutProps {
@@ -54,6 +56,7 @@ export function Layout({ children, title, showSearch = true }: LayoutProps) {
           </div>
           <div className="flex items-center gap-2 md:gap-4">
             {showSearch && !isMobile && <GlobalSearch />}
+            <ThemeToggle />
             <div className="relative">
               <Button
                 variant="ghost"
