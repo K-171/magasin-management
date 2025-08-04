@@ -35,8 +35,10 @@ export default function RootLayout({
         disableTransitionOnChange
       >
         <body className={inter.className}>
-          <AppProviders>{children}</AppProviders>
-          <DynamicThemeToggle />
+          <AppProviders>
+            {children}
+            <DynamicThemeToggle />
+          </AppProviders>
         </body>
       </ThemeProvider>
       <SpeedInsights />
