@@ -28,17 +28,17 @@ export default function RootLayout({
       <head>
         <link rel="manifest" href="/manifest.json" />
       </head>
-      <ThemeProvider
-        attribute="class"
-        defaultTheme="system"
-        enableSystem
-        disableTransitionOnChange
-      >
-        <body className={inter.className}>
+      <body className={inter.className}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
           <AppProviders>{children}</AppProviders>
-        </body>
-      </ThemeProvider>
-      <SpeedInsights />
+        </ThemeProvider>
+        <SpeedInsights />
+      </body>
     </html>
   )
 }
