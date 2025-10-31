@@ -37,7 +37,7 @@ export function Layout({ children, title, showSearch = true }: LayoutProps) {
 
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
-        <header className="flex justify-between items-center py-4 px-6 border-b-2 border-border bg-background">
+        <header className="flex justify-between items-center py-4 px-6 border-b-2 border-gray-200">
           <div className="flex items-center">
             {isMobile && (
               <Button
@@ -49,7 +49,7 @@ export function Layout({ children, title, showSearch = true }: LayoutProps) {
                 <Menu className="h-6 w-6" />
               </Button>
             )}
-            <h2 className="text-2xl md:text-3xl font-bold text-foreground">
+            <h2 className="text-2xl md:text-3xl font-bold text-[#3d414a]">
               {title}
             </h2>
           </div>
@@ -60,7 +60,7 @@ export function Layout({ children, title, showSearch = true }: LayoutProps) {
               <Button
                 variant="ghost"
                 size="icon"
-                className="relative text-muted-foreground hover:text-primary"
+                className="relative text-gray-600 hover:text-[#2b4198]"
                 onClick={markAllAsRead}
               >
                 <Bell className="h-5 w-5" />
@@ -72,7 +72,7 @@ export function Layout({ children, title, showSearch = true }: LayoutProps) {
             <Button
               variant="ghost"
               size="icon"
-              className="text-muted-foreground hover:text-primary"
+              className="text-gray-600 hover:text-[#2b4198]"
               onClick={logout}
             >
               <LogOut className="h-5 w-5" />
