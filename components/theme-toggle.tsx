@@ -13,11 +13,17 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 export function ThemeToggle() {
-  const { setTheme } = useTheme()
+  const { setTheme, theme } = useTheme()
 
-  const handleThemeChange = (theme: string) => {
-    console.log("Setting theme to:", theme)
-    setTheme(theme)
+  const handleThemeChange = (newTheme: string) => {
+    console.log("Current theme:", theme)
+    console.log("Setting theme to:", newTheme)
+    setTheme(newTheme)
+    // Force check after a short delay
+    setTimeout(() => {
+      const htmlElement = document.documentElement
+      console.log("HTML classes after theme change:", htmlElement.className)
+    }, 100)
   }
 
   return (
