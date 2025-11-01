@@ -37,7 +37,7 @@ export function Layout({ children, title, showSearch = true }: LayoutProps) {
 
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
-        <header className="flex justify-between items-center py-4 px-6 border-b-2 border-gray-200">
+        <header className="flex justify-between items-center py-4 px-6 border-b-2 border-header-border bg-header">
           <div className="flex items-center">
             {isMobile && (
               <Button
@@ -49,7 +49,7 @@ export function Layout({ children, title, showSearch = true }: LayoutProps) {
                 <Menu className="h-6 w-6" />
               </Button>
             )}
-            <h2 className="text-2xl md:text-3xl font-bold text-[#3d414a]">
+            <h2 className="text-2xl md:text-3xl font-bold text-header-foreground">
               {title}
             </h2>
           </div>
@@ -60,19 +60,19 @@ export function Layout({ children, title, showSearch = true }: LayoutProps) {
               <Button
                 variant="ghost"
                 size="icon"
-                className="relative text-gray-600 hover:text-[#2b4198]"
+                className="relative text-muted-foreground hover:text-primary"
                 onClick={markAllAsRead}
               >
                 <Bell className="h-5 w-5" />
                 {unreadCount > 0 && (
-                  <span className="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full"></span>
+                  <span className="absolute top-0 right-0 h-2 w-2 bg-destructive rounded-full"></span>
                 )}
               </Button>
             </div>
             <Button
               variant="ghost"
               size="icon"
-              className="text-gray-600 hover:text-[#2b4198]"
+              className="text-muted-foreground hover:text-primary"
               onClick={logout}
             >
               <LogOut className="h-5 w-5" />

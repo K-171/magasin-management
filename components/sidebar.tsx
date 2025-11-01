@@ -75,14 +75,14 @@ export function Sidebar({ isMobile, isOpen, setIsOpen }: SidebarProps) {
   const sidebarContent = (
     <div className="flex flex-col h-full">
       {/* Header */}
-      <div className="px-8 py-6 border-b border-gray-700 flex justify-center items-center">
-        <h1 className="text-2xl font-bold">MAGASIN</h1>
+      <div className="px-8 py-6 border-b border-sidebar-border flex justify-center items-center">
+        <h1 className="text-2xl font-bold text-sidebar-foreground">MAGASIN</h1>
         {isMobile && (
           <Button
             variant="ghost"
             size="icon"
             onClick={() => setIsOpen(false)}
-            className="text-white"
+            className="text-sidebar-foreground"
           >
             <X className="h-6 w-6" />
           </Button>
@@ -101,9 +101,9 @@ export function Sidebar({ isMobile, isOpen, setIsOpen }: SidebarProps) {
               variant="ghost"
               className={`w-full justify-start px-4 py-2 mt-5 text-left ${
                 isActive
-                  ? 'bg-[#2b4198] text-white'
-                  : 'text-gray-300 hover:bg-[#2b4198] hover:text-white'
-              } rounded-lg`}
+                  ? 'bg-sidebar-accent text-sidebar-accent-foreground'
+                  : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
+              } rounded-lg transition-colors`}
               onClick={() => handleNavigation(item.href)}
             >
               <Icon className="mr-3 h-5 w-5" />
@@ -114,9 +114,9 @@ export function Sidebar({ isMobile, isOpen, setIsOpen }: SidebarProps) {
       </nav>
 
       {/* User Profile */}
-      <div className="px-8 py-6 border-t border-gray-700">
+      <div className="px-8 py-6 border-t border-sidebar-border">
         <div
-          className="flex items-center cursor-pointer hover:bg-[#2b4198] rounded-lg p-2 transition-colors"
+          className="flex items-center cursor-pointer hover:bg-sidebar-accent rounded-lg p-2 transition-colors"
           onClick={() => handleNavigation('/settings')}
         >
           <Avatar className="h-10 w-10">
@@ -146,15 +146,15 @@ export function Sidebar({ isMobile, isOpen, setIsOpen }: SidebarProps) {
       </div>
 
       {/* Language Selector */}
-      <div className="px-6 py-3 border-t border-gray-700">
+      <div className="px-6 py-3 border-t border-sidebar-border">
         <div className="flex items-center gap-2 mb-2">
-          <Globe className="h-4 w-4 text-gray-400" />
-          <span className="text-xs text-gray-400 uppercase tracking-wide">
+          <Globe className="h-4 w-4 text-muted-foreground" />
+          <span className="text-xs text-muted-foreground uppercase tracking-wide">
             Language
           </span>
         </div>
         <Select value={language} onValueChange={setLanguage}>
-          <SelectTrigger className="w-full bg-[#2b4198] border-gray-600 text-white">
+          <SelectTrigger className="w-full bg-sidebar-accent border-sidebar-border text-sidebar-foreground">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -167,7 +167,7 @@ export function Sidebar({ isMobile, isOpen, setIsOpen }: SidebarProps) {
       </div>
 
       {/* Company Logo */}
-      <div className="px-8 py-4 border-t border-gray-700 text-center">
+      <div className="px-8 py-4 border-t border-sidebar-border text-center">
         <Image
           src="/Stellantis-Emblem.png"
           alt="Company Logo"
@@ -189,7 +189,7 @@ export function Sidebar({ isMobile, isOpen, setIsOpen }: SidebarProps) {
           ></div>
         )}
         <div
-          className={`fixed top-0 left-0 h-full w-64 bg-[#001f3f] text-white z-50 transform transition-transform ${
+          className={`fixed top-0 left-0 h-full w-64 bg-sidebar text-sidebar-foreground z-50 transform transition-transform ${
             isOpen ? 'translate-x-0' : '-translate-x-full'
           }`}
         >
@@ -200,7 +200,7 @@ export function Sidebar({ isMobile, isOpen, setIsOpen }: SidebarProps) {
   }
 
   return (
-    <div className="w-64 bg-[#001f3f] text-white flex-col hidden md:flex">
+    <div className="w-64 bg-sidebar text-sidebar-foreground flex-col hidden md:flex">
       {sidebarContent}
     </div>
   )
