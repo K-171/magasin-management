@@ -93,12 +93,12 @@ export default function UserManagementPage() {
 
   return (
     <Layout title={t("userManagement")}>
-      <div className="bg-white p-8 rounded-lg shadow-md">
+      <div className="bg-card p-8 rounded-lg shadow-md">
         <h3 className="text-xl font-semibold text-[#3d414a] mb-6">{t("allUsers")}</h3>
         <div className="overflow-x-auto">
           <Table>
             <TableHeader>
-              <TableRow className="bg-gray-50">
+              <TableRow className="bg-muted/50">
                 <TableHead className="font-semibold text-gray-600">Username</TableHead>
                 <TableHead className="font-semibold text-gray-600">Email</TableHead>
                 <TableHead className="font-semibold text-gray-600">Role</TableHead>
@@ -107,7 +107,7 @@ export default function UserManagementPage() {
             </TableHeader>
             <TableBody>
               {users.map((user) => (
-                <TableRow key={user.id} className="hover:bg-gray-50">
+                <TableRow key={user.id} className="hover:bg-muted/50">
                   <TableCell className="font-medium">{user.username}</TableCell>
                   <TableCell>{user.email}</TableCell>
                   <TableCell>{user.role}</TableCell>
@@ -116,7 +116,7 @@ export default function UserManagementPage() {
                       variant="ghost"
                       size="sm"
                       onClick={() => handleEditUser(user)}
-                      className="text-[#2b4198] hover:text-[#2b4198] hover:bg-blue-50 mr-2"
+                      className="text-primary hover:text-primary hover:bg-primary/10 mr-2"
                     >
                       <Edit className="h-4 w-4" />
                     </Button>
@@ -151,7 +151,7 @@ export default function UserManagementPage() {
                   </SelectContent>
                 </Select>
               </div>
-              <Button onClick={handleUpdateUser} className="w-full bg-[#2b4198] hover:bg-opacity-90">
+              <Button onClick={handleUpdateUser} className="w-full bg-primary hover:bg-opacity-90">
                 Update Role
               </Button>
             </div>

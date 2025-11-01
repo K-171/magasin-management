@@ -84,12 +84,12 @@ export default function AdminPanel() {
 
   const getStatusBadge = (invitation: Invitation) => {
     if (invitation.used) {
-      return <Badge className="bg-green-100 text-green-800">{t("used")}</Badge>
+      return <Badge className="bg-green-500/20 text-green-800">{t("used")}</Badge>
     }
     if (new Date(invitation.expiresAt) < new Date()) {
       return <Badge variant="destructive">{t("expired")}</Badge>
     }
-    return <Badge className="bg-blue-100 text-blue-800">{t("pending")}</Badge>
+    return <Badge className="bg-primary/20 text-blue-800">{t("pending")}</Badge>
   }
 
   const getStatusIcon = (invitation: Invitation) => {
@@ -117,7 +117,7 @@ export default function AdminPanel() {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
                 <CardTitle className="text-sm font-medium">{t("totalInvitations")}</CardTitle>
-                <Mail className="h-4 w-4 text-[#2b4198]" />
+                <Mail className="h-4 w-4 text-primary" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{invitations.length}</div>
@@ -153,7 +153,7 @@ export default function AdminPanel() {
               </div>
               <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
                 <DialogTrigger asChild>
-                  <Button className="bg-[#2b4198] hover:bg-opacity-90">
+                  <Button className="bg-primary hover:bg-opacity-90">
                     <UserPlus className="mr-2 h-4 w-4" />
                     Invite User
                   </Button>
@@ -192,7 +192,7 @@ export default function AdminPanel() {
                         </SelectContent>
                       </Select>
                     </div>
-                    <Button type="submit" disabled={isSubmitting} className="w-full bg-[#2b4198] hover:bg-opacity-90">
+                    <Button type="submit" disabled={isSubmitting} className="w-full bg-primary hover:bg-opacity-90">
                       {isSubmitting ? t("sending") : t("sendInvitation")}
                     </Button>
                   </form>
@@ -224,7 +224,7 @@ export default function AdminPanel() {
                       invitations
                         .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
                         .map((invitation) => (
-                          <TableRow key={invitation.id} className={`${highlightedId === invitation.id ? 'bg-blue-100' : ''}`}>
+                          <TableRow key={invitation.id} className={`${highlightedId === invitation.id ? 'bg-primary/20' : ''}`}>
                             <TableCell>
                               <div className="flex items-center gap-2">
                                 {getStatusIcon(invitation)}
@@ -245,7 +245,7 @@ export default function AdminPanel() {
                                   variant="ghost"
                                   size="sm"
                                   onClick={() => handleRevokeInvitation(invitation.id)}
-                                  className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                                  className="text-red-600 hover:text-red-700 hover:bg-destructive/10"
                                 >
                                   {t("revoke")}
                                 </Button>
@@ -267,7 +267,7 @@ export default function AdminPanel() {
                   invitations
                     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
                     .map((invitation) => (
-                      <Card key={invitation.id} className={`bg-white shadow-sm rounded-lg ${highlightedId === invitation.id ? 'border-2 border-blue-400' : ''}`}>
+                      <Card key={invitation.id} className={`bg-card shadow-sm rounded-lg ${highlightedId === invitation.id ? 'border-2 border-blue-400' : ''}`}>
                         <CardContent className="p-4">
                           <div className="flex justify-between items-start">
                             <div className="flex-grow">
@@ -295,7 +295,7 @@ export default function AdminPanel() {
                                 variant="ghost"
                                 size="sm"
                                 onClick={() => handleRevokeInvitation(invitation.id)}
-                                className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                                className="text-red-600 hover:text-red-700 hover:bg-destructive/10"
                               >
                                 Revoke
                               </Button>

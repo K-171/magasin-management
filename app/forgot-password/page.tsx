@@ -40,11 +40,11 @@ export default function ForgotPasswordPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen flex items-center justify-center bg-muted/50 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
           <Card>
             <CardHeader className="text-center">
-              <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
+              <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-500/20">
                 <CheckCircle className="h-6 w-6 text-green-600" />
               </div>
               <CardTitle className="mt-4">Check your email</CardTitle>
@@ -71,7 +71,7 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-muted/50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
           <h1 className="text-3xl font-bold text-[#001f3f] mb-2">INVENTORY</h1>
@@ -113,7 +113,7 @@ export default function ForgotPasswordPage() {
                 />
               </div>
 
-              <Button type="submit" disabled={isSubmitting} className="w-full bg-[#2b4198] hover:bg-[#1e2f7a]">
+              <Button type="submit" disabled={isSubmitting} className="w-full bg-primary hover:bg-primary/90">
                 {isSubmitting ? "Sending..." : "Send reset link"}
               </Button>
             </form>
@@ -121,7 +121,7 @@ export default function ForgotPasswordPage() {
             <div className="mt-6 text-center">
               <Link
                 href="/login"
-                className="text-sm text-[#2b4198] hover:text-[#1e2f7a] flex items-center justify-center gap-2"
+                className="text-sm text-primary hover:text-[#1e2f7a] flex items-center justify-center gap-2"
               >
                 <ArrowLeft className="h-4 w-4" />
                 Back to login

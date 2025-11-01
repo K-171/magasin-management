@@ -196,7 +196,7 @@ export default function MovementLog() {
   if (isLoading) {
     return (
       <Layout title={t('movementLog')}>
-        <div className="bg-white p-8 rounded-lg shadow-md">
+        <div className="bg-card p-8 rounded-lg shadow-md">
           <div className="flex justify-between items-center mb-6">
             <Skeleton className="h-8 w-1/4" />
             <Skeleton className="h-10 w-24" />
@@ -235,7 +235,7 @@ export default function MovementLog() {
 
   return (
     <Layout title={t('movementLog')}>
-      <div className="bg-white p-8 rounded-lg shadow-md">
+      <div className="bg-card p-8 rounded-lg shadow-md">
         <div className="flex justify-between items-center mb-6">
           <h3 className="text-xl font-semibold text-[#3d414a]">
             {t('movementHistory')}
@@ -275,7 +275,7 @@ export default function MovementLog() {
                   <Filter className="h-4 w-4" />
                   {t('filters')}
                   {(selectedTypes.length > 0 || selectedStatuses.length > 0) && (
-                    <Badge className="ml-1 bg-[#2b4198]">
+                    <Badge className="ml-1 bg-primary">
                       {selectedTypes.length + selectedStatuses.length}
                     </Badge>
                   )}
@@ -381,7 +381,7 @@ export default function MovementLog() {
           {isMobile ? (
             <div className="space-y-4">
               {paginatedMovements.map((movement) => (
-                <Card key={movement.movementId} className={`bg-white shadow-sm rounded-lg ${
+                <Card key={movement.movementId} className={`bg-card shadow-sm rounded-lg ${
                   isOverdue(movement) ? 'border-red-500' : ''
                 } ${
                   highlightedId === movement.movementId ? 'border-blue-500' : ''
@@ -440,7 +440,7 @@ export default function MovementLog() {
                             variant="ghost"
                             size="sm"
                             onClick={() => handleCheckin(movement.movementId)}
-                            className="text-[#2b4198] hover:text-[#2b4198] hover:bg-blue-50"
+                            className="text-primary hover:text-primary hover:bg-primary/10"
                           >
                             <RotateCcw className="h-4 w-4 mr-1" />
                             {t('checkin')}
@@ -454,7 +454,7 @@ export default function MovementLog() {
           ) : (
             <Table>
               <TableHeader>
-                <TableRow className="bg-gray-50">
+                <TableRow className="bg-muted/50">
                   <TableHead className="font-semibold text-gray-600">
                     <Button
                       variant="ghost"
@@ -563,10 +563,10 @@ export default function MovementLog() {
                 {paginatedMovements.map((movement) => (
                   <TableRow
                     key={movement.movementId}
-                    className={`hover:bg-gray-50 ${
-                      isOverdue(movement) ? 'bg-red-50' : ''
+                    className={`hover:bg-muted/50 ${
+                      isOverdue(movement) ? 'bg-destructive/10' : ''
                     } ${
-                      highlightedId === movement.movementId ? 'bg-blue-100' : ''
+                      highlightedId === movement.movementId ? 'bg-primary/20' : ''
                     }`}
                   >
                     <TableCell className="font-medium">
@@ -608,7 +608,7 @@ export default function MovementLog() {
                             variant="ghost"
                             size="sm"
                             onClick={() => handleCheckin(movement.movementId)}
-                            className="text-[#2b4198] hover:text-[#2b4198] hover:bg-blue-50"
+                            className="text-primary hover:text-primary hover:bg-primary/10"
                           >
                             <RotateCcw className="h-4 w-4" />
                           </Button>
@@ -634,7 +634,7 @@ export default function MovementLog() {
               size="sm"
               onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
               disabled={currentPage === 1}
-              className="hover:bg-[#2b4198] hover:text-white"
+              className="hover:bg-primary hover:text-white"
             >
               Previous
             </Button>
@@ -656,8 +656,8 @@ export default function MovementLog() {
                   onClick={() => setCurrentPage(pageNum)}
                   className={
                     currentPage === pageNum
-                      ? 'bg-[#2b4198] text-white'
-                      : 'hover:bg-[#2b4198] hover:text-white'
+                      ? 'bg-primary text-white'
+                      : 'hover:bg-primary hover:text-white'
                   }
                 >
                   {pageNum}
@@ -669,7 +669,7 @@ export default function MovementLog() {
               size="sm"
               onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
               disabled={currentPage === totalPages}
-              className="hover:bg-[#2b4198] hover:text-white"
+              className="hover:bg-primary hover:text-white"
             >
               Next
             </Button>

@@ -12,10 +12,10 @@ export default function AdminPage() {
     <Layout title={t("adminPanel")}> {/* Add Layout and title */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <Link href="/admin/user-management">
-          <Card className="hover:bg-gray-50 transition-colors">
+          <Card className="hover:shadow-lg hover:border-primary/50 hover:bg-muted/30 transition-all duration-300 cursor-pointer">
             <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
               <CardTitle className="text-sm font-medium">{t("userManagement")}</CardTitle>
-              <Users className="h-4 w-4 text-[#2b4198]" />
+              <Users className="h-4 w-4 text-primary" />
             </CardHeader>
             <CardContent>
               <p className="text-xs text-muted-foreground">{t("viewAndManageUsers")}</p>
@@ -23,10 +23,10 @@ export default function AdminPage() {
           </Card>
         </Link>
         <Link href="/admin/invitations">
-          <Card className="hover:bg-gray-50 transition-colors">
+          <Card className="hover:shadow-lg hover:border-primary/50 hover:bg-muted/30 transition-all duration-300 cursor-pointer">
             <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
               <CardTitle className="text-sm font-medium">{t("invitations")}</CardTitle>
-              <UserPlus className="h-4 w-4 text-[#2b4198]" />
+              <UserPlus className="h-4 w-4 text-primary" />
             </CardHeader>
             <CardContent>
               <p className="text-xs text-muted-foreground">{t("inviteNewUsers")}</p>
@@ -35,10 +35,10 @@ export default function AdminPage() {
         </Link>
         {/* System Analytics - Coming Soon */}
         <Link href="/admin/analytics">
-          <Card className="hover:bg-gray-50 transition-colors">
+          <Card className="hover:shadow-lg hover:border-primary/50 hover:bg-muted/30 transition-all duration-300 cursor-pointer">
             <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
               <CardTitle className="text-sm font-medium">{t("systemAnalytics")}</CardTitle>
-              <BarChart2 className="h-4 w-4 text-[#2b4198]" />
+              <BarChart2 className="h-4 w-4 text-primary" />
             </CardHeader>
             <CardContent>
               <p className="text-xs text-muted-foreground">{t("viewDetailedAnalytics")}</p>

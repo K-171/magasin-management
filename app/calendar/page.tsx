@@ -38,7 +38,7 @@ export default function CalendarPage() {
 
   return (
     <Layout title={t('calendar')}>
-      <div className="bg-white p-8 rounded-lg shadow-md">
+      <div className="bg-card p-8 rounded-lg shadow-md">
         <div className="flex justify-end mb-4">
           <Select value={statusFilter} onValueChange={setStatusFilter}>
             <SelectTrigger className="w-[180px]">

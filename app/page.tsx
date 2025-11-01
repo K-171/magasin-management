@@ -119,7 +119,7 @@ export default function Dashboard() {
               <CardTitle className="text-sm font-medium">
                 {t('totalInventory')}
               </CardTitle>
-              <Package className="h-4 w-4 text-[#2b4198]" />
+              <Package className="h-4 w-4 text-primary" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{totalItems}</div>
@@ -133,7 +133,7 @@ export default function Dashboard() {
               <CardTitle className="text-sm font-medium">
                 {t('consumableTurnover')}
               </CardTitle>
-              <TrendingUp className="h-4 w-4 text-[#2b4198]" />
+              <TrendingUp className="h-4 w-4 text-primary" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
@@ -232,7 +232,7 @@ export default function Dashboard() {
               <div className="flex gap-4">
                 <Button
                   onClick={() => setIsImportDialogOpen(true)}
-                  className="flex items-center gap-2 bg-[#2b4198] hover:bg-opacity-90"
+                  className="flex items-center gap-2 bg-primary hover:bg-opacity-90"
                 >
                   <Upload className="h-4 w-4" />
                   {t('importInventoryData')}
@@ -292,16 +292,16 @@ export default function Dashboard() {
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <div className="h-3 w-3 rounded-full bg-[#2b4198]"></div>
+                      <div className="h-3 w-3 rounded-full bg-primary"></div>
                       <span>{t('inStock')}</span>
                     </div>
                     <span className="font-medium">
                       {statusStats['In Stock'] || 0}
                     </span>
                   </div>
-                  <div className="h-2 w-full rounded-full bg-gray-100">
+                  <div className="h-2 w-full rounded-full bg-muted">
                     <div
-                      className="h-2 rounded-full bg-[#2b4198]"
+                      className="h-2 rounded-full bg-primary"
                       style={{
                         width: `${
                           ((statusStats['In Stock'] || 0) /
@@ -316,16 +316,16 @@ export default function Dashboard() {
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <div className="h-3 w-3 rounded-full bg-amber-500"></div>
+                      <div className="h-3 w-3 rounded-full bg-amber-500/100"></div>
                       <span>{t('lowStock')}</span>
                     </div>
                     <span className="font-medium">
                       {statusStats['Low Stock'] || 0}
                     </span>
                   </div>
-                  <div className="h-2 w-full rounded-full bg-gray-100">
+                  <div className="h-2 w-full rounded-full bg-muted">
                     <div
-                      className="h-2 rounded-full bg-amber-500"
+                      className="h-2 rounded-full bg-amber-500/100"
                       style={{
                         width: `${
                           ((statusStats['Low Stock'] || 0) /
@@ -340,16 +340,16 @@ export default function Dashboard() {
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <div className="h-3 w-3 rounded-full bg-red-500"></div>
+                      <div className="h-3 w-3 rounded-full bg-destructive/100"></div>
                       <span>{t('outOfStock')}</span>
                     </div>
                     <span className="font-medium">
                       {statusStats['Out of Stock'] || 0}
                     </span>
                   </div>
-                  <div className="h-2 w-full rounded-full bg-gray-100">
+                  <div className="h-2 w-full rounded-full bg-muted">
                     <div
-                      className="h-2 rounded-full bg-red-500"
+                      className="h-2 rounded-full bg-destructive/100"
                       style={{
                         width: `${
                           ((statusStats['Out of Stock'] || 0) /
@@ -380,7 +380,7 @@ export default function Dashboard() {
                   {outOfStockItems.map((item) => (
                     <div
                       key={item.id}
-                      className="flex items-center justify-between p-3 bg-red-50 rounded-lg"
+                      className="flex items-center justify-between p-3 bg-destructive/10 border border-destructive/20 rounded-lg"
                     >
                       <div className="flex items-center gap-3">
                         <AlertCircle className="h-5 w-5 text-red-500" />
@@ -398,7 +398,7 @@ export default function Dashboard() {
                   {lowStockItems.map((item) => (
                     <div
                       key={item.id}
-                      className="flex items-center justify-between p-3 bg-amber-50 rounded-lg"
+                      className="flex items-center justify-between p-3 bg-amber-500/100/10 border border-amber-500/20 rounded-lg"
                     >
                       <div className="flex items-center gap-3">
                         <AlertTriangle className="h-5 w-5 text-amber-500" />

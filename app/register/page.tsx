@@ -111,14 +111,14 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-muted/50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
           <h1 className="text-3xl font-bold text-[#001f3f] mb-2">INVENTORY</h1>
           <h2 className="text-2xl font-bold text-gray-900">Create your account</h2>
           <p className="mt-2 text-sm text-gray-600">
             Or{" "}
-            <Link href="/login" className="font-medium text-[#2b4198] hover:text-[#1e2f7a]">
+            <Link href="/login" className="font-medium text-primary hover:text-[#1e2f7a]">
               sign in to your existing account
             </Link>
           </p>
@@ -142,7 +142,7 @@ export default function RegisterPage() {
               )}
 
               {success && (
-                <Alert className="border-green-200 bg-green-50">
+                <Alert className="border-green-500/20 bg-green-500/10">
                   <CheckCircle className="h-4 w-4 text-green-600" />
                   <AlertDescription className="text-green-800">{success}</AlertDescription>
                 </Alert>
@@ -276,7 +276,7 @@ export default function RegisterPage() {
               <Button
                 type="submit"
                 disabled={isSubmitting || passwordErrors.length > 0}
-                className="w-full bg-[#2b4198] hover:bg-[#1e2f7a]"
+                className="w-full bg-primary hover:bg-primary/90"
               >
                 {isSubmitting ? "Creating account..." : "Create account"}
               </Button>

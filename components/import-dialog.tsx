@@ -156,7 +156,7 @@ export function ImportDialog({ open, onOpenChange }: ImportDialogProps) {
                 <Button
                   onClick={processFile}
                   disabled={!selectedFile || isProcessing}
-                  className="bg-[#2b4198] hover:bg-opacity-90"
+                  className="bg-primary hover:bg-opacity-90"
                 >
                   {isProcessing ? "Processing..." : "Process File"}
                 </Button>
@@ -273,7 +273,7 @@ export function ImportDialog({ open, onOpenChange }: ImportDialogProps) {
 
                 {importResult.success && importResult.data.length > 0 && (
                   <div className="flex justify-end">
-                    <Button onClick={handleImport} disabled={isProcessing} className="bg-[#2b4198] hover:bg-opacity-90">
+                    <Button onClick={handleImport} disabled={isProcessing} className="bg-primary hover:bg-opacity-90">
                       {isProcessing
                         ? `Importing... ${progress.toFixed(0)}%`
                         : `Import ${importResult.data.length} Items`}

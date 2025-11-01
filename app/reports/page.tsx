@@ -144,7 +144,7 @@ export default function Reports() {
               </Select>
               <Button
                 onClick={() => setIsExportDialogOpen(true)}
-                className="w-full sm:w-auto flex items-center justify-center gap-2 bg-[#2b4198] hover:bg-opacity-90"
+                className="w-full sm:w-auto flex items-center justify-center gap-2 bg-primary hover:bg-opacity-90"
               >
                 <FileSpreadsheet className="h-4 w-4" />
                 {t("exportExcel")}
@@ -172,7 +172,7 @@ export default function Reports() {
                 <div className="hidden md:block overflow-x-auto">
                   <Table>
                     <TableHeader>
-                      <TableRow className="bg-gray-50">
+                      <TableRow className="bg-muted/50">
                         <TableHead className="font-semibold text-gray-600">{t("itemId")}</TableHead>
                         <TableHead className="font-semibold text-gray-600">{t("itemName")}</TableHead>
                         <TableHead className="font-semibold text-gray-600">{t("category")}</TableHead>
@@ -183,7 +183,7 @@ export default function Reports() {
                     </TableHeader>
                     <TableBody>
                       {filteredItems.map((item) => (
-                        <TableRow key={item.id} className="hover:bg-gray-50">
+                        <TableRow key={item.id} className="hover:bg-muted/50">
                           <TableCell className="font-medium">{item.id}</TableCell>
                           <TableCell>{item.name}</TableCell>
                           <TableCell>{item.category}</TableCell>
@@ -201,7 +201,7 @@ export default function Reports() {
                 </div>
                 <div className="md:hidden space-y-4">
                   {filteredItems.map((item) => (
-                    <Card key={item.id} className="bg-white shadow-sm rounded-lg">
+                    <Card key={item.id} className="bg-card shadow-sm rounded-lg">
                       <CardContent className="p-4">
                         <div className="flex justify-between items-start">
                           <div className="flex-grow">
@@ -254,7 +254,7 @@ export default function Reports() {
                                 {count} {t("items")} ({percentage}%)
                               </span>
                             </div>
-                            <div className="h-2 w-full rounded-full bg-gray-100">
+                            <div className="h-2 w-full rounded-full bg-muted">
                               <div
                                 className="h-2 rounded-full"
                                 style={{
@@ -289,7 +289,7 @@ export default function Reports() {
                                 {count} {t("items")} ({percentage}%)
                               </span>
                             </div>
-                            <div className="h-2 w-full rounded-full bg-gray-100">
+                            <div className="h-2 w-full rounded-full bg-muted">
                               <div
                                 className="h-2 rounded-full"
                                 style={{

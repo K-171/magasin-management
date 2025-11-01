@@ -452,7 +452,7 @@ export function ExportDialog({
             <Button
               onClick={handleExport}
               disabled={selectedColumns.length === 0}
-              className="bg-[#2b4198] hover:bg-opacity-90"
+              className="bg-primary hover:bg-opacity-90"
             >
               <Download className="mr-2 h-4 w-4" />
               Export to Excel

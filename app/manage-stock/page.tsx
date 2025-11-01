@@ -183,14 +183,14 @@ export default function ManageStock() {
                 </Button>
                 <Button
                   onClick={() => setIsExportDialogOpen(true)}
-                  className="flex items-center gap-2 bg-[#2b4198] hover:bg-opacity-90"
+                  className="flex items-center gap-2 bg-primary hover:bg-opacity-90"
                 >
                   <FileSpreadsheet className="h-4 w-4" />
                   {t("exportExcel")}
                 </Button>
                 <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
                   <DialogTrigger asChild>
-                    <Button className="bg-[#2b4198] text-white hover:bg-opacity-90">
+                    <Button className="bg-primary text-white hover:bg-opacity-90">
                       <Plus className="mr-2 h-4 w-4" />
                       {t("addNewItem")}
                     </Button>
@@ -234,7 +234,7 @@ export default function ManageStock() {
                           placeholder={t("enterQuantity")}
                         />
                       </div>
-                      <Button onClick={handleAddItem} className="w-full bg-[#2b4198] hover:bg-opacity-90">
+                      <Button onClick={handleAddItem} className="w-full bg-primary hover:bg-opacity-90">
                         {t("addNewItem")}
                       </Button>
                     </div>
@@ -257,7 +257,7 @@ export default function ManageStock() {
               <div className="hidden md:block overflow-x-auto">
                 <Table>
                   <TableHeader>
-                    <TableRow className="bg-gray-50">
+                    <TableRow className="bg-muted/50">
                       <TableHead className="font-semibold text-gray-600">{t("itemId")}</TableHead>
                       <TableHead className="font-semibold text-gray-600">{t("itemName")}</TableHead>
                       <TableHead className="font-semibold text-gray-600">{t("category")}</TableHead>
@@ -269,7 +269,7 @@ export default function ManageStock() {
                   </TableHeader>
                   <TableBody>
                     {paginatedItems.map((item) => (
-                      <TableRow key={item.id} className="hover:bg-gray-50">
+                      <TableRow key={item.id} className="hover:bg-muted/50">
                         <TableCell className="font-medium">{item.id}</TableCell>
                         <TableCell className="font-medium">{item.name}</TableCell>
                         <TableCell>{item.category}</TableCell>
@@ -285,7 +285,7 @@ export default function ManageStock() {
                             variant="ghost"
                             size="sm"
                             onClick={() => handleCheckoutItem(item)}
-                            className="text-[#2b4198] hover:text-[#2b4198] hover:bg-blue-50 mr-2"
+                            className="text-primary hover:text-primary hover:bg-primary/10 mr-2"
                             disabled={item.quantity === 0}
                           >
                             <LogOut className="h-4 w-4" />
@@ -294,7 +294,7 @@ export default function ManageStock() {
                             variant="ghost"
                             size="sm"
                             onClick={() => handleEditItem(item)}
-                            className="text-[#2b4198] hover:text-[#2b4198] hover:bg-blue-50 mr-2"
+                            className="text-primary hover:text-primary hover:bg-primary/10 mr-2"
                           >
                             <Edit className="h-4 w-4" />
                           </Button>
@@ -302,7 +302,7 @@ export default function ManageStock() {
                             variant="ghost"
                             size="sm"
                             onClick={() => handleDeleteItem(item.id)}
-                            className="text-red-500 hover:text-red-500 hover:bg-red-50"
+                            className="text-red-500 hover:text-red-500 hover:bg-destructive/10"
                           >
                             <Trash2 className="h-4 w-4" />
                           </Button>
@@ -316,7 +316,7 @@ export default function ManageStock() {
               {/* Mobile Card View */}
               <div className="md:hidden space-y-4">
                 {paginatedItems.map((item) => (
-                  <Card key={item.id} className="bg-white shadow-sm rounded-lg">
+                  <Card key={item.id} className="bg-card shadow-sm rounded-lg">
                     <CardContent className="p-4">
                       <div className="flex justify-between items-start">
                         <div className="flex-grow">
@@ -346,7 +346,7 @@ export default function ManageStock() {
                           variant="ghost"
                           size="sm"
                           onClick={() => handleCheckoutItem(item)}
-                          className="text-[#2b4198] hover:text-[#2b4198] hover:bg-blue-50"
+                          className="text-primary hover:text-primary hover:bg-primary/10"
                           disabled={item.quantity === 0}
                         >
                           <LogOut className="h-4 w-4 mr-1" />
@@ -356,7 +356,7 @@ export default function ManageStock() {
                           variant="ghost"
                           size="sm"
                           onClick={() => handleEditItem(item)}
-                          className="text-[#2b4198] hover:text-[#2b4198] hover:bg-blue-50"
+                          className="text-primary hover:text-primary hover:bg-primary/10"
                         >
                           <Edit className="h-4 w-4" />
                         </Button>
@@ -364,7 +364,7 @@ export default function ManageStock() {
                           variant="ghost"
                           size="sm"
                           onClick={() => handleDeleteItem(item.id)}
-                          className="text-red-500 hover:text-red-500 hover:bg-red-50"
+                          className="text-red-500 hover:text-red-500 hover:bg-destructive/10"
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>
@@ -386,7 +386,7 @@ export default function ManageStock() {
                     size="sm"
                     onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
                     disabled={currentPage === 1}
-                    className="hover:bg-[#2b4198] hover:text-white"
+                    className="hover:bg-primary hover:text-white"
                   >
                     Previous
                   </Button>
@@ -396,7 +396,7 @@ export default function ManageStock() {
                       variant={currentPage === page ? "default" : "outline"}
                       size="sm"
                       onClick={() => setCurrentPage(page)}
-                      className={currentPage === page ? "bg-[#2b4198] text-white" : "hover:bg-[#2b4198] hover:text-white"}
+                      className={currentPage === page ? "bg-primary text-white" : "hover:bg-primary hover:text-white"}
                     >
                       {page}
                     </Button>
@@ -406,7 +406,7 @@ export default function ManageStock() {
                     size="sm"
                     onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
                     disabled={currentPage === totalPages}
-                    className="hover:bg-[#2b4198] hover:text-white"
+                    className="hover:bg-primary hover:text-white"
                   >
                     Next
                   </Button>
@@ -459,7 +459,7 @@ export default function ManageStock() {
                   onChange={(e) => setEditingItem({ ...editingItem, quantity: Number.parseInt(e.target.value) || 0 })}
                 />
               </div>
-              <Button onClick={handleUpdateItem} className="w-full bg-[#2b4198] hover:bg-opacity-90">
+              <Button onClick={handleUpdateItem} className="w-full bg-primary hover:bg-opacity-90">
                 {t("updateItem")}
               </Button>
             </div>

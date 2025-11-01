@@ -55,7 +55,7 @@ export default function VerifyEmailPage() {
 
   if (status === "loading") {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-muted/50">
         <div className="text-center">
           <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-[#2b4198] mx-auto"></div>
           <p className="mt-4 text-gray-600">Verifying your email...</p>
@@ -66,11 +66,11 @@ export default function VerifyEmailPage() {
 
   if (status === "success") {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen flex items-center justify-center bg-muted/50 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
           <Card>
             <CardHeader className="text-center">
-              <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
+              <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-500/20">
                 <CheckCircle className="h-6 w-6 text-green-600" />
               </div>
               <CardTitle className="mt-4">Email verified successfully!</CardTitle>
@@ -78,7 +78,7 @@ export default function VerifyEmailPage() {
             </CardHeader>
             <CardContent className="text-center">
               <Link href="/login">
-                <Button className="w-full bg-[#2b4198] hover:bg-[#1e2f7a]">Continue to login</Button>
+                <Button className="w-full bg-primary hover:bg-primary/90">Continue to login</Button>
               </Link>
             </CardContent>
           </Card>
@@ -88,11 +88,11 @@ export default function VerifyEmailPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-muted/50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <Card>
           <CardHeader className="text-center">
-            <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
+            <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-destructive/20">
               <AlertCircle className="h-6 w-6 text-red-600" />
             </div>
             <CardTitle className="mt-4">Verification failed</CardTitle>

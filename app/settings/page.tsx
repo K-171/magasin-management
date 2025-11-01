@@ -210,7 +210,7 @@ export default function Settings() {
                       </div>
 
                       <div className="flex justify-center sm:justify-end">
-                        <Button type="submit" className="w-full sm:w-auto bg-[#2b4198] hover:bg-opacity-90">
+                        <Button type="submit" className="w-full sm:w-auto bg-primary hover:bg-opacity-90">
                           {t("saveChanges")}
                         </Button>
                       </div>
@@ -341,7 +341,7 @@ export default function Settings() {
                       </div>
 
                       <div className="flex justify-center sm:justify-end">
-                        <Button className="w-full sm:w-auto bg-[#2b4198] hover:bg-opacity-90">{t("saveSecuritySettings")}</Button>
+                        <Button className="w-full sm:w-auto bg-primary hover:bg-opacity-90">{t("saveSecuritySettings")}</Button>
                       </div>
                     </div>
                   </CardContent>
@@ -359,13 +359,13 @@ export default function Settings() {
                     <div>
                       <h4 className="font-medium mb-3 text-lg">{t("importingData")}</h4>
                       <div className="space-y-4 text-sm">
-                        <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                        <div className="p-4 bg-primary/10 rounded-lg border border-primary/20">
                           <p className="font-semibold text-blue-900 mb-1">{t("supportedFileFormats")}</p>
                           <p className="text-blue-800">
                             {t("importFileFormats")}
                           </p>
                         </div>
-                        <div className="p-4 bg-green-50 rounded-lg border border-green-200">
+                        <div className="p-4 bg-green-500/10 rounded-lg border border-green-500/20">
                           <p className="font-semibold text-green-900 mb-1">{t("requiredColumns")}</p>
                           <p className="text-green-800 mb-2">
                             {t("requiredColumnsInfo")}
@@ -377,7 +377,7 @@ export default function Settings() {
                             <li>• quantity</li>
                           </ul>
                         </div>
-                        <div className="p-4 bg-amber-50 rounded-lg border border-amber-200">
+                        <div className="p-4 bg-amber-500/10 rounded-lg border border-amber-500/20">
                           <p className="font-semibold text-amber-900 mb-1">{t("importingTips")}</p>
                           <ul className="text-amber-800 space-y-1 list-disc list-inside">
                             <li>{t("ensureColumnsPresent")}</li>

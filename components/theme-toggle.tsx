@@ -16,13 +16,12 @@ export function ThemeToggle() {
   const { setTheme, theme } = useTheme()
 
   const handleThemeChange = (newTheme: string) => {
-    console.log("Current theme:", theme)
-    console.log("Setting theme to:", newTheme)
+    console.log("🎨 Current theme:", theme)
+    console.log("🎨 Switching to:", newTheme)
     setTheme(newTheme)
-    // Force check after a short delay
     setTimeout(() => {
-      const htmlElement = document.documentElement
-      console.log("HTML classes after theme change:", htmlElement.className)
+      console.log("🎨 HTML element classes:", document.documentElement.className)
+      console.log("🎨 Has dark class:", document.documentElement.classList.contains('dark'))
     }, 100)
   }
 

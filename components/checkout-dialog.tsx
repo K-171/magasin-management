@@ -148,7 +148,7 @@ export function CheckoutDialog({ open, onOpenChange, item, onCheckout }: Checkou
             </Button>
             <Button
               onClick={handleSubmit}
-              className="flex-1 bg-[#2b4198] hover:bg-opacity-90"
+              className="flex-1 bg-primary hover:bg-opacity-90"
               disabled={
                 !handledBy ||
                 quantity <= 0 ||

@@ -170,13 +170,13 @@ export default function AllStock() {
 
   return (
     <Layout title={t("allStockTitle")}>
-      <div className="bg-white p-4 md:p-8 rounded-lg shadow-md">
+      <div className="bg-card p-4 md:p-8 rounded-lg shadow-md">
         <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-6 gap-4">
           <h3 className="text-xl font-semibold text-[#3d414a]">{t("inventoryItems")}</h3>
           <div className="flex flex-col sm:flex-row gap-2">
             <Button
               onClick={() => setIsExportDialogOpen(true)}
-              className="flex items-center justify-center gap-2 bg-[#2b4198] hover:bg-opacity-90"
+              className="flex items-center justify-center gap-2 bg-primary hover:bg-opacity-90"
             >
               <FileSpreadsheet className="h-4 w-4" />
               {t("exportExcel")}
@@ -189,7 +189,7 @@ export default function AllStock() {
               <Filter className="h-4 w-4" />
               {t("filters")}
               {(selectedCategories.length > 0 || selectedStatuses.length > 0) && (
-                <Badge className="ml-1 bg-[#2b4198]">{selectedCategories.length + selectedStatuses.length}</Badge>
+                <Badge className="ml-1 bg-primary">{selectedCategories.length + selectedStatuses.length}</Badge>
               )}
             </Button>
           </div>
@@ -266,7 +266,7 @@ export default function AllStock() {
         <div className="hidden md:block overflow-x-auto">
           <Table>
             <TableHeader>
-              <TableRow className="bg-gray-50">
+              <TableRow className="bg-muted/50">
                 <TableHead className="font-semibold text-gray-600">
                   <Button
                     variant="ghost"
@@ -344,7 +344,7 @@ export default function AllStock() {
             </TableHeader>
             <TableBody>
               {paginatedItems.map((item) => (
-                <TableRow key={item.id} className={`hover:bg-gray-50 ${highlightedId === item.id ? 'bg-blue-100' : ''}`}>
+                <TableRow key={item.id} className={`hover:bg-muted/50 ${highlightedId === item.id ? 'bg-primary/20' : ''}`}>
                   <TableCell className="font-medium">{item.id}</TableCell>
                   <TableCell className="font-medium">{item.name}</TableCell>
                   <TableCell>{item.category}</TableCell>
@@ -360,7 +360,7 @@ export default function AllStock() {
                       variant="ghost"
                       size="sm"
                       onClick={() => handleCheckoutItem(item)}
-                      className="text-[#2b4198] hover:text-[#2b4198] hover:bg-blue-50 mr-2"
+                      className="text-primary hover:text-primary hover:bg-primary/10 mr-2"
                       disabled={item.quantity === 0}
                     >
                       <LogOut className="h-4 w-4" />
@@ -369,7 +369,7 @@ export default function AllStock() {
                       variant="ghost"
                       size="sm"
                       onClick={() => handleEditItem(item)}
-                      className="text-[#2b4198] hover:text-[#2b4198] hover:bg-blue-50 mr-2"
+                      className="text-primary hover:text-primary hover:bg-primary/10 mr-2"
                     >
                       <Edit className="h-4 w-4" />
                     </Button>
@@ -377,7 +377,7 @@ export default function AllStock() {
                       variant="ghost"
                       size="sm"
                       onClick={() => handleDeleteItem(item.id)}
-                      className="text-red-500 hover:text-red-500 hover:bg-red-50"
+                      className="text-red-500 hover:text-red-500 hover:bg-destructive/10"
                     >
                       <Trash2 className="h-4 w-4" />
                     </Button>
@@ -391,7 +391,7 @@ export default function AllStock() {
         {/* Mobile Card View */}
         <div className="md:hidden space-y-4">
           {paginatedItems.map((item) => (
-            <Card key={item.id} className={`bg-white shadow-sm rounded-lg ${highlightedId === item.id ? 'border-2 border-blue-400' : ''}`}>
+            <Card key={item.id} className={`bg-card shadow-sm rounded-lg ${highlightedId === item.id ? 'border-2 border-blue-400' : ''}`}>
               <CardContent className="p-4">
                 <div className="flex justify-between items-start">
                   <div className="flex-grow">
@@ -421,7 +421,7 @@ export default function AllStock() {
                     variant="ghost"
                     size="sm"
                     onClick={() => handleCheckoutItem(item)}
-                    className="text-[#2b4198] hover:text-[#2b4198] hover:bg-blue-50"
+                    className="text-primary hover:text-primary hover:bg-primary/10"
                     disabled={item.quantity === 0}
                   >
                     <LogOut className="h-4 w-4 mr-1" />
@@ -431,7 +431,7 @@ export default function AllStock() {
                     variant="ghost"
                     size="sm"
                     onClick={() => handleEditItem(item)}
-                    className="text-[#2b4198] hover:text-[#2b4198] hover:bg-blue-50"
+                    className="text-primary hover:text-primary hover:bg-primary/10"
                   >
                     <Edit className="h-4 w-4" />
                   </Button>
@@ -439,7 +439,7 @@ export default function AllStock() {
                     variant="ghost"
                     size="sm"
                     onClick={() => handleDeleteItem(item.id)}
-                    className="text-red-500 hover:text-red-500 hover:bg-red-50"
+                    className="text-red-500 hover:text-red-500 hover:bg-destructive/10"
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
@@ -461,7 +461,7 @@ export default function AllStock() {
               size="sm"
               onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
               disabled={currentPage === 1}
-              className="hover:bg-[#2b4198] hover:text-white"
+              className="hover:bg-primary hover:text-white"
             >
               Previous
             </Button>
@@ -483,7 +483,7 @@ export default function AllStock() {
                   size="sm"
                   onClick={() => setCurrentPage(pageNum)}
                   className={
-                    currentPage === pageNum ? "bg-[#2b4198] text-white" : "hover:bg-[#2b4198] hover:text-white"
+                    currentPage === pageNum ? "bg-primary text-white" : "hover:bg-primary hover:text-white"
                   }
                 >
                   {pageNum}
@@ -495,7 +495,7 @@ export default function AllStock() {
               size="sm"
               onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
               disabled={currentPage === totalPages}
-              className="hover:bg-[#2b4198] hover:text-white"
+              className="hover:bg-primary hover:text-white"
             >
               Next
             </Button>
@@ -543,7 +543,7 @@ export default function AllStock() {
                   onChange={(e) => setEditingItem({ ...editingItem, quantity: Number.parseInt(e.target.value) || 0 })}
                 />
               </div>
-              <Button onClick={handleUpdateItem} className="w-full bg-[#2b4198] hover:bg-opacity-90">
+              <Button onClick={handleUpdateItem} className="w-full bg-primary hover:bg-opacity-90">
                 {t("updateItem")}
               </Button>
             </div>
