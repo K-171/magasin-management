@@ -25,7 +25,7 @@ export async function POST(request: Request) {
     });
 
     if (!invitation) {
-      return NextResponse.json({ error: 'Invalid invitation token' }, { status: 400 });
+      return NextResponse.json({ error: 'Invalid or revoked invitation token' }, { status: 400 });
     }
 
     if (invitation.used) {
