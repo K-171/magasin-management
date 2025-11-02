@@ -13,7 +13,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Edit } from "lucide-react";
+import { Edit, Trash2 } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
@@ -80,6 +80,29 @@ export default function UserManagementPage() {
     }
   };
 
+  const handleDeleteUser = async (userId: string, username: string) => {
+    if (!confirm(`Are you sure you want to delete user "${username}"? This action cannot be undone.`)) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/users/${userId}`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        await fetchUsers();
+        toast.success("User deleted successfully");
+      } else {
+        const errorData = await response.json();
+        toast.error(errorData.error || "Failed to delete user");
+      }
+    } catch (error) {
+      console.error("Failed to delete user:", error);
+      toast.error("An unexpected error occurred while deleting user");
+    }
+  };
+
   if (user?.role !== "admin") {
     return (
       <Layout title={t("forbidden")}>
@@ -119,6 +142,14 @@ export default function UserManagementPage() {
                       className="text-primary hover:text-primary hover:bg-primary/10 mr-2"
                     >
                       <Edit className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleDeleteUser(user.id, user.username)}
+                      className="text-red-600 hover:text-red-700 hover:bg-destructive/10"
+                    >
+                      <Trash2 className="h-4 w-4" />
                     </Button>
                   </TableCell>
                 </TableRow>
