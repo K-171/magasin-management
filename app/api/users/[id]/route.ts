@@ -5,7 +5,7 @@ import { getSession } from "@/lib/session";
 export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
   const session = await getSession();
 
-  if (!session || (session.role !== "admin" && session.userId !== id)) {
+  if (!session?.user || (session.user.role !== "admin" && session.user.id !== params.id)) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 

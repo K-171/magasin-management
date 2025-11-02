@@ -6,7 +6,7 @@ import { join } from 'path';
 
 export async function POST(request: Request) {
   const session = await getSession();
-  if (!session?.userId) {
+  if (!session?.user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
@@ -22,7 +22,7 @@ export async function POST(request: Request) {
 
   // Create a unique filename to avoid collisions
   const fileExtension = file.name.split('.').pop() || 'jpg';
-  const filename = `${session.userId}-${Date.now()}.${fileExtension}`;
+  const filename = `${session.user.id}-${Date.now()}.${fileExtension}`;
   
   const relativePath = join('/avatars', filename);
   const absolutePath = join(process.cwd(), 'public', relativePath);
@@ -36,7 +36,7 @@ export async function POST(request: Request) {
 
     // Update the user's avatar in the database
     await prisma.user.update({
-      where: { id: session.userId as string },
+      where: { id: session.user.id },
       data: { avatar: relativePath },
     });
 

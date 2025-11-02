@@ -4,7 +4,7 @@ import { getSession } from '@/lib/session';
 
 export async function DELETE(request: Request, { params }: { params: { id: string } }) {
   const session = await getSession();
-  if (!session || session.role !== 'admin') {
+  if (!session?.user || session.user.role !== 'admin') {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 

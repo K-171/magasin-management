@@ -5,7 +5,7 @@ import { generateToken } from '@/lib/auth';
 
 export async function POST(request: Request) {
   const session = await getSession();
-  if (!session || session.role !== 'admin') {
+  if (!session?.user || session.user.role !== 'admin') {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
@@ -18,7 +18,7 @@ export async function POST(request: Request) {
         role,
         token: generateToken(),
         expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
-        createdBy: session.userId as string,
+        createdBy: session.user.id,
       },
     });
 

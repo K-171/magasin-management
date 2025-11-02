@@ -4,7 +4,7 @@ import { getSession } from '@/lib/session';
 
 export async function PUT(request: Request) {
   const session = await getSession();
-  if (!session) {
+  if (!session?.user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
@@ -12,7 +12,7 @@ export async function PUT(request: Request) {
     const { firstName, lastName, username, email } = await request.json();
 
     const updatedUser = await prisma.user.update({
-      where: { id: session.userId as string },
+      where: { id: session.user.id },
       data: {
         firstName,
         lastName,
