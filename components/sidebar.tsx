@@ -75,7 +75,7 @@ export function Sidebar({ isMobile, isOpen, setIsOpen }: SidebarProps) {
   const sidebarContent = (
     <div className="flex flex-col h-full">
       {/* Header */}
-      <div className="py-6 border-b border-sidebar-border">
+      <div className="py-4 border-b border-border">
         <div className="px-8 flex justify-center items-center">
           <h1 className="text-2xl font-bold text-sidebar-foreground">MAGASIN</h1>
           {isMobile && (
