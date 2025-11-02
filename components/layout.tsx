@@ -37,7 +37,7 @@ export function Layout({ children, title, showSearch = true }: LayoutProps) {
 
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
-        <header className="flex justify-between items-center py-4 px-6 border-b-2 border-header-border bg-header">
+        <header className="flex justify-between items-center py-4 px-6 border-b border-border bg-header">
           <div className="flex items-center">
             {isMobile && (
               <Button
