@@ -55,53 +55,53 @@
   }
 
   .dark {
-    /* Dark Mode - Black Theme */
-    --background: 0 0% 0%;                      /* Pure black background */
-    --foreground: 0 0% 95%;                     /* Off-white text */
-    --card: 0 0% 5%;                            /* Very dark gray cards */
-    --card-foreground: 0 0% 95%;
-    --popover: 0 0% 5%;
-    --popover-foreground: 0 0% 95%;
-    --primary: 229 58% 50%;                     /* Brighter blue for dark mode */
+    /* Dark Mode - Improved Deep Blue-Gray Theme */
+    --background: 222 47% 7%;                   /* Deep blue-gray background #0f1318 */
+    --foreground: 210 40% 98%;                  /* Near white text */
+    --card: 220 39% 11%;                        /* Dark blue-gray cards #161b22 */
+    --card-foreground: 210 40% 98%;
+    --popover: 220 39% 11%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 217 91% 60%;                     /* Vibrant blue #3b82f6 */
     --primary-foreground: 0 0% 100%;
-    --secondary: 0 0% 10%;
-    --secondary-foreground: 0 0% 95%;
-    --muted: 0 0% 10%;
-    --muted-foreground: 0 0% 65%;               /* Light gray for secondary text */
-    --accent: 0 0% 15%;
-    --accent-foreground: 0 0% 95%;
-    --destructive: 0 70% 50%;
+    --secondary: 217 33% 17%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 215 28% 17%;                       /* Subtle gray-blue #21262d */
+    --muted-foreground: 217 19% 63%;            /* Muted blue-gray text */
+    --accent: 217 33% 17%;
+    --accent-foreground: 217 91% 60%;
+    --destructive: 0 63% 50%;                   /* Softer red */
     --destructive-foreground: 0 0% 100%;
-    --border: 0 0% 15%;                         /* Dark gray border */
-    --input: 0 0% 15%;
-    --ring: 229 58% 50%;
+    --border: 217 19% 27%;                      /* Blue-gray border #30363d */
+    --input: 217 19% 27%;
+    --ring: 217 91% 60%;
     
-    /* Sidebar - Black Theme for Dark Mode */
-    --sidebar-background: 0 0% 0%;              /* Pure black sidebar */
-    --sidebar-foreground: 0 0% 95%;             /* Off-white text */
-    --sidebar-primary: 229 58% 50%;             /* Brighter blue */
+    /* Sidebar - Rich Dark Theme */
+    --sidebar-background: 222 47% 7%;           /* Match background */
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 217 91% 60%;             /* Vibrant blue */
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 0 0% 15%;                 /* Dark gray for hover */
-    --sidebar-accent-foreground: 229 58% 60%;   /* Light blue text on hover */
-    --sidebar-border: 0 0% 15%;                 /* Dark gray borders */
-    --sidebar-ring: 229 58% 50%;
+    --sidebar-accent: 217 33% 17%;              /* Darker blue for hover */
+    --sidebar-accent-foreground: 217 91% 70%;   /* Lighter blue text */
+    --sidebar-border: 217 19% 27%;
+    --sidebar-ring: 217 91% 60%;
     
     /* Header */
-    --header-background: 0 0% 0%;
-    --header-foreground: 0 0% 95%;
-    --header-border: 0 0% 15%;
+    --header-background: 220 39% 11%;           /* Card color */
+    --header-foreground: 210 40% 98%;
+    --header-border: 217 19% 27%;
     
     /* Search */
-    --search-background: 0 0% 5%;
-    --search-border: 0 0% 15%;
-    --search-foreground: 0 0% 95%;
+    --search-background: 222 47% 7%;
+    --search-border: 217 19% 27%;
+    --search-foreground: 210 40% 98%;
     
-    /* Chart colors - adjusted for dark mode */
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    /* Chart colors - vibrant for dark mode */
+    --chart-1: 217 91% 60%;                     /* Blue */
+    --chart-2: 142 76% 36%;                     /* Green */
+    --chart-3: 38 92% 50%;                      /* Orange */
+    --chart-4: 271 91% 65%;                     /* Purple */
+    --chart-5: 345 83% 61%;                     /* Pink */
   }
 }
 
