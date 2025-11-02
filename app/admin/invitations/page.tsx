@@ -16,7 +16,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { UserPlus, Mail, Clock, CheckCircle, XCircle, AlertCircle } from "lucide-react"
+import { UserPlus, Mail, Clock, CheckCircle, XCircle, AlertCircle, Copy, Check } from "lucide-react"
 import { useLanguage } from "@/context/language-context"
 import type { Invitation } from "@/lib/auth"
 import { formatDate } from "@/lib/utils"
@@ -34,6 +34,23 @@ export default function AdminPanel() {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null)
+  const [copiedId, setCopiedId] = useState<string | null>(null)
+
+  const getInvitationLink = (token: string) => {
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || window.location.origin
+    return `${baseUrl}/register?token=${token}`
+  }
+
+  const copyInvitationLink = async (invitation: Invitation) => {
+    const link = getInvitationLink(invitation.token)
+    try {
+      await navigator.clipboard.writeText(link)
+      setCopiedId(invitation.id)
+      setTimeout(() => setCopiedId(null), 2000)
+    } catch (err) {
+      setMessage({ type: "error", text: "Failed to copy link" })
+    }
+  }
 
   const fetchInvitations = async () => {
     const fetchedInvitations = await getInvitations();
@@ -240,16 +257,33 @@ export default function AdminPanel() {
                             <TableCell>{formatDate(invitation.createdAt)}</TableCell>
                             <TableCell>{formatDate(invitation.expiresAt)}</TableCell>
                             <TableCell>
-                              {!invitation.used && new Date(invitation.expiresAt) > new Date() && (
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  onClick={() => handleRevokeInvitation(invitation.id)}
-                                  className="text-red-600 hover:text-red-700 hover:bg-destructive/10"
-                                >
-                                  {t("revoke")}
-                                </Button>
-                              )}
+                              <div className="flex items-center gap-2">
+                                {!invitation.used && new Date(invitation.expiresAt) > new Date() && (
+                                  <>
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      onClick={() => copyInvitationLink(invitation)}
+                                      className="text-primary hover:text-primary hover:bg-primary/10"
+                                      title="Copy invitation link"
+                                    >
+                                      {copiedId === invitation.id ? (
+                                        <Check className="h-4 w-4" />
+                                      ) : (
+                                        <Copy className="h-4 w-4" />
+                                      )}
+                                    </Button>
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      onClick={() => handleRevokeInvitation(invitation.id)}
+                                      className="text-red-600 hover:text-red-700 hover:bg-destructive/10"
+                                    >
+                                      {t("revoke")}
+                                    </Button>
+                                  </>
+                                )}
+                              </div>
                             </TableCell>
                           </TableRow>
                         ))
@@ -289,16 +323,36 @@ export default function AdminPanel() {
                               <p className="font-medium">{formatDate(invitation.expiresAt)}</p>
                             </div>
                           </div>
-                          <div className="mt-4 pt-4 border-t border-gray-200 flex justify-end">
+                          <div className="mt-4 pt-4 border-t border-gray-200 flex justify-end gap-2">
                             {!invitation.used && new Date(invitation.expiresAt) > new Date() && (
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => handleRevokeInvitation(invitation.id)}
-                                className="text-red-600 hover:text-red-700 hover:bg-destructive/10"
-                              >
-                                Revoke
-                              </Button>
+                              <>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => copyInvitationLink(invitation)}
+                                  className="text-primary hover:text-primary hover:bg-primary/10"
+                                >
+                                  {copiedId === invitation.id ? (
+                                    <>
+                                      <Check className="h-4 w-4 mr-1" />
+                                      Copied
+                                    </>
+                                  ) : (
+                                    <>
+                                      <Copy className="h-4 w-4 mr-1" />
+                                      Copy Link
+                                    </>
+                                  )}
+                                </Button>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => handleRevokeInvitation(invitation.id)}
+                                  className="text-red-600 hover:text-red-700 hover:bg-destructive/10"
+                                >
+                                  Revoke
+                                </Button>
+                              </>
                             )}
                           </div>
                         </CardContent>

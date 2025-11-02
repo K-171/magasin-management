@@ -12,6 +12,19 @@ export interface User {
   lastLoginAt?: string;
 }
 
+export interface Invitation {
+  id: string;
+  email: string;
+  role: string;
+  token: string;
+  expiresAt: string;
+  createdAt: string;
+  createdBy: string;
+  used: boolean;
+  usedAt: string | null;
+  usedBy: string | null;
+}
+
 // Password hashing utilities
 export function hashPassword(password: string, salt: string): string {
   return createHash('sha256')
