@@ -12,15 +12,39 @@ export async function POST(request: Request) {
   try {
     const { email, role } = await request.json();
 
-    const invitation = await prisma.invitation.create({
-      data: {
-        email,
-        role,
-        token: generateToken(),
-        expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
-        createdBy: session.user.id,
-      },
+    // Check if there's an existing invitation for this email
+    const existingInvitation = await prisma.invitation.findUnique({
+      where: { email },
     });
+
+    let invitation;
+
+    if (existingInvitation) {
+      // Update the existing invitation with a new token and expiry
+      invitation = await prisma.invitation.update({
+        where: { email },
+        data: {
+          role,
+          token: generateToken(),
+          expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
+          createdBy: session.user.id,
+          used: false,
+          usedAt: null,
+          usedBy: null,
+        },
+      });
+    } else {
+      // Create a new invitation
+      invitation = await prisma.invitation.create({
+        data: {
+          email,
+          role,
+          token: generateToken(),
+          expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
+          createdBy: session.user.id,
+        },
+      });
+    }
 
     return NextResponse.json({ success: true, invitation });
   } catch (error) {
